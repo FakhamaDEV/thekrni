@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>ذكّرني</title>
+<meta name="description" content="أنشئ رابطك الخاص واستقبل رسائل مجهولة">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌙%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+:root{--bg:#04201a;--bg2:#0a3a2c;--gold:#e3b94a;--gold2:#b88a1e;--txt:#f4efe0;--mut:#9fb8ac;--glass:rgba(255,255,255,.06);--line:rgba(227,185,74,.28);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;font-family:Tajawal,Tahoma,sans-serif;color:var(--txt);min-height:100vh;min-height:100dvh;
+background:radial-gradient(circle at 80% -10%,#1b8a6455,transparent 45%),radial-gradient(circle at 0 100%,#e3b94a22,transparent 40%),
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cpath d='M45 8l9 25 25-9-9 25 25 9-25 9 9 25-25-9-9 25-9-25-25 9 9-25-25-9 25-9-9-25 25 9z' fill='none' stroke='%23e3b94a' stroke-opacity='.07'/%3E%3C/svg%3E"),
+linear-gradient(160deg,var(--bg),var(--bg2));background-attachment:fixed}
+.wrap{width:100%;max-width:760px;margin:0 auto;padding:16px 16px 30px;animation:in .6s ease}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.sm{max-width:480px;margin-inline:auto}
+.tb{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 4px 12px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.tbrand{font-family:Amiri,serif;font-size:28px;color:var(--gold);cursor:pointer}
+.tbr{display:flex;gap:6px;align-items:center}
+.ic{width:auto;min-width:58px;margin:0;padding:6px 8px;background:#ffffff0d;border:1px solid var(--line);box-shadow:none;color:var(--txt);font-size:20px;border-radius:14px;position:relative;line-height:1.2}
+.ic small{display:block;font-size:11px;font-weight:500;color:var(--mut)}
+.bd{position:absolute;top:-6px;left:-4px;background:#e0533d;color:#fff;border-radius:12px;font-size:11px;font-style:normal;padding:1px 6px;font-weight:700}
+.hero{text-align:center;padding:34px 8px 22px}
+.moon{font-size:54px;filter:drop-shadow(0 0 18px #e3b94a88)}
+h1.brand{font-family:Amiri,serif;font-size:clamp(52px,14vw,76px);margin:6px 0 0;line-height:1.2;background:linear-gradient(180deg,#fff3c4,var(--gold) 55%,var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:clamp(17px,4.6vw,20px);line-height:2;margin:10px 0 4px}
+.lead{font-family:Amiri,serif;font-size:clamp(24px,6.6vw,34px);line-height:1.9;margin:14px 0 8px;color:#fff3c4}
+.lead em{font-style:normal;color:var(--gold)}
+.tag{color:var(--mut);font-size:15px;line-height:1.9}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:20px;margin-top:16px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.glass h2{margin:0 0 12px;font-size:20px;color:var(--gold)}
+.steps{display:grid;gap:12px}
+.step{display:flex;gap:14px;align-items:center}
+.n{flex:none;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#f3d77a,var(--gold2));color:#04201a;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center}
+.step b{display:block}.step small{color:var(--mut)}
+.feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.feats .glass{margin:0;text-align:center;padding:16px 10px}
+.feats span{font-size:30px;display:block;margin-bottom:4px}
+.feats small{color:var(--mut)}
+.zikr{text-align:center;color:var(--gold);font-family:Amiri,serif;font-size:24px;margin:18px 0 0}
+.respect{text-align:center;border-color:var(--gold);background:linear-gradient(160deg,#e3b94a14,#ffffff08)}
+.respect h2{font-family:Amiri,serif;font-size:clamp(22px,6vw,28px);margin-bottom:14px}
+.respect p{line-height:2.1;margin:10px 0;font-size:16.5px}
+.ann{border:2px solid var(--gold);background:linear-gradient(135deg,#e3b94a2b,#e3b94a0d);box-shadow:0 0 26px #e3b94a33;margin:14px 0 0;border-radius:20px;padding:16px 18px;text-align:center}
+.ann b{display:block;color:var(--gold);font-size:19px;margin-bottom:4px}
+.ann p{margin:0;line-height:1.9;white-space:pre-wrap}
+.tips{margin:0;padding:0;list-style:none}
+.tips li{padding:10px 0;border-bottom:1px dashed var(--line);line-height:1.9}
+.tips li:last-child{border:0}
+.tips b{color:var(--gold)}
+input,textarea,select{width:100%;padding:14px;margin:6px 0;border:1px solid var(--line);border-radius:14px;font-size:16px;font-family:inherit;background:#00000033;color:var(--txt);outline:none;transition:.2s}
+select option{color:#000}
+input::placeholder,textarea::placeholder{color:#8aa397}
+input:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px #e3b94a22}
+textarea{resize:vertical}
+button{width:100%;padding:15px;margin:6px 0;border:0;border-radius:14px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;color:#04201a;background:linear-gradient(135deg,#f6dc84,var(--gold) 50%,var(--gold2));box-shadow:0 6px 20px #e3b94a33}
+button:active{transform:scale(.98)}
+button.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold);box-shadow:none}
+button:disabled{opacity:.55}
+button.sbtn{width:auto;padding:7px 16px;font-size:14px;margin:6px 0 0 8px;box-shadow:none}
+button.red{background:#c0392b;color:#fff}
+.avatar{width:96px;height:96px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:800;color:#04201a;background:linear-gradient(135deg,#f6dc84,var(--gold2));box-shadow:0 0 0 5px #e3b94a33,0 0 40px #e3b94a55}
+.who{font-family:Amiri,serif;font-size:clamp(30px,9vw,42px);margin:4px 0;color:var(--gold);word-break:break-word}
+.ub{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0 0;padding:12px 16px}
+.ub .av2{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#04201a;background:linear-gradient(135deg,#f6dc84,var(--gold2))}
+.ub b{flex:1;color:var(--gold);word-break:break-word;font-size:18px}
+.lbl{color:var(--mut);margin-top:8px;font-size:15px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.chip{flex:1;text-align:center;padding:10px 14px;border-radius:30px;border:1px solid var(--line);background:#ffffff08;cursor:pointer;font-size:16px}
+.chip.on{background:linear-gradient(135deg,#f6dc84,var(--gold2));color:#04201a;font-weight:700;border-color:transparent}
+.cnt{text-align:left;color:var(--mut);font-size:13px;direction:ltr}
+.note{text-align:center;color:#ff9b8f;min-height:22px;margin-top:6px}
+.note.good{color:var(--gold)}
+.warn{background:#e3b94a14;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.8;color:#f6e7b0;margin:6px 0}
+.ok{text-align:center;padding:14px 4px}.ok .big{font-size:50px}.ok b{display:block;font-size:20px;color:var(--gold);margin:6px 0}
+.link{direction:ltr;word-break:break-all;background:#00000040;padding:12px;border-radius:12px;font-size:14px;color:var(--gold);border:1px dashed var(--line)}
+.msg{background:#ffffff0a;border-right:4px solid var(--gold);border-radius:14px;padding:14px;margin:12px 0}
+.msg p{margin:8px 0;line-height:1.9;white-space:pre-wrap;word-break:break-word}
+.msg small{color:var(--mut)}
+.msg .from{display:block;color:var(--gold);margin-bottom:4px}
+.msg .rep{border-right:3px solid var(--gold2);padding-right:10px;color:#f6e7b0}
+.new{background:var(--gold);color:#04201a;border-radius:10px;padding:1px 10px;font-size:12px;font-weight:800;margin-left:6px}
+.top{display:flex;justify-content:space-between;align-items:center}.top h2{margin:0}
+.num{background:var(--gold);color:#04201a;border-radius:20px;padding:2px 14px;font-weight:800}
+.chk{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--mut)}
+.chk input{width:auto;margin:0}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.stat{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line)}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--gold);color:#04201a;padding:12px 22px;border-radius:30px;font-weight:700;z-index:50;box-shadow:0 8px 24px #0008}
+footer{text-align:center;color:var(--mut);font-size:14px;margin-top:30px;padding-top:16px;border-top:1px solid var(--line)}
+footer b{color:var(--gold)}
+@media(min-width:700px){.wrap{padding:24px 24px 40px}.feats{grid-template-columns:repeat(3,1fr)}.glass{padding:26px}}
+@media(max-width:700px){body{background-attachment:scroll}}
+</style>
+</head>
+<body>
+<div class="wrap"><div id="app">جارٍ التحميل...</div>
+<footer>© 2026 <b>ذكّرني</b> &nbsp;|&nbsp; تطوير: <b>FakhamaDev</b></footer></div>
+<script>
+// ====== بيانات Supabase ======
+const SUPABASE_URL = "https://pkyqkzqkxfcytvtsygse.supabase.co";
+const SUPABASE_KEY = "sb_publishable_ZIeFUW3JFOEHV7-wImxM1Q_g5JM4wHZ";
+// =============================
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const app = document.getElementById("app");
+const params = new URLSearchParams(location.search);
+const $ = id => document.getElementById(id);
+const mk = (t, c, x) => { const e = document.createElement(t); if(c) e.className = c; if(x != null) e.textContent = x; return e; };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const go = q => { location.href = location.pathname + q; };
+let chan = null, reload = null, ANN = null;
+const el = h => { reload = null; app.innerHTML = h; window.scrollTo(0,0); const b = $("home"); if(b) b.onclick = () => go(""); };
+const say = (id, t, good) => { const n = $(id); if(n){ n.textContent = t; n.classList.toggle("good", !!good); } };
+const HOME = `<button class="ghost sbtn" id="home" style="margin:10px 0 0">الصفحة الرئيسية</button>`;
+const NAME_RE = /^[\u0621-\u064A\u0660-\u0669a-z0-9_]+(?: [\u0621-\u064A\u0660-\u0669a-z0-9_]+)*$/;
+const NAME_MSG = "اسم المستخدم: من 3 إلى 25 حرفًا، عربيًا أو إنجليزيًا، ويمكن وضع مسافة بين الكلمات";
+const SLUG_MSG = "الرابط: من 3 إلى 25 حرفًا إنجليزيًا أو رقمًا أو _";
+const RESERVED = ["admin","login","signup","profile","notifications","support","help","about"];
+const normName = s => s.trim().replace(/\s+/g, " ").toLowerCase();
+const nameOk = s => s.length >= 3 && s.length <= 25 && NAME_RE.test(s);
+const slugOk = s => /^[a-z0-9_]{3,25}$/.test(s) && !RESERVED.includes(s);
+const linkOf = s => location.origin + location.pathname + "?u=" + s;
+const ERR = [
+  ["invalid login","البريد الإلكتروني أو كلمة المرور غير صحيحة"],
+  ["already registered","هذا البريد الإلكتروني مسجّل مسبقًا"],
+  ["at least","كلمة المرور يجب ألا تقل عن 6 أحرف"],
+  ["not confirmed","لم يتم تأكيد بريدك الإلكتروني بعد"],
+  ["rate limit","محاولات كثيرة، حاول لاحقًا"],
+  ["invalid","البريد الإلكتروني غير صالح"]
+];
+const arErr = e => { const m = ((e && e.message) || "").toLowerCase(); const f = ERR.find(x => m.includes(x[0])); return f ? f[1] : "حدث خطأ، حاول مرة أخرى"; };
+const fmt = d => new Date(d).toLocaleString("ar");
+const track = () => db.from("visits").insert({ device: innerWidth < 768 ? "جوال" : "حاسوب" }).then(()=>{}, ()=>{});
+const getSession = async () => (await db.auth.getSession()).data.session;
+const cnt = async (t, f, col) => { let q = db.from(t).select(col || "id", { count:"exact", head:true }); if(f) q = f(q); return (await q).count ?? 0; };
+const PCOLS = "username,slug,banned,username_changed_at,slug_changed_at";
+async function ensureProfile(user){
+  const p = await db.from("profiles").select(PCOLS).eq("id", user.id).maybeSingle();
+  if(p.data) return p.data;
+  const m = user.user_metadata || {};
+  if(m.username && m.slug){
+    const r = await db.from("profiles").insert({ id: user.id, username: m.username, slug: m.slug, gender: m.gender || null });
+    if(!r.error) return { username: m.username, slug: m.slug, banned: false };
+  }
+  return null;
+}
+function annHtml(home){
+  if(!ANN || !(home || ANN.show_all)) return "";
+  return `<div class="ann">${ANN.title ? `<b>${esc(ANN.title)}</b>` : ""}<p>${esc(ANN.body)}</p></div>`;
+}
+function toast(t){ const d = mk("div","toast",t); document.body.appendChild(d); setTimeout(() => d.remove(), 4000); }
+function setBadge(n){ window._nb = n; const b = $("bd"); if(!b) return; b.textContent = n.toLocaleString("ar-EG"); b.hidden = n <= 0; }
+const BAR = `<div class="tb"><b class="tbrand" id="tbh">ذكّرني</b><div class="tbr">
+  <button class="ic" id="icn">🔔<small>إشعارات</small><i class="bd" id="bd" hidden></i></button>
+  <button class="ic" id="ica">👤<small>الحساب</small></button>
+  <button class="ic" id="ico">🚪<small>خروج</small></button></div></div>`;
+async function wireBar(user){
+  $("tbh").onclick = () => go("");
+  $("icn").onclick = () => notifPage(user);
+  $("ica").onclick = () => go("?profile");
+  $("ico").onclick = async()=>{ await db.auth.signOut(); go(""); };
+  setBadge(await cnt("notifications", q => q.eq("read", false)));
+  if(chan) db.removeChannel(chan);
+  chan = db.channel("n" + user.id).on("postgres_changes", { event:"INSERT", schema:"public", table:"notifications", filter:"user_id=eq." + user.id },
+    pl => { setBadge((window._nb || 0) + 1); toast(pl.new.body); if(reload && pl.new.kind === "message") reload(); }).subscribe();
+}
+function bannedPage(){
+  el(`<div class="hero"><div class="moon">🌙</div><p class="sub">تم حظر هذا الحساب</p><p class="tag">إن كان ذلك بالخطأ فتواصل مع إدارة الموقع.</p></div><button class="ghost" id="out">تسجيل الخروج</button>`);
+  $("out").onclick = async()=>{ await db.auth.signOut(); go(""); };
+}
+
+async function start(){
+  const a = await db.from("announcements").select("title,body,show_all").eq("active", true).order("created_at", { ascending:false }).limit(1);
+  ANN = (a.data && a.data[0]) || null;
+  const s = await getSession();
+  if(params.has("admin")) return s ? adminPage() : authPage("login");
+  if(params.has("profile")) return s ? editPage(s.user) : authPage("login");
+  if(params.has("login") || params.has("signup")) return s ? dashboard(s.user) : authPage(params.has("signup") ? "signup" : "login");
+  track();
+  if(params.get("u")) return sendPage(params.get("u").trim().toLowerCase());
+  landing(s);
+}
+
+const RESPECT = `<div class="glass respect"><h2>🌿 الاحترام أساس التعامل بين الناس 🌿</h2>
+  <p>احترم غيرك بكلامك وأفعالك، فالكلمة الطيبة صدقة، والأسلوب الراقي دليل على حسن التربية. لا تجرح مشاعر الآخرين، ولا تقلّل من شأن أحد، واختلف مع الناس بأدب واحترام.</p>
+  <p>تذكّر دائماً: عامل الناس كما تحب أن يعاملوك، فالاحترام لا يُفرض بالقوة، بل يُكتسب بالأخلاق، والكلمة الطيبة تترك أثراً جميلاً في القلوب. 🌱</p></div>`;
+
+async function landing(s){
+  const p = s ? await ensureProfile(s.user) : null;
+  if(p && p.banned) return bannedPage();
+  const top = p ? BAR : `<div class="tb"><b class="tbrand" id="tbh">ذكّرني</b><div class="tbr"><button class="ghost sbtn" id="nl" style="margin:0">دخول</button><button class="sbtn" id="ns" style="margin:0">حساب جديد</button></div></div>`;
+  const who = p ? `<div class="glass ub"><div class="av2">${esc(p.username[0])}</div><b>${esc(p.username)}</b><button class="sbtn" id="ub1" style="margin:0">لوحتي</button></div>` : "";
+  const sg = s ? `<textarea id="sg" rows="3" maxlength="500" placeholder="اكتب اقتراحك هنا (500 حرف كحد أقصى)"></textarea><button id="sgb">إرسال الاقتراح</button><div class="note" id="sgn"></div>`
+    : `<p class="tag">يمكن للأعضاء المسجّلين فقط إرسال الاقتراحات.</p><button class="ghost" id="sgl">تسجيل الدخول</button>`;
+  el(`${top}${annHtml(true)}${who}
+  <div class="hero"><div class="moon">🌙</div><h1 class="brand">ذكّرني</h1>
+    <p class="sub">مرحبًا بك في ذكّرني</p>
+    <p class="lead">كلماتٌ <em>صادقة</em>، تصلُكَ بلا أسماء</p>
+    <p class="tag">أنشئ رابطك الخاص، وشاركه مع من تُحِبّ،<br>واستقبل ما يريد الناس قولَه لك بأمانٍ وخصوصية.</p></div>
+  ${p ? "" : `<div class="sm"><button id="go">إنشاء حساب</button><button class="ghost" id="go2">تسجيل الدخول</button></div>`}
+  <div class="glass"><h2>كيف يعمل الموقع؟</h2><div class="steps">
+    <div class="step"><div class="n">١</div><div><b>أنشئ حسابك</b><small>اختر اسمك ورابطك الخاص</small></div></div>
+    <div class="step"><div class="n">٢</div><div><b>شارك رابطك</b><small>انشره حيث تشاء</small></div></div>
+    <div class="step"><div class="n">٣</div><div><b>استقبل الرسائل</b><small>تصلك رسائل دون معرفة المرسل</small></div></div></div></div>
+  <div class="feats">
+    <div class="glass"><span>🔒</span><b>مجهول</b><br><small>لا يظهر اسم المرسل</small></div>
+    <div class="glass"><span>🌿</span><b>مجاني</b><br><small>بدون أي رسوم</small></div>
+    <div class="glass"><span>🚫</span><b>بدون إعلانات</b><br><small>تجربة نظيفة ومريحة</small></div>
+    <div class="glass"><span>⚡</span><b>خفيف</b><br><small>يعمل بسرعة على كل جهاز</small></div>
+    <div class="glass"><span>✅</span><b>سهل الاستخدام</b><br><small>خطوات بسيطة وواضحة</small></div>
+    <div class="glass"><span>🛡️</span><b>آمن</b><br><small>الرسالة لا يقرؤها إلا مستلمها</small></div></div>
+  <p class="zikr">اذكروا الله 🌱</p>
+  ${RESPECT}
+  <div class="glass sm"><h2>اقتراح لتحسين الموقع</h2>${sg}</div>`);
+  if(p){ await wireBar(s.user); $("ub1").onclick = () => go("?login"); }
+  else { $("tbh").onclick = () => go(""); $("nl").onclick = () => go("?login"); $("ns").onclick = () => go("?signup"); $("go").onclick = () => go("?signup"); $("go2").onclick = () => go("?login"); }
+  if(s){
+    $("sgb").onclick = async()=>{
+      const v = $("sg").value.trim();
+      if(!v) return say("sgn","اكتب اقتراحك أولًا");
+      $("sgb").disabled = true;
+      const r = await db.from("suggestions").insert({ user_id: s.user.id, body: v });
+      $("sgb").disabled = false;
+      if(r.error) return say("sgn","تعذّر إرسال الاقتراح، حاول مرة أخرى");
+      $("sg").value = ""; say("sgn","تم إرسال اقتراحك، شكرًا لك", true);
+    };
+  } else $("sgl").onclick = () => go("?login");
+}
+
+function authPage(mode){
+  const su = mode === "signup";
+  el(`${HOME}<div class="hero" style="padding:14px 0 6px"><div class="moon">🌙</div><h1 class="brand" style="font-size:clamp(40px,10vw,50px)">ذكّرني</h1></div>
+  <div class="glass sm"><h2>${su ? "إنشاء حساب" : "تسجيل الدخول"}</h2>
+    ${su ? `<div class="lbl">الجنس</div><div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>` : ""}
+    <input id="email" type="email" placeholder="البريد الإلكتروني" dir="ltr" autocomplete="email">
+    ${su ? `<input id="username" placeholder="اسم المستخدم (عربي أو إنجليزي)" maxlength="25" autocomplete="off">
+    <input id="slug" placeholder="رابطك الخاص (إنجليزي وأرقام)" dir="ltr" maxlength="25" autocomplete="off">` : ""}
+    <input id="pass" type="password" placeholder="كلمة المرور" dir="ltr" autocomplete="${su ? "new-password" : "current-password"}">
+    ${su ? `<div class="warn">تنبيه: احفظ بريدك الإلكتروني وكلمة المرور في مكان آمن، فلا يمكن استرجاع كلمة المرور حاليًا، ولا تشاركها مع أحد.</div>` : ""}
+    <button id="act">${su ? "إنشاء الحساب" : "دخول"}</button>
+    <button class="ghost" id="sw">${su ? "لديّ حساب، تسجيل الدخول" : "ليس لديّ حساب، إنشاء حساب"}</button>
+    <div class="note" id="note"></div></div>`);
+  $("sw").onclick = () => go(su ? "?login" : "?signup");
+  let gender = "";
+  if(su) $("gen").onclick = e => { const c = e.target.closest(".chip"); if(!c) return; gender = c.dataset.g; [...$("gen").children].forEach(x => x.classList.toggle("on", x === c)); };
+  $("act").onclick = async()=>{
+    const email = $("email").value.trim(), pass = $("pass").value;
+    say("note","");
+    if(!email || !pass) return say("note","أدخل البريد الإلكتروني وكلمة المرور");
+    if(!su){
+      $("act").disabled = true;
+      const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+      $("act").disabled = false;
+      if(error) return say("note", arErr(error));
+      return params.has("admin") ? adminPage() : params.has("profile") ? editPage(data.user) : dashboard(data.user);
+    }
+    const u = normName($("username").value), sl = $("slug").value.trim().toLowerCase();
+    if(!gender) return say("note","اختر الجنس");
+    if(!nameOk(u)) return say("note", NAME_MSG);
+    if(!slugOk(sl)) return say("note", SLUG_MSG);
+    if(pass.length < 6) return say("note","كلمة المرور يجب ألا تقل عن 6 أحرف");
+    $("act").disabled = true;
+    const t1 = await db.from("profiles").select("id").eq("username", u).maybeSingle();
+    if(t1.data){ $("act").disabled = false; return say("note","اسم المستخدم محجوز، اختر اسمًا آخر"); }
+    const t2 = await db.from("profiles").select("id").eq("slug", sl).maybeSingle();
+    if(t2.data){ $("act").disabled = false; return say("note","هذا الرابط محجوز، اختر رابطًا آخر"); }
+    const { data, error } = await db.auth.signUp({ email, password: pass, options:{ data:{ username: u, slug: sl, gender } } });
+    if(error){ $("act").disabled = false; return say("note", arErr(error)); }
+    if(!data.session){ $("act").disabled = false; return say("note","تم إنشاء الحساب. أكّد بريدك الإلكتروني ثم سجّل الدخول.", true); }
+    const r = await db.from("profiles").insert({ id: data.user.id, username: u, slug: sl, gender });
+    $("act").disabled = false;
+    if(r.error) return say("note", r.error.code === "23505" ? "الاسم أو الرابط محجوز، اختر غيره" : "تعذّر إنشاء الحساب، حاول مرة أخرى");
+    dashboard(data.user);
+  };
+}
+
+const TIPS = [
+  ["احترم غيرك","عامل الناس كما تحب أن يعاملوك."],
+  ["اختر كلماتك بعناية","فالكلمة الطيبة ترفع من شأنك، والكلمة الجارحة تترك أثراً مؤلماً."],
+  ["تقبّل الاختلاف","ليس من الضروري أن نتفق في كل شيء، لكن يجب أن نحترم آراء بعضنا."],
+  ["لا تقلّل من شأن أحد","لكل إنسان كرامته ومشاعره."],
+  ["استمع قبل أن تحكم","أعطِ الآخرين فرصة للتعبير عن أنفسهم."],
+  ["ابتعد عن السخرية والإهانة","فالقوة الحقيقية في حسن الأخلاق وليس في جرح الآخرين."],
+  ["اعتذر عندما تخطئ","الاعتذار دليل على النضج وليس ضعفاً."],
+  ["احترم حدود الآخرين","لا تتدخل فيما لا يعنيك، ولا تفرض رأيك على أحد."],
+  ["كن متواضعاً","لا تتكبر على أحد مهما كانت مكانتك."],
+  ["اجعل الاحترام متبادلاً","لا تطلب من الآخرين ما لا تقدمه لهم. 🌱"]
+];
+
+async function dashboard(user){
+  const p = await ensureProfile(user);
+  if(!p){ el(`${HOME}<div class="hero"><div class="moon">🌙</div><p class="sub">لم يتم العثور على حسابك، أو أن الاسم أو الرابط محجوز.</p></div><button class="ghost" id="out">تسجيل الخروج</button>`); $("out").onclick = async()=>{ await db.auth.signOut(); go(""); }; return; }
+  if(p.banned) return bannedPage();
+  const isAdmin = (await db.rpc("is_admin")).data === true;
+  const link = linkOf(p.slug);
+  el(`${BAR}${annHtml(false)}${HOME}<div class="hero" style="padding:16px 0 6px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك، شاركه لتصلك الرسائل</p></div>
+  <div class="glass"><div class="link" id="lnk"></div>
+    <button id="copy">نسخ الرابط</button><button class="ghost" id="share">مشاركة الرابط</button>${isAdmin ? `<button class="ghost" id="adm">لوحة الإدارة</button>` : ""}</div>
+  <div class="glass" id="fbox" hidden><h2>⭐ الرسائل المميزة</h2><div id="flist"></div></div>
+  <div class="glass"><div class="top"><h2>رسائلك</h2><span class="num" id="cnt">0</span></div>
+    <p class="tag">الرسالة العامة تظهر في صفحة رابطك مع ردّك، دون اسم المرسل.</p><div id="list">جارٍ التحميل...</div></div>
+  <div class="glass"><h2>مرسلاتي</h2><p class="tag">تظهر هنا حالة الرسائل التي أرسلتها وأنت مسجّل. لا يظهر نص الرسالة بعد الإرسال، ويمكنك إخفاء الرسالة بعد أن يقرأها المستلم.</p><div id="sent">جارٍ التحميل...</div></div>
+  <div class="glass"><h2>نصائح للتعامل</h2><ul class="tips" id="tips"></ul></div>
+  <div class="glass"><h2>للأمان</h2><ul class="tips"><li>لا تكتب معلومات شخصية في رسالتك، كالرقم أو العنوان.</li><li>احذف أي رسالة مسيئة، وبلّغ عن الحساب المسيء، ولا تشارك رابطك إلا مع من تعرف.</li><li>لا تشارك كلمة المرور مع أحد.</li></ul></div>`);
+  $("av").textContent = p.username[0]; $("nm").textContent = p.username; $("lnk").textContent = link;
+  TIPS.forEach(t => { const li = mk("li"); li.append(mk("b", null, t[0] + ": "), t[1]); $("tips").appendChild(li); });
+  const cp = async b => { try{ await navigator.clipboard.writeText(link); b.textContent = "تم النسخ ✓"; }catch(e){ b.textContent = "انسخ الرابط يدويًا"; } };
+  $("copy").onclick = () => cp($("copy"));
+  $("share").onclick = () => navigator.share ? navigator.share({ title:"ذكّرني", text:"أرسل لي رسالة مجهولة", url: link }).catch(()=>{}) : cp($("share"));
+  if(isAdmin) $("adm").onclick = () => go("?admin");
+  await wireBar(user);
+  reload = () => loadMsgs(user);
+  loadMsgs(user); loadSent();
+}
+
+function msgCard(m, user){
+  const d = mk("div","msg");
+  if(m.fresh){ d.appendChild(mk("span","new","جديدة")); }
+  if(m.sender_name) d.appendChild(mk("small","from","من: " + m.sender_name));
+  d.appendChild(mk("p", null, m.body));
+  if(m.reply) d.appendChild(mk("p","rep","ردّك: " + m.reply));
+  d.appendChild(mk("small", null, fmt(m.created_at) + (m.is_public ? " • عامة" : " • سرية")));
+  const row = mk("div");
+  const up = async f => { await db.from("messages").update(f).eq("id", m.id); loadMsgs(user); };
+  const st = mk("button","sbtn ghost", m.starred ? "إزالة التمييز ⭐" : "تمييز ⭐"); st.onclick = () => up({ starred: !m.starred });
+  const pub = mk("button","sbtn ghost", m.is_public ? "جعلها سرية" : "جعلها عامة"); pub.onclick = () => up({ is_public: !m.is_public });
+  const rp = mk("button","sbtn ghost","رد");
+  rp.onclick = ()=>{
+    rp.disabled = true;
+    const ta = mk("textarea"); ta.rows = 3; ta.maxLength = 1000; ta.placeholder = "اكتب ردّك"; ta.value = m.reply || "";
+    const sv = mk("button","sbtn","حفظ الرد"); sv.onclick = () => up({ reply: ta.value.trim() || null });
+    d.append(ta, sv);
+  };
+  const del = mk("button","sbtn red","حذف");
+  del.onclick = async()=>{ if(!confirm("هل تريد حذف هذه الرسالة؟")) return; await db.from("messages").delete().eq("id", m.id); loadMsgs(user); };
+  row.append(st, pub, rp, del); d.appendChild(row);
+  return d;
+}
+
+async function loadMsgs(user){
+  const { data, error } = await db.from("messages").select("id,to_user,body,sender_name,is_public,reply,created_at,read_at,starred").eq("to_user", user.id).order("created_at",{ascending:false});
+  const box = $("list"); if(!box) return; box.innerHTML = "";
+  if(error) return box.textContent = "تعذّر تحميل الرسائل";
+  $("cnt").textContent = data.length;
+  const ids = data.filter(m => !m.read_at).map(m => m.id);
+  data.forEach(m => m.fresh = !m.read_at);
+  const fl = $("flist"), fb = $("fbox"); fl.innerHTML = "";
+  const fav = data.filter(m => m.starred);
+  fb.hidden = !fav.length;
+  fav.forEach(m => fl.appendChild(msgCard(m, user)));
+  if(!data.length) return box.textContent = "لم تصلك رسائل بعد. شارك رابطك لتبدأ.";
+  data.forEach(m => box.appendChild(msgCard(m, user)));
+  if(ids.length){ await db.from("messages").update({ read_at: new Date().toISOString() }).in("id", ids); db.from("notifications").update({ read:true }).eq("user_id", user.id).eq("kind","message").then(()=>setBadge(0), ()=>{}); }
+}
+
+async function loadSent(){
+  const box = $("sent"); if(!box) return;
+  const { data, error } = await db.rpc("my_sent");
+  box.innerHTML = "";
+  if(error) return box.textContent = "تعذّر التحميل";
+  if(!data.length) return box.textContent = "لا توجد رسائل مرسلة.";
+  data.forEach(m => {
+    const d = mk("div","msg");
+    d.appendChild(mk("p", null, "إلى: " + m.to_username));
+    d.appendChild(mk("small", null, (m.read_at ? "تمت القراءة" : "لم تُقرأ بعد") + " • " + fmt(m.created_at)));
+    if(m.read_at){ const h = mk("button","sbtn ghost","إخفاء"); h.onclick = async()=>{ await db.rpc("hide_sent", { mid: m.id }); loadSent(); }; d.appendChild(mk("div")).appendChild(h); }
+    box.appendChild(d);
+  });
+}
+
+async function notifPage(user){
+  el(`${BAR}${HOME}<div class="glass"><h2>الإشعارات</h2><div id="nl2">جارٍ التحميل...</div></div>`);
+  await wireBar(user);
+  const { data } = await db.from("notifications").select("id,body,read,created_at").eq("user_id", user.id).order("created_at",{ascending:false}).limit(50);
+  const box = $("nl2"); box.innerHTML = "";
+  if(!data || !data.length) box.textContent = "لا توجد إشعارات.";
+  (data || []).forEach(n => { const d = mk("div","msg"); if(!n.read) d.appendChild(mk("span","new","جديد")); d.appendChild(mk("p", null, n.body)); d.appendChild(mk("small", null, fmt(n.created_at))); box.appendChild(d); });
+  await db.from("notifications").update({ read:true }).eq("user_id", user.id).eq("read", false); setBadge(0);
+}
+
+async function editPage(user){
+  const p = await ensureProfile(user);
+  if(!p) return go("");
+  if(p.banned) return bannedPage();
+  const lock = (t) => { if(!t) return ""; const nx = new Date(t); nx.setMonth(nx.getMonth() + 2); return nx > new Date() ? "يمكنك التغيير بعد: " + nx.toLocaleDateString("ar") : ""; };
+  const l1 = lock(p.username_changed_at), l2 = lock(p.slug_changed_at);
+  const dr = (await db.from("deletion_requests").select("status").eq("user_id", user.id).maybeSingle()).data;
+  el(`${BAR}${HOME}<div class="hero" style="padding:10px 0 0"><h1 class="brand" style="font-size:40px">حسابي</h1></div>
+  <div class="glass sm"><h2>اسم المستخدم</h2><p class="tag">الحالي: ${esc(p.username)} — يمكن تغييره مرة كل شهرين.</p>
+    <input id="nu" maxlength="25" placeholder="الاسم الجديد" ${l1 ? "disabled" : ""}>
+    <button id="sn" ${l1 ? "disabled" : ""}>حفظ الاسم</button><div class="note" id="n1">${l1}</div></div>
+  <div class="glass sm"><h2>رابطك الخاص</h2><p class="tag" dir="ltr" style="text-align:right">${esc(linkOf(p.slug))}</p><p class="tag">يمكن تغييره مرة كل شهرين، وسيتوقف الرابط القديم.</p>
+    <input id="ns2" dir="ltr" maxlength="25" placeholder="رابط جديد" ${l2 ? "disabled" : ""}>
+    <button id="sl" ${l2 ? "disabled" : ""}>حفظ الرابط</button><div class="note" id="n4">${l2}</div></div>
+  <div class="glass sm"><h2>الجنس</h2><div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>
+    <button id="sgd">حفظ الجنس</button><div class="note" id="n2"></div></div>
+  <div class="glass sm"><h2>كلمة المرور</h2><input id="np" type="password" placeholder="كلمة المرور الجديدة" dir="ltr" autocomplete="new-password">
+    <button id="sp">تغيير كلمة المرور</button><div class="note" id="n3"></div></div>
+  <div class="glass sm"><h2>حذف الحساب</h2>
+    ${dr && dr.status === "pending" ? `<p class="tag">تم إرسال طلبك، يرجى الانتظار حتى يوافق فريق العمل على حذف حسابك.</p>` : `${dr ? `<p class="tag">تم رفض طلبك السابق. يمكنك إرسال طلب جديد.</p>` : `<p class="tag">لن يُحذف حسابك إلا بعد موافقة فريق العمل. اكتب سبب الحذف.</p>`}
+    <textarea id="dr" rows="3" maxlength="500" placeholder="سبب حذف الحساب"></textarea><button class="red" id="sd">إرسال طلب الحذف</button>`}
+    <div class="note" id="n5"></div></div>`);
+  await wireBar(user);
+  let gender = "";
+  $("gen").onclick = e => { const c = e.target.closest(".chip"); if(!c) return; gender = c.dataset.g; [...$("gen").children].forEach(x => x.classList.toggle("on", x === c)); };
+  $("sn").onclick = async()=>{
+    const u = normName($("nu").value);
+    if(!nameOk(u)) return say("n1", NAME_MSG);
+    if(u === p.username) return say("n1","هذا هو اسمك الحالي");
+    const r = await db.from("profiles").update({ username: u }).eq("id", user.id);
+    if(r.error){ const m = r.error.message || ""; return say("n1", m.includes("NAMELIMIT") ? "لا يمكن تغيير الاسم قبل مرور شهرين" : r.error.code === "23505" ? "اسم المستخدم محجوز" : "تعذّر تغيير الاسم"); }
+    say("n1","تم تغيير الاسم", true); setTimeout(() => go("?profile"), 800);
+  };
+  $("sl").onclick = async()=>{
+    const s = $("ns2").value.trim().toLowerCase();
+    if(!slugOk(s)) return say("n4", SLUG_MSG);
+    if(s === p.slug) return say("n4","هذا هو رابطك الحالي");
+    const r = await db.from("profiles").update({ slug: s }).eq("id", user.id);
+    if(r.error){ const m = r.error.message || ""; return say("n4", m.includes("SLUGLIMIT") ? "لا يمكن تغيير الرابط قبل مرور شهرين" : r.error.code === "23505" ? "هذا الرابط محجوز" : "تعذّر تغيير الرابط"); }
+    say("n4","تم تغيير الرابط", true); setTimeout(() => go("?profile"), 800);
+  };
+  $("sgd").onclick = async()=>{
+    if(!gender) return say("n2","اختر الجنس");
+    const r = await db.from("profiles").update({ gender }).eq("id", user.id);
+    say("n2", r.error ? "تعذّر الحفظ" : "تم الحفظ", !r.error);
+  };
+  $("sp").onclick = async()=>{
+    const v = $("np").value;
+    if(v.length < 6) return say("n3","كلمة المرور يجب ألا تقل عن 6 أحرف");
+    const r = await db.auth.updateUser({ password: v });
+    say("n3", r.error ? arErr(r.error) : "تم تغيير كلمة المرور", !r.error);
+  };
+  if($("sd")) $("sd").onclick = async()=>{
+    const reason = $("dr").value.trim();
+    if(!reason) return say("n5","اكتب سبب الحذف");
+    const r = dr ? await db.from("deletion_requests").update({ reason, status:"pending" }).eq("user_id", user.id) : await db.from("deletion_requests").insert({ user_id: user.id, reason });
+    if(r.error) return say("n5","تعذّر إرسال الطلب");
+    say("n5","تم إرسال طلبك، انتظر موافقة فريق العمل", true); setTimeout(() => go("?profile"), 1200);
+  };
+}
+
+async function sendPage(key){
+  const p = await db.from("profiles").select("id,username,slug,banned").eq("slug", key).maybeSingle();
+  if(!p.data || p.data.banned){ el(`<div class="hero"><div class="moon">🌙</div><h1 class="brand" style="font-size:44px">ذكّرني</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
+  const s = await getSession();
+  const canReport = s && s.user.id !== p.data.id;
+  el(`${HOME}${annHtml(false)}<div class="hero" style="padding:16px 0 8px"><div class="avatar" id="av"></div>
+    <p class="tag" style="margin:0">أرسل رسالة مجهولة إلى</p><div class="who" id="who"></div></div>
+  <div class="glass sm" id="box"><h2>اكتب رسالتك</h2>
+    <p class="tag" style="margin:0 0 6px">كن لطيفًا في كلامك، فالكلمة الطيبة تصل إلى صاحبها.</p>
+    <textarea id="body" rows="5" maxlength="1000" placeholder="اكتب رسالتك هنا"></textarea>
+    <div class="cnt" id="c">الأحرف: ٠ / ١٠٠٠</div>
+    ${s ? `<label class="chk"><input type="checkbox" id="show"> إظهار اسمي لصاحب الرابط</label><p class="tag" style="font-size:13px;margin:0">يحتفظ الموقع بسجلّ المرسل المسجّل لأغراض الحماية، ولا يراه صاحب الرابط ما لم تُظهر اسمك.</p>` : ""}
+    <button id="send">إرسال الرسالة</button><div class="note" id="note"></div></div>
+  <div id="pub"></div>
+  <div class="glass sm" style="text-align:center"><b>هل تريد رابطك الخاص؟</b><button class="ghost" id="mine">أنشئ حسابك</button>
+    <button class="ghost sbtn" id="rp" style="margin:10px 0 0">إبلاغ عن هذا الحساب</button><div id="rbox"></div></div>`);
+  $("av").textContent = p.data.username[0]; $("who").textContent = p.data.username;
+  $("body").oninput = ()=>{ $("c").textContent = "الأحرف: " + $("body").value.length.toLocaleString("ar-EG") + " / ١٠٠٠"; };
+  $("mine").onclick = () => go("?signup");
+  $("rp").onclick = ()=>{
+    if(!s){ $("rbox").innerHTML = `<p class="tag">يجب تسجيل الدخول للإبلاغ.</p><button class="sbtn" id="rl">تسجيل الدخول</button>`; $("rl").onclick = () => go("?login"); return; }
+    if(!canReport){ $("rbox").innerHTML = `<p class="tag">لا يمكنك الإبلاغ عن حسابك.</p>`; return; }
+    $("rbox").innerHTML = `<p class="tag">اختر سبب الإبلاغ:</p><div class="chips" id="rs"></div><div class="note" id="rn"></div>`;
+    ["إساءة","انتحال","إزعاج"].forEach(x => { const c = mk("div","chip",x); c.onclick = async()=>{
+      const r = await db.from("reports").insert({ reporter_id: s.user.id, reported_id: p.data.id, reason: x });
+      say("rn", r.error ? (r.error.code === "23505" ? "سبق أن أبلغت عن هذا الحساب" : "تعذّر إرسال البلاغ") : "تم إرسال البلاغ، شكرًا لك", !r.error); }; $("rs").appendChild(c); });
+  };
+  $("send").onclick = async()=>{
+    const t = $("body").value.trim();
+    if(!t) return say("note","اكتب رسالتك أولًا");
+    $("send").disabled = true;
+    const r = await db.from("messages").insert({ to_user: p.data.id, body: t, sender_name: (s && $("show").checked) ? "show" : null });
+    $("send").disabled = false;
+    if(r.error){ const m = r.error.message || ""; return say("note", m.includes("BANNED") ? "هذا المستخدم غير متاح" : m.includes("TOOFAST") ? "وصلت رسائل كثيرة الآن، حاول بعد قليل" : m.includes("BADWORD") ? "رسالتك تحتوي على كلمات غير مسموحة" : "حدث خطأ، حاول مرة أخرى"); }
+    $("box").innerHTML = `<div class="ok"><div class="big">✓</div><b>تم إرسال رسالتك</b></div><button class="ghost" id="again">إرسال رسالة أخرى</button>`;
+    $("again").onclick = () => sendPage(key);
+  };
+  const pm = await db.from("public_messages").select("body,reply,created_at").eq("to_user", p.data.id).order("created_at",{ascending:false}).limit(20);
+  if(pm.data && pm.data.length){
+    const g = mk("div","glass sm"); g.appendChild(mk("h2", null, "رسائل عامة"));
+    pm.data.forEach(m => { const d = mk("div","msg"); d.appendChild(mk("p", null, m.body)); if(m.reply) d.appendChild(mk("p","rep","الرد: " + m.reply)); g.appendChild(d); });
+    $("pub").appendChild(g);
+  }
+}
+
+// ===== لوحة الإدارة =====
+const accounts = async () => (await db.rpc("admin_profiles")).data || [];
+const nameMap = async () => { const m = {}; (await accounts()).forEach(a => m[a.id] = a.username); return m; };
+async function adminPage(){
+  if((await db.rpc("is_admin")).data !== true){ el(`${HOME}<div class="glass"><p class="sub">لا تملك صلاحية الدخول إلى هذه الصفحة</p></div>`); return; }
+  el(`${HOME}<div class="hero" style="padding:10px 0 0"><h1 class="brand" style="font-size:40px">لوحة الإدارة</h1></div><div class="tabs" id="tabs"></div><div class="glass" id="ad">جارٍ التحميل...</div>`);
+  [["الإحصائيات",aStats],["الحسابات",aAcc],["الرسائل",aMsg],["البلاغات",aRep],["طلبات الحذف",aDel],["الاقتراحات",aSug],["الإعلان",aAnn],["الكلمات الممنوعة",aWords]].forEach(([t,f]) => { const b = mk("button","sbtn ghost",t); b.onclick = f; $("tabs").appendChild(b); });
+  aStats();
+}
+async function aStats(){
+  const d0 = new Date(); d0.setHours(0,0,0,0); const iso = d0.toISOString();
+  const r = await Promise.all([cnt("profiles"),cnt("profiles",q=>q.eq("banned",true)),cnt("messages"),cnt("suggestions"),cnt("reports"),cnt("deletion_requests",q=>q.eq("status","pending"),"user_id"),cnt("visits"),cnt("visits",q=>q.gte("created_at",iso)),cnt("visits",q=>q.gte("created_at",iso).eq("device","جوال")),cnt("visits",q=>q.gte("created_at",iso).eq("device","حاسوب"))]);
+  const L = ["عدد الحسابات","الحسابات المحظورة","عدد الرسائل","عدد الاقتراحات","عدد البلاغات","طلبات حذف معلّقة","إجمالي الزيارات","زيارات اليوم","زيارات اليوم من الجوال","زيارات اليوم من الحاسوب"];
+  const box = $("ad"); box.innerHTML = "";
+  L.forEach((l,i) => { const x = mk("div","stat"); x.append(mk("span", null, l), mk("b", null, r[i].toLocaleString("ar-EG"))); box.appendChild(x); });
+}
+async function aAcc(){
+  const all = await accounts(), box = $("ad"); box.innerHTML = "";
+  const q = mk("input"); q.placeholder = "ابحث عن مستخدم"; box.appendChild(q);
+  const list = mk("div"); box.appendChild(list);
+  const draw = () => {
+    list.innerHTML = "";
+    all.filter(a => a.username.includes(q.value.trim().toLowerCase())).forEach(a => {
+      const d = mk("div","msg");
+      d.appendChild(mk("p", null, a.username + " — " + (a.gender || "غير محدد") + (a.banned ? " — محظور" : "")));
+      d.appendChild(mk("small", null, "الرابط: " + a.slug + " • " + new Date(a.created_at).toLocaleDateString("ar")));
+      const row = mk("div");
+      const bn = mk("button","sbtn ghost", a.banned ? "إلغاء الحظر" : "حظر");
+      bn.onclick = async()=>{ await db.from("profiles").update({ banned: !a.banned }).eq("id", a.id); aAcc(); };
+      const dl = mk("button","sbtn red","حذف");
+      dl.onclick = async()=>{ if(!confirm("حذف الحساب نهائيًا مع كل رسائله؟")) return; const r = await db.rpc("admin_delete_account", { uid: a.id }); if(r.error) alert("تعذّر الحذف"); aAcc(); };
+      row.append(bn, dl); d.appendChild(row); list.appendChild(d);
+    });
+  };
+  q.oninput = draw; draw();
+}
+async function aMsg(){
+  const names = await nameMap();
+  const { data } = await db.rpc("admin_messages");
+  const box = $("ad"); box.innerHTML = "";
+  (data || []).forEach(m => {
+    const d = mk("div","msg"); d.append(mk("small","from","إلى: " + (names[m.to_user] || "؟") + " — المرسل: " + (m.sender_id ? (names[m.sender_id] || "؟") : "زائر") + (m.sender_name ? " (أظهر اسمه)" : "")), mk("p", null, m.body));
+    const x = mk("button","sbtn red","حذف"); x.onclick = async()=>{ await db.from("messages").delete().eq("id", m.id); aMsg(); };
+    d.appendChild(x); box.appendChild(d);
+  });
+  if(!(data || []).length) box.textContent = "لا توجد رسائل";
+}
+async function aRep(){
+  const names = await nameMap();
+  const { data } = await db.from("reports").select("*").order("created_at",{ascending:false}).limit(100);
+  const box = $("ad"); box.innerHTML = "";
+  (data || []).forEach(r => {
+    const d = mk("div","msg"); d.append(mk("p", null, "المبلَّغ عنه: " + (names[r.reported_id] || "؟") + " — السبب: " + r.reason), mk("small", null, "المبلِّغ: " + (names[r.reporter_id] || "؟") + " • " + fmt(r.created_at)));
+    const row = mk("div");
+    const bn = mk("button","sbtn ghost","حظر المبلَّغ عنه"); bn.onclick = async()=>{ await db.from("profiles").update({ banned:true }).eq("id", r.reported_id); alert("تم الحظر"); };
+    const x = mk("button","sbtn red","حذف البلاغ"); x.onclick = async()=>{ await db.from("reports").delete().eq("id", r.id); aRep(); };
+    row.append(bn, x); d.appendChild(row); box.appendChild(d);
+  });
+  if(!(data || []).length) box.textContent = "لا توجد بلاغات";
+}
+async function aDel(){
+  const names = await nameMap();
+  const { data } = await db.from("deletion_requests").select("*").eq("status","pending").order("created_at",{ascending:false});
+  const box = $("ad"); box.innerHTML = "";
+  (data || []).forEach(r => {
+    const d = mk("div","msg"); d.append(mk("p", null, (names[r.user_id] || "؟") + " — السبب: " + r.reason), mk("small", null, fmt(r.created_at)));
+    const row = mk("div");
+    const ok = mk("button","sbtn red","موافقة وحذف الحساب"); ok.onclick = async()=>{ if(!confirm("حذف الحساب نهائيًا؟")) return; const x = await db.rpc("admin_delete_account", { uid: r.user_id }); if(x.error) alert("تعذّر الحذف"); aDel(); };
+    const no = mk("button","sbtn ghost","رفض"); no.onclick = async()=>{ await db.from("deletion_requests").update({ status:"rejected" }).eq("user_id", r.user_id); aDel(); };
+    row.append(ok, no); d.appendChild(row); box.appendChild(d);
+  });
+  if(!(data || []).length) box.textContent = "لا توجد طلبات حذف";
+}
+async function aSug(){
+  const names = await nameMap();
+  const { data } = await db.from("suggestions").select("*").order("created_at",{ascending:false}).limit(100);
+  const box = $("ad"); box.innerHTML = "";
+  (data || []).forEach(m => {
+    const d = mk("div","msg"); d.append(mk("small","from","من: " + (names[m.user_id] || "؟")), mk("p", null, m.body));
+    const x = mk("button","sbtn red","حذف"); x.onclick = async()=>{ await db.from("suggestions").delete().eq("id", m.id); aSug(); };
+    d.appendChild(x); box.appendChild(d);
+  });
+  if(!(data || []).length) box.textContent = "لا توجد اقتراحات";
+}
+async function aAnn(){
+  const cur = (await db.from("announcements").select("*").eq("active", true).order("created_at",{ascending:false}).limit(1)).data;
+  const box = $("ad"); box.innerHTML = "";
+  if(cur && cur[0]){
+    const c = cur[0]; const d = mk("div","msg"); d.append(mk("small","from","الإعلان الحالي" + (c.show_all ? " (يظهر في كل الصفحات)" : " (الرئيسية فقط)") + (c.expires_at ? " — ينتهي: " + fmt(c.expires_at) : "")), mk("p", null, (c.title ? c.title + " — " : "") + c.body));
+    const x = mk("button","sbtn red","إخفاء الإعلان"); x.onclick = async()=>{ await db.from("announcements").update({ active:false }).eq("active", true); aAnn(); };
+    d.appendChild(x); box.appendChild(d);
+  }
+  const t = mk("input"); t.placeholder = "عنوان الإعلان (اختياري)"; t.maxLength = 80;
+  const b = mk("textarea"); b.rows = 3; b.maxLength = 600; b.placeholder = "نص الإعلان";
+  const lb = mk("label","chk"); const ck = mk("input"); ck.type = "checkbox"; lb.append(ck, " إظهاره في كل صفحات الموقع (وإلا فالصفحة الرئيسية فقط)");
+  const ex = mk("select"); [["","بدون تاريخ انتهاء"],["1","ينتهي بعد يوم"],["7","ينتهي بعد أسبوع"],["30","ينتهي بعد شهر"]].forEach(([v,l]) => { const o = mk("option", null, l); o.value = v; ex.appendChild(o); });
+  const pb = mk("button", null, "نشر الإعلان"), nt = mk("div","note");
+  pb.onclick = async()=>{
+    if(!b.value.trim()){ nt.textContent = "اكتب نص الإعلان"; return; }
+    await db.from("announcements").update({ active:false }).eq("active", true);
+    const exp = ex.value ? new Date(Date.now() + Number(ex.value) * 864e5).toISOString() : null;
+    const r = await db.from("announcements").insert({ title: t.value.trim() || null, body: b.value.trim(), show_all: ck.checked, expires_at: exp });
+    if(r.error){ nt.textContent = "تعذّر النشر"; return; } aAnn();
+  };
+  box.append(t, b, lb, ex, pb, nt);
+}
+async function aWords(){
+  const { data } = await db.from("banned_words").select("word").order("word");
+  const box = $("ad"); box.innerHTML = "";
+  const inp = mk("input"); inp.placeholder = "كلمة ممنوعة جديدة";
+  const add = mk("button", null, "إضافة");
+  add.onclick = async()=>{ const w = inp.value.trim().toLowerCase(); if(!w) return; await db.from("banned_words").insert({ word: w }); aWords(); };
+  box.append(inp, add);
+  (data || []).forEach(w => { const d = mk("div","stat"); d.appendChild(mk("span", null, w.word)); const x = mk("button","sbtn red","حذف"); x.onclick = async()=>{ await db.from("banned_words").delete().eq("word", w.word); aWords(); }; d.appendChild(x); box.appendChild(d); });
+}
+start();
+</script>
+</body>
+</html>
