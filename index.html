@@ -179,6 +179,13 @@ a{color:inherit;text-decoration:none}
 .shb.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}.shb.wa{background:#25d366}.shb.tg{background:#2aabee}
 .about p{line-height:2;margin:8px 0}.about b{font-weight:700}.more{display:inline-block;margin-top:6px;color:var(--gold);font-weight:700}
 @media(min-width:700px){.feat2{grid-template-columns:repeat(4,1fr)}}
+.hero .logo{margin:0 auto 18px}h1.brand{margin:8px 0 6px;line-height:1.35}
+button.sbtn{display:inline-flex;align-items:center;gap:6px}.sbtn .ico{width:1.05em;height:1.05em}
+.like{padding:10px 18px}.like .ico{width:22px;height:22px}
+.lkn{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--gold)}
+.qrbox canvas{max-width:260px;width:100%}
+.dev{color:var(--gold);font-weight:700}.dev:hover{text-decoration:underline}
+a.shb .ico{width:20px;height:20px;margin-left:8px}
 </style>
 <style id="custom"></style>
 </head>
@@ -215,7 +222,14 @@ const I = {
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
   book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/>',
   coffee:'<path d="M5 8h11v6a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 9h2a2 2 0 0 1 0 4h-2"/>',
-  chev:'<path d="M15 6l-6 6 6 6"/>'
+  chev:'<path d="M15 6l-6 6 6 6"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>',
+  unpub:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/><path d="M4 4l16 16"/>',
+  unstar:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/><path d="M4 4l16 16"/>',
+  reply:'<path d="M9 7L4 12l5 5"/><path d="M4 12h9a6 6 0 0 1 6 6v1"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 17l-5-5-9 8"/>',
+  fb:'<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8a1 1 0 0 1 1-1z"/>'
 };
 const ic = n => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
 const N = () => SET.site_name || "ذكّرني";
@@ -251,7 +265,7 @@ const darken = h => { const n = parseInt(h.slice(1), 16); const f = v => Math.ma
 
 const LS = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
 function setFooter(){
-  $("ft").innerHTML = ZK + `<nav class="fnav"><a href="?about">عن الموقع</a><a href="?guide">الإرشادات</a><a href="?suggest">اقترح فكرة</a></nav>© 2026 <b>${esc(N())}</b> · تطوير <b>${esc(T("footer_dev","FakhamaDev"))}</b>`;
+  $("ft").innerHTML = ZK + `<nav class="fnav"><a href="?about">عن الموقع</a><a href="?guide">الإرشادات</a><a href="?suggest">اقترح فكرة</a></nav>© 2026 <b>${esc(N())}</b> · تطوير <a class="dev" href="${FB}" target="_blank" rel="noopener noreferrer">${esc(T("footer_dev","FakhamaDev"))}</a>`;
 }
 function applySettings(){
   const root = document.documentElement.style;
@@ -347,6 +361,9 @@ async function start(){
   if(JSON.stringify([SET, ANN]) !== before && (["home","about","guide","tips","safety","respect","featured","suggest"].includes(route) || SET.maintenance === "1")) render(route, s);
 }
 
+const FB = "https://www.facebook.com/share/1E34bY6N7D/";
+const SHARE_TXT = "تذكيرٌ بالخير، أو نصيحةٌ طيبة، أو كلمةٌ تنفع وتبقى.";
+const mkb = (cls, icon, text) => { const b = mk("button", cls); b.innerHTML = ic(icon) + " " + esc(text); return b; };
 const ZK = '<div class="zk"><span>﴿ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ ﴾</span><small>سورة الرعد · 28</small></div>';
 const AV_ICONS = ["chat","star","leaf","sun","bolt","shield","bell","book","coffee","thumb","lock","user"];
 const AV_COLORS = ["#e3b94a","#5fd1a5","#6cb6ff","#ff8fa3","#b39cff","#ffa94d"];
@@ -363,21 +380,33 @@ function drawStats(){
 }
 async function shareCard(m){
   try{ await document.fonts.load("700 28px Tajawal"); }catch(e){}
-  const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H;
+  const W = 1080, H = 1080, F = "Tajawal, Tahoma, sans-serif", c = document.createElement("canvas"); c.width = W; c.height = H;
   const x = c.getContext("2d");
   const g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#04201a"); g.addColorStop(1, "#0a3a2c"); x.fillStyle = g; x.fillRect(0, 0, W, H);
-  x.strokeStyle = "#e3b94a"; x.lineWidth = 4; x.strokeRect(40, 40, W - 80, H - 80);
+  x.strokeStyle = "#e3b94a"; x.lineWidth = 3; x.strokeRect(36, 36, W - 72, H - 72);
   x.direction = "rtl"; x.textAlign = "center";
-  x.fillStyle = "#e3b94a"; x.font = "700 64px Tajawal, sans-serif"; x.fillText(N(), W / 2, 150);
-  const wrap = (t, font, maxW) => { x.font = font; const out = []; t.split("\n").forEach(par => { let line = ""; par.split(" ").forEach(w => { const test = line ? line + " " + w : w; if(x.measureText(test).width > maxW && line){ out.push(line); line = w; } else line = test; }); out.push(line); }); return out; };
-  let y = 300; x.fillStyle = "#f4efe0";
-  wrap(m.body, "700 54px Tajawal, sans-serif", W - 240).slice(0, 12).forEach(l => { x.fillText(l, W / 2, y); y += 84; });
-  if(m.reply){
-    y += 30; x.fillStyle = "#e3b94a"; x.font = "700 38px Tajawal, sans-serif"; x.fillText("الرد", W / 2, y); y += 70; x.fillStyle = "#f6e7b0";
-    wrap(m.reply, "400 46px Tajawal, sans-serif", W - 240).slice(0, 6).forEach(l => { x.fillText(l, W / 2, y); y += 72; });
+  const wrap = (t, font, maxW) => { x.font = font; const out = []; String(t).split("\n").forEach(par => { let line = ""; par.split(" ").forEach(w => { const test = line ? line + " " + w : w; if(x.measureText(test).width > maxW && line){ out.push(line); line = w; } else line = test; }); out.push(line); }); return out; };
+  x.fillStyle = "#e3b94a"; x.font = "700 56px " + F; x.fillText(N(), W / 2, 130);
+  const top = 190, bottom = H - 190, maxW = W - 220;
+  let size = 58, lh, rs, body, reply;
+  for(; size >= 30; size -= 2){
+    lh = Math.round(size * 1.55); rs = Math.round(size * .8);
+    body = wrap(m.body, "700 " + size + "px " + F, maxW);
+    reply = m.reply ? wrap(m.reply, "400 " + rs + "px " + F, maxW) : [];
+    if(body.length * lh + (reply.length ? 84 + reply.length * Math.round(rs * 1.5) : 0) <= bottom - top) break;
   }
-  x.fillStyle = "#9fb8ac"; x.font = "400 36px Tajawal, sans-serif"; x.fillText("أرسل لي رسالة مجهولة", W / 2, H - 170);
-  x.fillStyle = "#e3b94a"; x.font = "700 34px Tajawal, sans-serif"; x.direction = "ltr"; x.fillText(linkOf(window._me.slug).replace(/^https?:\/\//, ""), W / 2, H - 110);
+  const maxL = Math.max(1, Math.floor((bottom - top) / lh)); if(body.length > maxL) body = body.slice(0, maxL);
+  const rlh = Math.round(rs * 1.5), total = body.length * lh + (reply.length ? 84 + reply.length * rlh : 0);
+  let y = top + Math.max(0, (bottom - top - total) / 2) + size;
+  x.fillStyle = "#f4efe0"; x.font = "700 " + size + "px " + F;
+  body.forEach(l => { x.fillText(l, W / 2, y); y += lh; });
+  if(reply.length){
+    y += 20; x.fillStyle = "#e3b94a"; x.font = "700 " + Math.round(size * .7) + "px " + F; x.fillText("الرد", W / 2, y); y += Math.round(size * 1.1);
+    x.fillStyle = "#f6e7b0"; x.font = "400 " + rs + "px " + F; reply.forEach(l => { x.fillText(l, W / 2, y); y += rlh; });
+  }
+  x.strokeStyle = "#e3b94a66"; x.lineWidth = 2; x.beginPath(); x.moveTo(W / 2 - 120, H - 170); x.lineTo(W / 2 + 120, H - 170); x.stroke();
+  x.fillStyle = "#9fb8ac"; x.font = "400 30px " + F; wrap(SHARE_TXT, x.font, W - 220).slice(0, 2).forEach((l, i) => x.fillText(l, W / 2, H - 125 + i * 40));
+  x.fillStyle = "#e3b94a"; x.font = "700 30px " + F; x.direction = "ltr"; x.fillText(linkOf(window._me.slug).replace(/^https?:\/\//, ""), W / 2, H - 52);
   c.toBlob(async blob => {
     const f = new File([blob], "message.png", { type: "image/png" });
     if(navigator.canShare && navigator.canShare({ files: [f] })){ try{ await navigator.share({ files: [f], title: N() }); return; }catch(e){ if(e.name === "AbortError") return; } }
@@ -428,8 +457,9 @@ function guidePage(s, open){
   const o = open === "guide" ? "tips" : open;
   const list = a => a.map((t, i) => `<div class="tipc"><div class="n">${i + 1}</div><div><b>${esc(t[0])}</b><p>${esc(t[1])}</p></div></div>`).join("");
   const sec = (k, title, icon, inner) => `<details class="glass acc" ${o === k ? "open" : ""}><summary>${ic(icon)}<span>${title}</span></summary><div class="accb">${inner}</div></details>`;
+  const notice = `<div class="warn"><b class="hl">تنبيه:</b> كثرة البلاغات على حساب قد تؤدي إلى تقييده أو حذفه، إذا ثبتت مخالفات مثل السبّ أو الشتم أو أي إساءة، وذلك بعد مراجعة البلاغات والتأكد منها.</div>`;
   infoPage(s, "الإرشادات", "نصائح بسيطة تجعل تجربتك أجمل وأكثر أمانًا.",
-    sec("tips","كيف نتعامل بلطف","chat", list(TIPS)) + sec("safety","كيف نحمي حسابنا","shield", list(SAFE)) +
+    notice + sec("tips","كيف نتعامل بلطف","chat", list(TIPS)) + sec("safety","كيف نحمي حسابنا","shield", list(SAFE)) +
     sec("respect","الاحترام أساس التعامل بين الناس","star", `<p>احترم غيرك بكلامك وأفعالك، فالكلمة الطيبة صدقة، والأسلوب الراقي دليل على حسن التربية. لا تجرح مشاعر الآخرين، ولا تقلّل من شأن أحد، واختلف مع الناس بأدب واحترام.</p><p>تذكّر دائماً: عامل الناس كما تحب أن يعاملوك، فالاحترام لا يُفرض بالقوة، بل يُكتسب بالأخلاق، والكلمة الطيبة تترك أثراً جميلاً في القلوب.</p>`));
 }
 function aboutPage(s){
@@ -448,9 +478,9 @@ function aboutPage(s){
 function suggestPage(s){
   if(!on("show_suggestions")) return infoPage(s, "اقتراحات", "هذه الصفحة غير متاحة حاليًا.", "");
   infoPage(s, "ساعدنا نطوّر الموقع", "اكتب أي فكرة أو ملاحظة، وسنقرأها بعناية. لا تحتاج حسابًا.",
-    `<div class="glass sm" id="sbox"><div class="lbl">نوع اقتراحك</div><div class="chips" id="sk"></div><textarea id="sg" rows="5" maxlength="480" placeholder="اكتب فكرتك هنا..."></textarea><div class="cnt" id="sc">0 / 480</div><button id="sgb">أرسل الاقتراح</button><div class="note" id="sgn"></div></div>`);
-  let kind = "فكرة";
-  ["فكرة","مشكلة","تحسين"].forEach(k => { const c = mk("div", "chip" + (k === kind ? " on" : ""), k); c.onclick = () => { kind = k; [...$("sk").children].forEach(x => x.classList.toggle("on", x === c)); }; $("sk").appendChild(c); });
+    `<div class="glass sm" id="sbox"><div class="lbl">نوع اقتراحك</div><div class="chips" id="sk"></div><textarea id="sg" rows="5" maxlength="480" placeholder="اكتب فكرتك هنا..."></textarea><div class="cnt" id="sc">0 / 480</div><button id="sgb">أرسل الاقتراح</button><div class="note" id="sgn"></div></div><div class="glass sm"><h2>التواصل مع المطور</h2><p class="tag">للتواصل المباشر أو الاستفسار، تفضّل بزيارة حساب المطور.</p><a class="shb" href="${FB}" target="_blank" rel="noopener noreferrer">${ic("fb")} حساب المطور على فيسبوك</a></div>`);
+  let kind = "فكرة"; const PH = { "فكرة":"اكتب فكرتك هنا...", "مشكلة":"اكتب مشكلتك هنا...", "تحسين":"اكتب اقتراح التحسين هنا..." };
+  ["فكرة","مشكلة","تحسين"].forEach(k => { const c = mk("div", "chip" + (k === kind ? " on" : ""), k); c.onclick = () => { kind = k; $("sg").placeholder = PH[k]; [...$("sk").children].forEach(x => x.classList.toggle("on", x === c)); }; $("sk").appendChild(c); });
   $("sg").oninput = () => { $("sc").textContent = $("sg").value.length.toLocaleString("en") + " / 480"; };
   $("sgb").onclick = async()=>{
     const v = $("sg").value.trim();
@@ -578,7 +608,7 @@ async function dashboard(user){
   if(p.banned) return bannedPage();
   const isAdmin = (await db.rpc("is_admin")).data === true;
   const link = linkOf(p.slug);
-  el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك الخاص. انشره ليرسل لك الناس رسائل مجهولة.</p><p class="tag" id="lkn"></p></div>
+  el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك الخاص. انشره ليرسل لك الناس رسائل مجهولة.</p><p class="tag lkn" id="lkn"></p></div>
   <div class="glass"><div class="link sel" id="lnk"></div>
     <div class="shr"><a class="shb wa" id="wa" target="_blank" rel="noopener">واتساب</a><a class="shb tg" id="tg" target="_blank" rel="noopener">تيليجرام</a><button class="shb" id="copy">نسخ الرابط</button></div><div class="shr"><button class="shb ghost" id="share">مشاركة</button><button class="shb ghost" id="qrb">رمز QR</button></div><div class="qrbox" id="qrbox"></div>${isAdmin ? `<button class="ghost" id="adm">لوحة الإدارة</button>` : ""}</div>
   <div class="glass"><h2>إحصائياتي</h2><div class="stats" id="stt"></div><div class="badges" id="bdg"></div></div>
@@ -590,14 +620,14 @@ async function dashboard(user){
   setAv($("av"), p); $("nm").textContent = p.username; $("lnk").textContent = link;
   const cp = async b => { try{ await navigator.clipboard.writeText(link); b.textContent = "تم النسخ ✓"; }catch(e){ b.textContent = "انسخ الرابط يدويًا"; } };
   $("copy").onclick = () => cp($("copy"));
-  $("share").onclick = () => navigator.share ? navigator.share({ title: N(), text:"أرسل لي رسالة مجهولة", url: link }).catch(()=>{}) : cp($("share"));
+  $("share").onclick = () => navigator.share ? navigator.share({ title: N(), text: SHARE_TXT, url: link }).catch(()=>{}) : cp($("share"));
   $("qrb").onclick = () => qrShow(link);
-  $("wa").href = "https://wa.me/?text=" + encodeURIComponent("أرسل لي رسالة مجهولة: " + link);
-  $("tg").href = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent("أرسل لي رسالة مجهولة");
+  $("wa").href = "https://wa.me/?text=" + encodeURIComponent(SHARE_TXT + "\n" + link);
+  $("tg").href = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(SHARE_TXT);
   window._me = { slug: p.slug, username: p.username };
   if(isAdmin) $("adm").onclick = () => go("?admin");
   await wireBar(user);
-  db.rpc("like_count", { uid: user.id }).then(r => { if($("lkn")) $("lkn").textContent = "عدد المعجبين بصفحتك: " + Number(r.data || 0).toLocaleString("en"); window._st = Object.assign(window._st || {}, { likes: Number(r.data || 0) }); drawStats(); });
+  db.rpc("like_count", { uid: user.id }).then(r => { if($("lkn")) $("lkn").innerHTML = ic("thumb") + " عدد المعجبين بصفحتك: " + Number(r.data || 0).toLocaleString("en"); window._st = Object.assign(window._st || {}, { likes: Number(r.data || 0) }); drawStats(); });
   reload = () => loadMsgs(user);
   loadMsgs(user); loadSent();
 }
@@ -611,19 +641,19 @@ function msgCard(m, user, main){
   d.appendChild(mk("small", null, fmt(m.created_at) + (m.is_public ? " • منشورة في صفحتك" : " • خاصة")));
   const row = mk("div");
   const up = async f => { await db.from("messages").update(f).eq("id", m.id); loadMsgs(user); };
-  const st = mk("button","sbtn ghost", m.starred ? "إزالة التمييز" : "تمييز"); st.onclick = () => up({ starred: !m.starred });
-  const pub = mk("button","sbtn ghost", m.is_public ? "إلغاء النشر" : "نشر في صفحتي"); pub.onclick = () => up({ is_public: !m.is_public });
-  const rp = mk("button","sbtn ghost","رد");
+  const st = mkb("sbtn ghost", m.starred ? "unstar" : "star", m.starred ? "إزالة التمييز" : "تمييز"); st.onclick = () => up({ starred: !m.starred });
+  const pub = mkb("sbtn ghost", m.is_public ? "unpub" : "globe", m.is_public ? "إلغاء النشر" : "نشر في صفحتي"); pub.onclick = () => up({ is_public: !m.is_public });
+  const rp = mkb("sbtn ghost","reply","رد");
   rp.onclick = ()=>{
     rp.disabled = true;
     const ta = mk("textarea"); ta.rows = 3; ta.maxLength = 1000; ta.placeholder = "اكتب ردّك"; ta.value = m.reply || "";
     const sv = mk("button","sbtn","حفظ الرد"); sv.onclick = () => up({ reply: ta.value.trim() || null });
     d.append(ta, sv);
   };
-  const del = mk("button","sbtn red","حذف");
+  const del = mkb("sbtn red","trash","حذف");
   del.onclick = async()=>{ if(!confirm("هل تريد حذف هذه الرسالة؟")) return; await db.from("messages").delete().eq("id", m.id); loadMsgs(user); };
   row.append(st, pub, rp, del);
-  if(m.is_public){ const sh = mk("button","sbtn ghost","مشاركة كصورة"); sh.onclick = () => shareCard(m); row.append(sh); }
+  if(m.is_public){ const sh = mkb("sbtn ghost","image","مشاركة كصورة"); sh.onclick = () => shareCard(m); row.append(sh); }
   d.appendChild(row);
   return d;
 }
@@ -656,7 +686,7 @@ async function loadSent(){
     const d = mk("div","msg");
     d.appendChild(mk("p", null, "إلى: " + m.to_username));
     d.appendChild(mk("small", null, (m.read_at ? "قرأها المستلم" : "لم يقرأها المستلم بعد") + " • " + fmt(m.created_at)));
-    if(m.read_at){ const h = mk("button","sbtn ghost","إزالة من القائمة"); h.onclick = async()=>{ await db.rpc("hide_sent", { mid: m.id }); loadSent(); }; d.appendChild(mk("div")).appendChild(h); }
+    if(m.read_at){ const h = mkb("sbtn ghost","unpub","إزالة من القائمة"); h.onclick = async()=>{ await db.rpc("hide_sent", { mid: m.id }); loadSent(); }; d.appendChild(mk("div")).appendChild(h); }
     box.appendChild(d);
   });
 }
@@ -761,8 +791,8 @@ async function sendPage(key){
   if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
   const s = await getSession();
   const canReport = s && s.user.id !== p.data.id, mx = MAXLEN();
-  el(`${HOME}${annHtml(false)}<div class="hero" style="padding:14px 0 6px"><div class="avatar" id="av"></div>
-    <p class="tag" style="margin:0">أرسل رسالة مجهولة إلى</p><div class="who" id="who"></div><button class="like" id="lk">${ic("thumb")}<span id="lkt">أعجبني</span><b id="lkc">0</b></button><div class="note" id="lkn2"></div><p class="tag" id="bio"></p></div>
+  el(`${s ? BAR() : ""}${HOME}${annHtml(false)}<div class="hero" style="padding:14px 0 6px"><div class="avatar" id="av"></div>
+    <p class="tag" style="margin:0">أرسل رسالة مجهولة إلى</p><div class="who" id="who"></div><button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button><div class="note" id="lkn2"></div><p class="tag" id="bio"></p></div>
   <div class="glass sm" id="box"><h2>اكتب رسالتك</h2><div id="prm"></div>
     <p class="tag" style="margin:0 0 6px">كن لطيفًا في كلامك، فالكلمة الطيبة تصل إلى صاحبها.</p>
     <textarea id="body" rows="5" maxlength="${mx}" placeholder="اكتب رسالتك هنا"></textarea>
@@ -770,14 +800,13 @@ async function sendPage(key){
     ${s ? `<label class="chk"><input type="checkbox" id="show"> إظهار اسمي لصاحب الرابط</label><p class="tag" style="font-size:13px;margin:0">يحتفظ الموقع بسجلّ المرسل المسجّل لأغراض الحماية، ولا يراه صاحب الرابط ما لم تُظهر اسمك.</p>` : ""}
     <button id="send">إرسال الرسالة</button><div class="note" id="note"></div></div>
   <div id="pub"></div>
-  <div class="glass sm" style="text-align:center"><b>هل تريد رابطك الخاص؟</b>${on("allow_signup") ? `<button class="ghost" id="mine">أنشئ حسابك</button>` : ""}
-    ${on("show_reports") ? `<button class="ghost sbtn" id="rp" style="margin:10px 0 0">إبلاغ عن هذا الحساب</button>` : ""}<div id="rbox"></div></div>`);
+  ${(!s && on("allow_signup")) || on("show_reports") ? `<div class="glass sm" style="text-align:center">${!s && on("allow_signup") ? `<b>هل تريد رابطك الخاص؟</b><button class="ghost" id="mine">أنشئ حسابك</button>` : ""}${on("show_reports") ? `<button class="ghost sbtn" id="rp" style="margin:10px 0 0">إبلاغ عن هذا الحساب</button>` : ""}<div id="rbox"></div></div>` : ""}`);
+  if(s) wireBar(s.user);
   setAv($("av"), p.data); $("who").textContent = p.data.username;
   if(p.data.bio) $("bio").textContent = p.data.bio;
   if(p.data.prompt){ const pr = mk("div","prompt"); pr.appendChild(mk("b","hl","سؤال صاحب الصفحة: ")); pr.appendChild(document.createTextNode(p.data.prompt)); $("prm").appendChild(pr); }
-  const lkBtn = $("lk"); let liked = false, lkc = 0;
-  const lkSet = () => { $("lkc").textContent = lkc.toLocaleString("en"); lkBtn.classList.toggle("on", liked); $("lkt").textContent = liked ? "أعجبتك الصفحة" : "أعجبني"; };
-  db.rpc("like_count", { uid: p.data.id }).then(r => { lkc = Number(r.data || 0); lkSet(); });
+  const lkBtn = $("lk"); let liked = false;
+  const lkSet = () => lkBtn.classList.toggle("on", liked);
   if(s) db.from("profile_likes").select("liked_id").eq("liker_id", s.user.id).eq("liked_id", p.data.id).maybeSingle().then(r => { liked = !!r.data; lkSet(); });
   lkBtn.onclick = async()=>{
     if(!s) return say("lkn2","سجّل الدخول لتتمكن من الإعجاب");
@@ -786,7 +815,7 @@ async function sendPage(key){
     const r = liked ? await db.from("profile_likes").delete().eq("liker_id", s.user.id).eq("liked_id", p.data.id) : await db.from("profile_likes").insert({ liker_id: s.user.id, liked_id: p.data.id });
     lkBtn.disabled = false;
     if(r.error) return say("lkn2","تعذّر تنفيذ العملية، حاول لاحقًا");
-    liked = !liked; lkc += liked ? 1 : -1; lkSet();
+    liked = !liked; lkSet();
   };
   $("body").oninput = ()=>{ $("c").textContent = "الأحرف: " + $("body").value.length.toLocaleString("en") + " / " + mx.toLocaleString("en"); };
   if($("mine")) $("mine").onclick = () => go("?signup");
@@ -859,11 +888,11 @@ async function aStats(){
 }
 async function aAcc(){
   const all = await accounts(), box = $("ad"); box.innerHTML = "";
-  const q = mk("input"); q.placeholder = "ابحث عن مستخدم بالاسم"; box.appendChild(q);
+  const q = mk("input"); q.placeholder = "ابحث بالاسم أو الرابط أو البريد"; box.appendChild(q);
   const list = mk("div"); box.appendChild(list);
   const draw = () => {
     list.innerHTML = "";
-    all.filter(a => a.username.includes(q.value.trim().toLowerCase())).forEach(a => {
+    const v = q.value.trim().toLowerCase(); all.filter(a => [a.username, a.slug, a.email, a.bio].some(x => (x || "").toLowerCase().includes(v))).forEach(a => {
       const d = mk("div","msg");
       d.appendChild(mk("p", null, a.username + " — " + (a.gender || "غير محدد") + (a.banned ? " — موقوف" : "")));
       if(a.bio || a.prompt) d.appendChild(mk("small","from","النبذة: " + (a.bio || "—") + " | السؤال: " + (a.prompt || "—")));
@@ -878,10 +907,32 @@ async function aAcc(){
       const dl = mk("button","sbtn red","حذف نهائي");
       dl.onclick = async()=>{ if(!confirm("حذف الحساب نهائيًا مع كل رسائله؟")) return; const r = await db.rpc("admin_delete_account", { uid: a.id }); if(r.error) alert("تعذّر الحذف"); aAcc(); };
       const cl = mk("button","sbtn ghost","مسح النبذة والسؤال"); cl.onclick = async()=>{ await db.from("profiles").update({ bio: null, prompt: null }).eq("id", a.id); aAcc(); };
-      row.append(bn, rn, rs); if(a.bio || a.prompt) row.append(cl); row.append(dl); d.appendChild(row); list.appendChild(d);
+      const dt = mk("button","sbtn","التفاصيل"); dt.onclick = () => aDetail(a);
+      row.append(dt, bn, rn, rs); if(a.bio || a.prompt) row.append(cl); row.append(dl); d.appendChild(row); list.appendChild(d);
     });
   };
   q.oninput = draw; draw();
+}
+async function aDetail(a){
+  const box = $("ad"); box.innerHTML = SKEL;
+  const [msgs, pubs, repIn, repOut, likes, sugs, dr] = await Promise.all([
+    cnt("messages", x => x.eq("to_user", a.id)), cnt("messages", x => x.eq("to_user", a.id).eq("is_public", true)),
+    cnt("reports", x => x.eq("reported_id", a.id)), cnt("reports", x => x.eq("reporter_id", a.id)),
+    cnt("profile_likes", x => x.eq("liked_id", a.id), "liked_id"), cnt("suggestions", x => x.eq("user_id", a.id)),
+    db.from("deletion_requests").select("status").eq("user_id", a.id).maybeSingle()
+  ]);
+  box.innerHTML = "";
+  const back = mk("button","sbtn ghost","رجوع للحسابات"); back.onclick = aAcc; box.appendChild(back);
+  [["الاسم", a.username],["الرابط", a.slug],["البريد", a.email || "—"],["الجنس", a.gender || "غير محدد"],["الحالة", a.banned ? "موقوف" : "نشط"],
+   ["تاريخ التسجيل", fmt(a.created_at)],["آخر دخول", a.last_sign_in ? fmt(a.last_sign_in) : "—"],["النبذة", a.bio || "—"],["سؤال الصفحة", a.prompt || "—"],
+   ["الرسائل الواردة", msgs],["الرسائل المنشورة", pubs],["بلاغات ضده", repIn],["بلاغات قدّمها", repOut],["الإعجابات", likes],["اقتراحاته", sugs],
+   ["طلب حذف", dr.data ? (dr.data.status === "pending" ? "معلّق" : "مرفوض") : "لا يوجد"]
+  ].forEach(([l, v]) => { const d = mk("div","stat"); d.append(mk("span", null, l), mk("b", null, String(v))); box.appendChild(d); });
+  const row = mk("div");
+  const op = mk("button","sbtn","فتح صفحته العامة"); op.onclick = () => window.open(location.pathname + "?u=" + a.slug, "_blank");
+  const bn = mk("button","sbtn ghost", a.banned ? "إلغاء الإيقاف" : "إيقاف الحساب");
+  bn.onclick = async()=>{ await db.from("profiles").update({ banned: !a.banned }).eq("id", a.id); a.banned = !a.banned; aDetail(a); };
+  row.append(op, bn); box.appendChild(row);
 }
 async function aMsg(){
   const names = await nameMap();
