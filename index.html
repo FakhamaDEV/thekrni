@@ -150,6 +150,35 @@ a{color:inherit;text-decoration:none}
 .fnav a{color:var(--mut);font-size:14px}.fnav a:hover{color:var(--gold)}
 .tipc{display:flex;gap:14px;align-items:flex-start}.tipc b{display:block;color:var(--gold);margin-bottom:2px}.tipc p{margin:0;line-height:1.9}
 @media(min-width:700px){.icards{grid-template-columns:repeat(4,1fr)}}
+.zk{margin:6px 0 14px}.zk span{display:block;font-family:Amiri,serif;font-size:24px;color:var(--gold);line-height:1.8}.zk small{color:var(--mut);font-size:13px}
+.mini{font-size:13px;color:var(--mut);margin:8px 0 0}
+.demo{max-width:420px;margin:18px auto 0;border:1px solid var(--line);border-radius:22px;padding:16px;background:linear-gradient(160deg,#ffffff10,#ffffff05);text-align:right}
+.demo .dh{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:10px}
+.demo .dh i{font-style:normal;background:var(--gold);color:#04201a;border-radius:12px;padding:1px 10px;font-size:12px}
+.demo .dm{background:#ffffff0a;border-right:4px solid var(--gold);border-radius:14px;padding:12px;margin:8px 0}
+.dl{height:10px;border-radius:6px;background:#ffffff1f;margin:7px 0}.w80{width:80%}.w60{width:60%}.w70{width:70%}.w40{width:40%}
+.dt{margin-top:8px;color:var(--gold);font-size:13px;display:flex;gap:6px;align-items:center}
+.band{margin-top:22px;text-align:center;border-radius:22px;padding:22px 16px;background:linear-gradient(135deg,#e3b94a26,#e3b94a0d);border:1px solid var(--gold)}
+.band h2{margin:0 0 6px;color:var(--txt);font-size:22px}.band p{margin:0 0 12px;color:var(--mut)}
+.bn{display:flex;gap:10px;align-items:flex-start;padding:7px 0;line-height:1.8}.bn .ico{color:var(--gold);flex:none;margin-top:4px}
+.feat2{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;margin-top:24px}
+.f2{display:flex;gap:10px;align-items:flex-start}.f2 .fi{flex:none;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#e3b94a1a;color:var(--gold)}
+.f2 b{display:block;margin-bottom:2px}.f2 small{color:var(--mut);line-height:1.7}
+.sugg{margin-top:22px;display:flex;align-items:center;gap:14px;border-radius:20px;padding:16px;border:1px dashed var(--gold);background:#e3b94a0f}
+.sugg .fi{flex:none;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--gold);color:#04201a}
+.sugg b{display:block}.sugg small{color:var(--mut)}.sugg button{width:auto;margin:0;padding:10px 16px;flex:none}
+.lrow{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid #ffffff12}
+.lrow:last-child{border:0}.lrow>.ico{color:var(--gold);width:24px;height:24px}
+.lrow span{flex:1}.lrow b{display:block}.lrow small{color:var(--mut)}.lrow .chev{width:18px;height:18px;color:var(--mut)}
+.acc summary{cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;color:var(--gold);list-style:none;font-size:18px}
+.acc summary::-webkit-details-marker{display:none}.acc summary:after{content:"+";margin-right:auto;font-size:24px}.acc[open] summary:after{content:"−"}
+.acc .accb{margin-top:12px}.acc .tipc{padding:10px 0;border-bottom:1px dashed var(--line)}.acc .tipc:last-child{border:0}
+.acc .accb p{line-height:2}
+.shr{display:flex;gap:8px;margin-top:8px}
+.shb{flex:1;display:flex;align-items:center;justify-content:center;height:46px;border-radius:12px;font-weight:700;font-size:15px;background:var(--gold);color:#04201a;border:0;margin:0;cursor:pointer;font-family:inherit;padding:0}
+.shb.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}.shb.wa{background:#25d366}.shb.tg{background:#2aabee}
+.about p{line-height:2;margin:8px 0}.about b{font-weight:700}.more{display:inline-block;margin-top:6px;color:var(--gold);font-weight:700}
+@media(min-width:700px){.feat2{grid-template-columns:repeat(4,1fr)}}
 </style>
 <style id="custom"></style>
 </head>
@@ -185,7 +214,8 @@ const I = {
   leaf:'<path d="M5 19c0-9 5-14 14-14 0 9-5 14-14 14z"/><path d="M5 19L13 11"/>',
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
   book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/>',
-  coffee:'<path d="M5 8h11v6a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 9h2a2 2 0 0 1 0 4h-2"/>'
+  coffee:'<path d="M5 8h11v6a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 9h2a2 2 0 0 1 0 4h-2"/>',
+  chev:'<path d="M15 6l-6 6 6 6"/>'
 };
 const ic = n => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
 const N = () => SET.site_name || "ذكّرني";
@@ -221,7 +251,7 @@ const darken = h => { const n = parseInt(h.slice(1), 16); const f = v => Math.ma
 
 const LS = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
 function setFooter(){
-  $("ft").innerHTML = ZK + `<nav class="fnav"><a href="./">الرئيسية</a><a href="?tips">نصائح للتعامل</a><a href="?safety">نصائح الأمان</a><a href="?respect">الاحترام</a><a href="?featured">رسائل مختارة</a>${on("show_suggestions") ? `<a href="?suggest">اقتراحات</a>` : ""}</nav>© 2026 <b>${esc(N())}</b> &nbsp;|&nbsp; تطوير: <b>${esc(T("footer_dev","FakhamaDev"))}</b>`;
+  $("ft").innerHTML = ZK + `<nav class="fnav"><a href="?about">عن الموقع</a><a href="?guide">الإرشادات</a><a href="?suggest">اقترح فكرة</a></nav>© 2026 <b>${esc(N())}</b> · تطوير <b>${esc(T("footer_dev","FakhamaDev"))}</b>`;
 }
 function applySettings(){
   const root = document.documentElement.style;
@@ -290,7 +320,7 @@ const hcToken = () => (window.hcaptcha && hcId !== null) ? hcaptcha.getResponse(
 const hcReset = () => { if(window.hcaptcha && hcId !== null) hcaptcha.reset(hcId); };
 
 function routeOf(){
-  for(const k of ["admin","profile","login","signup","featured","tips","safety","respect","suggest"]) if(params.has(k)) return k;
+  for(const k of ["admin","profile","login","signup","featured","about","guide","tips","safety","respect","suggest"]) if(params.has(k)) return k;
   return params.get("u") ? "send" : "home";
 }
 async function render(route, s){
@@ -300,9 +330,8 @@ async function render(route, s){
     case "profile": return s ? editPage(s.user) : authPage("login");
     case "login": case "signup": return s ? dashboard(s.user) : authPage(route);
     case "featured": return featuredPage(s);
-    case "tips": return tipsPage(s);
-    case "safety": return safetyPage(s);
-    case "respect": return respectPage(s);
+    case "about": return aboutPage(s);
+    case "guide": case "tips": case "safety": case "respect": return guidePage(s, route);
     case "suggest": return suggestPage(s);
     case "send": return sendPage(params.get("u").trim().toLowerCase());
     default: return landing(s);
@@ -315,10 +344,10 @@ async function start(){
   render(route, s);
   const before = JSON.stringify([SET, ANN]);
   await Promise.all([loadSettings(), loadAnn()]);
-  if(JSON.stringify([SET, ANN]) !== before && (["home","tips","safety","respect","featured","suggest"].includes(route) || SET.maintenance === "1")) render(route, s);
+  if(JSON.stringify([SET, ANN]) !== before && (["home","about","guide","tips","safety","respect","featured","suggest"].includes(route) || SET.maintenance === "1")) render(route, s);
 }
 
-const ZK = '<div class="zk"><b>اذكروا الله</b><span>أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ</span><small>سورة الرعد، الآية 28</small></div>';
+const ZK = '<div class="zk"><span>﴿ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ ﴾</span><small>سورة الرعد · 28</small></div>';
 const AV_ICONS = ["chat","star","leaf","sun","bolt","shield","bell","book","coffee","thumb","lock","user"];
 const AV_COLORS = ["#e3b94a","#5fd1a5","#6cb6ff","#ff8fa3","#b39cff","#ffa94d"];
 const avOf = a => { const m = /^([a-z]{2,10}):([0-5])$/.exec(a || ""); return m && AV_ICONS.includes(m[1]) ? { icon: m[1], color: AV_COLORS[+m[2]] } : null; };
@@ -382,18 +411,11 @@ async function loadFeat(){
 const SKEL = '<div class="skel"></div><div class="skel"></div>';
 const TOPOUT = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr"><button class="ghost sbtn" id="nl" style="margin:0">دخول</button>${on("allow_signup") ? `<button class="sbtn" id="ns" style="margin:0">حساب جديد</button>` : ""}</div></div>`;
 const wireOut = () => { $("tbh").onclick = () => go(""); $("nl").onclick = () => go("?login"); if($("ns")) $("ns").onclick = () => go("?signup"); };
-function guideCards(){
-  return `<div class="icards">
-  <a class="icard" href="?tips"><div class="fi">${ic("chat")}</div><b>نصائح للتعامل</b><small>كيف تكتب وتتصرف باحترام</small></a>
-  <a class="icard" href="?safety"><div class="fi">${ic("shield")}</div><b>نصائح الأمان</b><small>احمِ حسابك ورسائلك</small></a>
-  <a class="icard" href="?respect"><div class="fi">${ic("star")}</div><b>الاحترام</b><small>أساس التعامل بين الناس</small></a>
-  ${on("show_suggestions") ? `<a class="icard" href="?suggest"><div class="fi">${ic("bolt")}</div><b>اقتراحات</b><small>ساعدنا نتحسّن</small></a>` : ""}</div>`;
-}
+const lrows = () => `<a class="lrow" href="?guide">${ic("shield")}<span><b>الإرشادات</b><small>نصائح التعامل والأمان والاحترام</small></span>${ic("chev")}</a><a class="lrow" href="?suggest">${ic("bolt")}<span><b>اقترح فكرة</b><small>ساعدنا نطوّر الموقع</small></span>${ic("chev")}</a>`;
 function infoPage(s, title, intro, body){
   el(`${s ? BAR() : TOPOUT()}${HOME}<div class="hero" style="padding:14px 0 6px"><h1 class="brand" style="font-size:clamp(32px,9vw,46px)">${esc(title)}</h1>${intro ? `<p class="tag">${esc(intro)}</p>` : ""}</div>${body}`);
   if(s) wireBar(s.user); else wireOut();
 }
-const tipCard = (i, t, d) => `<div class="glass tipc"><div class="n">${i}</div><div><b>${esc(t)}</b><p>${esc(d)}</p></div></div>`;
 const SAFE = [
   ["كلمة مرور قوية وخاصة","لا تستخدم كلمة مرور موقع آخر، ويفضّل جملة طويلة سهلة الحفظ بدل كلمة قصيرة."],
   ["إدارة الموقع لا تطلب كلمة مرورك أبدًا","لا تعطها لأحد، حتى لو قال إنه من الإدارة."],
@@ -402,25 +424,42 @@ const SAFE = [
   ["ادخل من الرابط الرسمي فقط","انتبه من مواقع تشبه موقعنا وتطلب بياناتك."],
   ["أنت تتحكم بما يُنشر","رسائلك خاصة، ولا تظهر للناس إلا إذا ضغطت «نشر في صفحتي». راجع الرسالة والرد قبل النشر."]
 ];
-const tipsPage = s => infoPage(s, "نصائح للتعامل", "كلمات بسيطة تجعل التواصل أجمل.", TIPS.map((t, i) => tipCard(i + 1, t[0], t[1])).join(""));
-const safetyPage = s => infoPage(s, "نصائح الأمان", "خطوات تحميك وتحمي رسائلك.", SAFE.map((t, i) => tipCard(i + 1, t[0], t[1])).join(""));
-const respectPage = s => infoPage(s, "الاحترام أساس التعامل بين الناس", "", `<div class="glass respect">
-  <p>احترم غيرك بكلامك وأفعالك، فالكلمة الطيبة صدقة، والأسلوب الراقي دليل على حسن التربية. لا تجرح مشاعر الآخرين، ولا تقلّل من شأن أحد، واختلف مع الناس بأدب واحترام.</p>
-  <p>تذكّر دائماً: عامل الناس كما تحب أن يعاملوك، فالاحترام لا يُفرض بالقوة، بل يُكتسب بالأخلاق، والكلمة الطيبة تترك أثراً جميلاً في القلوب.</p></div>`);
+function guidePage(s, open){
+  const o = open === "guide" ? "tips" : open;
+  const list = a => a.map((t, i) => `<div class="tipc"><div class="n">${i + 1}</div><div><b>${esc(t[0])}</b><p>${esc(t[1])}</p></div></div>`).join("");
+  const sec = (k, title, icon, inner) => `<details class="glass acc" ${o === k ? "open" : ""}><summary>${ic(icon)}<span>${title}</span></summary><div class="accb">${inner}</div></details>`;
+  infoPage(s, "الإرشادات", "نصائح بسيطة تجعل تجربتك أجمل وأكثر أمانًا.",
+    sec("tips","كيف نتعامل بلطف","chat", list(TIPS)) + sec("safety","كيف نحمي حسابنا","shield", list(SAFE)) +
+    sec("respect","الاحترام أساس التعامل بين الناس","star", `<p>احترم غيرك بكلامك وأفعالك، فالكلمة الطيبة صدقة، والأسلوب الراقي دليل على حسن التربية. لا تجرح مشاعر الآخرين، ولا تقلّل من شأن أحد، واختلف مع الناس بأدب واحترام.</p><p>تذكّر دائماً: عامل الناس كما تحب أن يعاملوك، فالاحترام لا يُفرض بالقوة، بل يُكتسب بالأخلاق، والكلمة الطيبة تترك أثراً جميلاً في القلوب.</p>`));
+}
+function aboutPage(s){
+  const q = (title, ans, open) => `<details class="glass acc" ${open ? "open" : ""}><summary><span>${title}</span></summary><div class="accb"><p>${ans}</p></div></details>`;
+  infoPage(s, "عن " + N(), "كل ما تريد معرفته في دقيقة.",
+    q("ما هو " + esc(N()) + "؟", "موقع يمنحك رابطًا خاصًا. تنشره في واتساب أو إنستغرام أو أي مكان، فيصلك ما يود الناس قوله لك في صندوق رسائل خاص بك.", true) +
+    q("كيف أبدأ؟", "أنشئ حسابًا مجانًا في أقل من دقيقة، ثم انسخ رابطك وشاركه.") +
+    q("هل أحتاج حسابًا لأرسل رسالة؟", "لا. أي شخص يفتح رابطك يكتب رسالته ويرسلها مباشرة.") +
+    q("هل يعرف صاحب الرابط من أرسل له؟", "لا، إلا إذا اختار المرسل المسجّل بنفسه أن يُظهر اسمه.") +
+    q("من يقرأ رسائلي؟", "أنت وحدك من بين المستخدمين. ولا تظهر للناس إلا إذا قررت نشرها في صفحتك.") +
+    q("هل الموقع مجاني؟", "نعم، وبدون إعلانات.") +
+    q("ماذا أفعل إذا وصلتني رسالة مسيئة؟", "احذفها. ويمكنك تغيير رابطك من «حسابي» لإيقاف الرابط القديم، وللإبلاغ عن حساب مسيء استخدم زر الإبلاغ في صفحته.") +
+    (on("allow_signup") ? `<div class="band"><h2>جرّب الآن</h2><p>أنشئ رابطك مجانًا وشاركه مع أصدقائك.</p><button id="ab">أنشئ رابطك</button></div>` : ""));
+  if($("ab")) $("ab").onclick = () => go(s ? "?login" : "?signup");
+}
 function suggestPage(s){
   if(!on("show_suggestions")) return infoPage(s, "اقتراحات", "هذه الصفحة غير متاحة حاليًا.", "");
-  const body = s ? `<div class="glass sm"><textarea id="sg" rows="5" maxlength="500" placeholder="اكتب فكرتك أو ملاحظتك هنا (500 حرف كحد أقصى)"></textarea><button id="sgb">إرسال الاقتراح</button><div class="note" id="sgn"></div></div>`
-    : `<div class="glass sm"><p class="tag">سجّل الدخول لتشاركنا اقتراحك.</p><button id="sgl">تسجيل الدخول</button></div>`;
-  infoPage(s, "ساعدنا نتحسّن", "اقتراحك يصل إلى إدارة الموقع مباشرة.", body);
-  if(!s) return void ($("sgl").onclick = () => go("?login"));
+  infoPage(s, "ساعدنا نطوّر الموقع", "اكتب أي فكرة أو ملاحظة، وسنقرأها بعناية. لا تحتاج حسابًا.",
+    `<div class="glass sm" id="sbox"><div class="lbl">نوع اقتراحك</div><div class="chips" id="sk"></div><textarea id="sg" rows="5" maxlength="480" placeholder="اكتب فكرتك هنا..."></textarea><div class="cnt" id="sc">0 / 480</div><button id="sgb">أرسل الاقتراح</button><div class="note" id="sgn"></div></div>`);
+  let kind = "فكرة";
+  ["فكرة","مشكلة","تحسين"].forEach(k => { const c = mk("div", "chip" + (k === kind ? " on" : ""), k); c.onclick = () => { kind = k; [...$("sk").children].forEach(x => x.classList.toggle("on", x === c)); }; $("sk").appendChild(c); });
+  $("sg").oninput = () => { $("sc").textContent = $("sg").value.length.toLocaleString("en") + " / 480"; };
   $("sgb").onclick = async()=>{
     const v = $("sg").value.trim();
     if(!v) return say("sgn","اكتب اقتراحك أولًا");
     $("sgb").disabled = true;
-    const r = await db.from("suggestions").insert({ user_id: s.user.id, body: v });
+    const r = await db.from("suggestions").insert({ user_id: s ? s.user.id : null, body: "[" + kind + "] " + v });
     $("sgb").disabled = false;
-    if(r.error) return say("sgn", (r.error.message || "").includes("TOOFAST") ? "أرسلت اقتراحات كثيرة، حاول لاحقًا" : "تعذّر إرسال الاقتراح، حاول مرة أخرى");
-    $("sg").value = ""; say("sgn","تم إرسال اقتراحك، شكرًا لك", true);
+    if(r.error) return say("sgn", (r.error.message || "").includes("TOOFAST") ? "وصلتنا اقتراحات كثيرة الآن، حاول بعد قليل" : "تعذّر الإرسال، حاول مرة أخرى");
+    $("sbox").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>شكرًا لك!</b><small class="tag">وصل اقتراحك إلى فريق الموقع.</small></div>`;
   };
 }
 async function featuredPage(s){
@@ -429,52 +468,65 @@ async function featuredPage(s){
   const box = $("fl2"); (r.data || []).forEach(m => box.appendChild(featItem(m)));
   if(!(r.data || []).length) box.textContent = "لا توجد رسائل مختارة بعد.";
 }
+const demoCard = () => `<div class="demo" aria-hidden="true"><div class="dh"><span>${ic("chat")} صندوق رسائلك</span><i>جديدة</i></div><div class="dm"><div class="dl w80"></div><div class="dl w60"></div><div class="dt">${ic("lock")} مجهول</div></div><div class="dm"><div class="dl w70"></div><div class="dl w40"></div></div></div>`;
 function landing(s){
+  const signup = on("allow_signup");
   el(`${s ? BAR() : TOPOUT()}${annHtml(true)}${s ? `<div class="glass ub"><div class="av2" id="av2"></div><b id="unm">&nbsp;</b><button class="sbtn" id="ub1" style="margin:0">صندوق رسائلي</button></div>` : ""}
   <div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand">${esc(N())}</h1>
     <p class="lead">${SET.hero_lead ? esc(SET.hero_lead) : 'أخبرني برأيك <span class="hl">بسرّية</span>'}</p>
-    <p class="tag">${esc(T("hero_tag","شارك رابطك، واقرأ ما يودّ أصدقاؤك قوله لك دون أن تعرف من أرسله."))}</p>
-    ${s ? "" : `<div class="sm">${on("allow_signup") ? `<button id="go">ابدأ الآن</button>` : ""}<button class="ghost" id="go2">تسجيل الدخول</button></div>`}</div>
+    <p class="tag">${esc(T("hero_tag","موقع يعطيك رابطًا خاصًا تنشره لأصدقائك، فيرسلون لك رسائل دون أن يظهر اسمهم، وأنت وحدك تقرؤها."))}</p>
+    ${s ? "" : `<div class="sm">${signup ? `<button id="go">أنشئ رابطك الآن، مجانًا</button>` : ""}<button class="ghost" id="go2">لدي حساب</button><p class="mini">التسجيل يستغرق أقل من دقيقة</p></div>`}</div>
+  <div class="glass about"><h2>ما هو ${esc(N())}؟</h2>
+    <p>موقع يعطيك <b class="hl">رابطًا خاصًا</b> تنشره لأصدقائك، فيكتبون لك رسائل <b class="hl">دون أن يظهر اسمهم</b>، وأنت وحدك تقرؤها.</p>
+    <p>فكّر فيه كأنه <b>صندوق اقتراحات خاص بك على الإنترنت</b>: تعرف رأي من حولك بصراحة، وتستقبل كلماتهم الطيبة ونصائحهم.</p>
+    <a class="more" href="?about">اقرأ المزيد</a></div>
+  ${s ? "" : demoCard()}
   ${motdHtml()}
   <div class="glass"><h2>كيف يعمل؟</h2><div class="steps">
-    <div class="step"><div class="n">1</div><div><b>أنشئ حسابك</b><small>اختر اسمك ورابطك الخاص في أقل من دقيقة</small></div></div>
+    <div class="step"><div class="n">1</div><div><b>أنشئ حسابك</b><small>اختر اسمك، ويصبح لك رابط خاص</small></div></div>
     <div class="step"><div class="n">2</div><div><b>شارك رابطك</b><small>انشره في واتساب أو إنستغرام أو أي مكان</small></div></div>
     <div class="step"><div class="n">3</div><div><b>اقرأ الرسائل</b><small>تصلك في صندوقك دون معرفة المرسل</small></div></div></div></div>
-  <div class="feats">
-    <div class="glass"><div class="fi">${ic("lock")}</div><b>مجهول</b><br><small>لا تعرف من أرسل لك، إلا إذا اختار أن يعرّفك بنفسه</small></div>
-    <div class="glass"><div class="fi">${ic("tag")}</div><b>مجاني</b><br><small>استخدام مجاني</small></div>
-    <div class="glass"><div class="fi">${ic("ban")}</div><b>بدون إعلانات</b><br><small>لا إعلانات تزعجك</small></div>
-    <div class="glass"><div class="fi">${ic("bolt")}</div><b>خفيف</b><br><small>يفتح بسرعة على أي جوال</small></div>
-    <div class="glass"><div class="fi">${ic("check")}</div><b>سهل الاستخدام</b><br><small>خطوات قليلة وواضحة</small></div>
-    <div class="glass"><div class="fi">${ic("shield")}</div><b>آمن</b><br><small>رسائلك لا يراها غيرك من المستخدمين، ولا تُنشر إلا بقرارك</small></div></div>
+  ${s || !signup ? "" : `<div class="glass"><h2>لماذا تنشئ حسابًا؟</h2>
+    <div class="bn">${ic("check")}<span>رابطك الخاص، تنشره فتصلك رسائل أصدقائك.</span></div>
+    <div class="bn">${ic("check")}<span>صندوق مرتب، وإشعار عند وصول كل رسالة.</span></div>
+    <div class="bn">${ic("check")}<span>أنت تقرّر ما يُنشر من رسائلك.</span></div>
+    <div class="bn">${ic("check")}<span>تعرف إن كان المستلم قرأ رسائلك التي ترسلها.</span></div></div>`}
+  <div class="feat2">
+    <div class="f2"><div class="fi">${ic("lock")}</div><div><b>مجهول</b><small>لا تعرف من أرسل لك، إلا إذا اختار أن يعرّفك بنفسه</small></div></div>
+    <div class="f2"><div class="fi">${ic("shield")}</div><div><b>آمن</b><small>رسائلك لا يراها غيرك من المستخدمين، ولا تُنشر إلا بقرارك</small></div></div>
+    <div class="f2"><div class="fi">${ic("ban")}</div><div><b>مجاني وبدون إعلانات</b><small>لا رسوم ولا إعلانات تزعجك</small></div></div>
+    <div class="f2"><div class="fi">${ic("bolt")}</div><div><b>خفيف وسهل الاستخدام</b><small>يفتح بسرعة، وخطواته واضحة</small></div></div></div>
   <div id="feat"></div>
-  <div class="sec"><h2>دليل الموقع</h2><p>كل ما تحتاجه في مكان واحد</p>${guideCards()}</div>`);
+  ${s || !signup ? "" : `<div class="band"><h2>جاهز لتبدأ؟</h2><p>أنشئ رابطك وشاركه مع أصدقائك، وانتظر أول رسالة.</p><button id="go3">أنشئ رابطك الآن</button></div>`}
+  ${on("show_suggestions") ? `<div class="sugg"><div class="fi">${ic("bolt")}</div><div style="flex:1"><b>عندك فكرة تطوّر الموقع؟</b><small>اقتراحك يصنع الفرق، ولا يحتاج حسابًا.</small></div><button id="sgo">شاركنا</button></div>` : ""}`);
   loadFeat();
+  if($("sgo")) $("sgo").onclick = () => go("?suggest");
   if(s){
     wireBar(s.user); $("ub1").onclick = () => go("?login");
     ensureProfile(s.user).then(p => { if(!p) return; if(p.banned) return bannedPage(); if($("unm")){ $("unm").textContent = p.username; setAv($("av2"), p); } });
-  } else { wireOut(); if($("go")) $("go").onclick = () => go("?signup"); $("go2").onclick = () => go("?login"); }
+  } else { wireOut(); [$("go"), $("go3")].forEach(b => { if(b) b.onclick = () => go("?signup"); }); $("go2").onclick = () => go("?login"); }
 }
 
 function authPage(mode){
   const su = mode === "signup";
   if(su && !on("allow_signup")){ el(`${HOME}<div class="glass sm"><p class="sub">التسجيل مغلق مؤقتًا، حاول لاحقًا.</p></div>`); return; }
-  el(`${HOME}<div class="hero" style="padding:12px 0 4px"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:clamp(40px,10vw,50px)">${esc(N())}</h1></div>
-  <div class="glass sm"><h2>${su ? "إنشاء حساب" : "تسجيل الدخول"}</h2>
-    ${su ? `<div class="lbl">الجنس</div><div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>` : ""}
+  el(`${HOME}<div class="hero" style="padding:12px 0 4px"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:clamp(36px,10vw,46px)">${esc(N())}</h1></div>
+  <div class="glass sm"><h2>${su ? "أنشئ حسابك" : "أهلًا بعودتك"}</h2>
+    ${su ? `<div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>` : ""}
     <input id="email" type="email" placeholder="البريد الإلكتروني" dir="ltr" autocomplete="email">
-    ${su ? `<input id="username" placeholder="اسم المستخدم (عربي أو إنجليزي)" maxlength="25" autocomplete="off">
-    <input id="slug" placeholder="رابطك الخاص (إنجليزي وأرقام)" dir="ltr" maxlength="25" autocomplete="off">` : ""}
-    <input id="pass" type="password" placeholder="كلمة المرور" dir="ltr" autocomplete="${su ? "new-password" : "current-password"}">
-    ${su ? `<div class="warn">تنبيه: كلمة المرور 8 أحرف على الأقل. احفظ بريدك وكلمة المرور في مكان آمن، فلا يمكن استرجاعها حاليًا، ولا تشاركها مع أحد.</div>` : ""}
+    ${su ? `<input id="username" placeholder="اسمك الذي يظهر لأصدقائك" maxlength="25" autocomplete="off">
+    <input id="slug" placeholder="رابطك الخاص (اختياري)" dir="ltr" maxlength="25" autocomplete="off">` : ""}
+    <input id="pass" type="password" placeholder="${su ? "كلمة المرور (8 أحرف على الأقل)" : "كلمة المرور"}" dir="ltr" autocomplete="${su ? "new-password" : "current-password"}">
+    ${su ? `<p class="mini">احفظ كلمة المرور، فلا يمكن استرجاعها حاليًا.</p>` : ""}
     <div class="hc" id="hc"></div>
     <button id="act">${su ? "إنشاء الحساب" : "دخول"}</button>
-    <button class="ghost" id="sw">${su ? "لديّ حساب، تسجيل الدخول" : "ليس لديّ حساب، إنشاء حساب"}</button>
+    <button class="ghost" id="sw">${su ? "لدي حساب" : "إنشاء حساب جديد"}</button>
     <div class="note" id="note"></div></div>`);
   mountCaptcha();
   $("sw").onclick = () => go(su ? "?login" : "?signup");
   let gender = "";
   if(su) $("gen").onclick = e => { const c = e.target.closest(".chip"); if(!c) return; gender = c.dataset.g; [...$("gen").children].forEach(x => x.classList.toggle("on", x === c)); };
+  const rnd = () => "u" + Math.random().toString(36).slice(2, 8);
   $("act").onclick = async()=>{
     const email = $("email").value.trim(), pass = $("pass").value;
     say("note","");
@@ -488,15 +540,16 @@ function authPage(mode){
       if(error){ hcReset(); return say("note", arErr(error)); }
       return params.has("admin") ? adminPage() : params.has("profile") ? editPage(data.user) : dashboard(data.user);
     }
-    const u = normName($("username").value), sl = $("slug").value.trim().toLowerCase();
+    const u = normName($("username").value); let sl = $("slug").value.trim().toLowerCase(); const auto = !sl; if(auto) sl = rnd();
     if(!gender) return say("note","اختر الجنس");
     if(!nameOk(u)) return say("note", NAME_MSG);
     if(!slugOk(sl)) return say("note", SLUG_MSG);
     if(pass.length < 8) return say("note","كلمة المرور يجب أن تكون 8 أحرف على الأقل");
     $("act").disabled = true;
     const t1 = await db.from("profiles").select("id").eq("username", u).maybeSingle();
-    if(t1.data){ $("act").disabled = false; hcReset(); return say("note","اسم المستخدم محجوز، اختر اسمًا آخر"); }
-    const t2 = await db.from("profiles").select("id").eq("slug", sl).maybeSingle();
+    if(t1.data){ $("act").disabled = false; hcReset(); return say("note","هذا الاسم محجوز، اختر اسمًا آخر"); }
+    let t2 = await db.from("profiles").select("id").eq("slug", sl).maybeSingle();
+    for(let i = 0; auto && t2.data && i < 3; i++){ sl = rnd(); t2 = await db.from("profiles").select("id").eq("slug", sl).maybeSingle(); }
     if(t2.data){ $("act").disabled = false; hcReset(); return say("note","هذا الرابط محجوز، اختر رابطًا آخر"); }
     const { data, error } = await db.auth.signUp({ email, password: pass, options:{ captchaToken: token, data:{ username: u, slug: sl, gender } } });
     if(error){ $("act").disabled = false; hcReset(); return say("note", arErr(error)); }
@@ -527,18 +580,20 @@ async function dashboard(user){
   const link = linkOf(p.slug);
   el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك الخاص. انشره ليرسل لك الناس رسائل مجهولة.</p><p class="tag" id="lkn"></p></div>
   <div class="glass"><div class="link sel" id="lnk"></div>
-    <button id="copy">نسخ الرابط</button><button class="ghost" id="share">مشاركة الرابط</button><button class="ghost" id="qrb">رمز QR للرابط</button><div class="qrbox" id="qrbox"></div>${isAdmin ? `<button class="ghost" id="adm">لوحة الإدارة</button>` : ""}</div>
+    <div class="shr"><a class="shb wa" id="wa" target="_blank" rel="noopener">واتساب</a><a class="shb tg" id="tg" target="_blank" rel="noopener">تيليجرام</a><button class="shb" id="copy">نسخ الرابط</button></div><div class="shr"><button class="shb ghost" id="share">مشاركة</button><button class="shb ghost" id="qrb">رمز QR</button></div><div class="qrbox" id="qrbox"></div>${isAdmin ? `<button class="ghost" id="adm">لوحة الإدارة</button>` : ""}</div>
   <div class="glass"><h2>إحصائياتي</h2><div class="stats" id="stt"></div><div class="badges" id="bdg"></div></div>
   <div class="glass" id="fbox" hidden><h2>${ic("star")} الرسائل المميزة</h2><div id="flist"></div></div>
   <div class="glass"><div class="top"><h2>الرسائل الواردة</h2><span class="num" id="cnt">0</span></div>
     <p class="tag">اضغط «نشر في صفحتي» لتظهر الرسالة وردّك للجميع، دون اسم المرسل.</p><div id="list">${SKEL}</div></div>
   <div class="glass"><h2>الرسائل التي أرسلتها</h2><p class="tag">هنا ترى هل قرأ المستلم رسالتك أم لا. نص الرسالة لا يظهر لك بعد إرسالها. وبعد أن يقرأها المستلم يمكنك إزالتها من هذه القائمة، وتبقى عنده.</p><div id="sent">${SKEL}</div></div>
-  <div class="glass"><h2>دليل الموقع</h2>${guideCards()}</div>`);
+  <div class="glass"><h2>المزيد</h2>${lrows()}</div>`);
   setAv($("av"), p); $("nm").textContent = p.username; $("lnk").textContent = link;
   const cp = async b => { try{ await navigator.clipboard.writeText(link); b.textContent = "تم النسخ ✓"; }catch(e){ b.textContent = "انسخ الرابط يدويًا"; } };
   $("copy").onclick = () => cp($("copy"));
   $("share").onclick = () => navigator.share ? navigator.share({ title: N(), text:"أرسل لي رسالة مجهولة", url: link }).catch(()=>{}) : cp($("share"));
   $("qrb").onclick = () => qrShow(link);
+  $("wa").href = "https://wa.me/?text=" + encodeURIComponent("أرسل لي رسالة مجهولة: " + link);
+  $("tg").href = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent("أرسل لي رسالة مجهولة");
   window._me = { slug: p.slug, username: p.username };
   if(isAdmin) $("adm").onclick = () => go("?admin");
   await wireBar(user);
@@ -585,7 +640,7 @@ async function loadMsgs(user){
   const fav = data.filter(m => m.starred);
   fb.hidden = !fav.length;
   fav.forEach(m => fl.appendChild(msgCard(m, user)));
-  if(!data.length) return box.textContent = "لم تصلك رسائل بعد. شارك رابطك لتبدأ.";
+  if(!data.length) return void (box.innerHTML = `<div class="ok"><b>شارك رابطك لتصلك أول رسالة</b><small class="tag">انشره في واتساب أو ستوري إنستغرام، وسيصلك أصدقاؤك.</small></div>`);
   data.forEach(m => box.appendChild(msgCard(m, user, true)));
   const hm = location.hash.match(/^#m(\d+)$/); if(hm){ const t = $("m" + hm[1]); if(t){ t.scrollIntoView({ block:"center" }); t.classList.add("flash"); } history.replaceState(null, "", location.pathname + location.search); }
   if(ids.length){ await db.from("messages").update({ read_at: new Date().toISOString() }).in("id", ids); db.from("notifications").update({ read:true }).eq("user_id", user.id).eq("kind","message").then(()=>setBadge(0), ()=>{}); }
@@ -871,7 +926,7 @@ async function aSug(){
   const { data } = await db.from("suggestions").select("*").order("created_at",{ascending:false}).limit(100);
   const box = $("ad"); box.innerHTML = "";
   (data || []).forEach(m => {
-    const d = mk("div","msg"); d.append(mk("small","from","من: " + (names[m.user_id] || "؟")), mk("p", null, m.body));
+    const d = mk("div","msg"); d.append(mk("small","from","من: " + (m.user_id ? (names[m.user_id] || "؟") : "زائر")), mk("p", null, m.body));
     const x = mk("button","sbtn red","حذف"); x.onclick = async()=>{ await db.from("suggestions").delete().eq("id", m.id); aSug(); };
     d.appendChild(x); box.appendChild(d);
   });
