@@ -194,6 +194,8 @@ a.shb .ico{width:20px;height:20px;margin-left:8px}
 .pl{display:block;cursor:pointer}
 .center{text-align:center}
 button.sbtn.on{background:var(--gold);color:#04201a;border-color:var(--gold)}
+.prow{margin:8px 0;padding-bottom:6px;border-bottom:1px solid var(--line)}.prow .chk{align-items:flex-start}.prow small{color:var(--mut)}
+.sumry{background:#00000033;border-radius:12px;padding:10px;margin:8px 0;color:var(--gold);line-height:1.9}
 </style>
 <style id="custom"></style>
 </head>
@@ -835,16 +837,18 @@ async function profilePage(s){
   const u = r.data, me = s.user.id === u.id;
   const pubs = (await db.from("public_messages").select("id", { count:"exact", head:true }).eq("to_user", u.id)).count ?? 0;
   el(`${BAR()}${HOME}<div class="hero" style="padding:14px 0 6px"><div class="avatar" id="av"></div><div class="who" id="who"></div><p class="tag" id="bio"></p>
-    <p class="mini">عضو منذ ${esc(new Date(u.created_at).toLocaleDateString("ar-u-nu-latn"))} · ${pubs.toLocaleString("en")} رسالة منشورة</p></div>
-  ${me ? `<div class="glass"><div class="link sel" id="lnk"></div>
+    <p class="mini" id="meta"></p><div class="stats" id="st3"></div></div>
+  ${me ? `<div class="shr"><button class="sbtn" id="eb">تعديل حسابي</button><button class="sbtn ghost" id="ib">صندوق رسائلي</button></div><div class="glass" id="chk2"></div><div class="glass"><div class="link sel" id="lnk"></div>
     <div class="shr"><a class="shb wa" id="wa" target="_blank" rel="noopener">واتساب</a><a class="shb tg" id="tg" target="_blank" rel="noopener">تيليجرام</a><button class="shb" id="copy">نسخ الرابط</button></div><div class="shr"><button class="shb ghost" id="share">مشاركة</button><button class="shb ghost" id="qrb">رمز QR</button></div><div class="qrbox" id="qrbox"></div></div>
   <div class="glass"><h2>إحصائياتي</h2><div class="stats" id="stt"></div><div class="badges" id="bdg"></div></div>
-  <div class="glass" id="prv"><h2>الخصوصية والمعلومات</h2></div>` : `<div class="glass sm center"><button id="sendb" class="bigbtn">${ic("send")} أرسل رسالة مجهولة</button><button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button><div class="note" id="lkn2"></div></div><div class="glass sm" id="xt" hidden></div>`}
+  <div class="glass" id="prv"><h2>الخصوصية والمعلومات</h2></div><div class="glass" id="pvw" hidden></div>` : `<div class="glass sm center"><button id="sendb" class="bigbtn">${ic("send")} أرسل رسالة مجهولة</button><button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button><div class="note" id="lkn2"></div></div><div class="glass sm" id="xt" hidden></div>`}
   <div id="pub"></div>
   ${!me && on("show_reports") ? `<div class="glass sm center"><button class="ghost sbtn" id="rp" style="margin:0">إبلاغ عن هذا الحساب</button><div id="rbox"></div></div>` : ""}`);
   wireBar(s.user); setAv($("av"), u); $("who").textContent = u.username; $("bio").textContent = u.bio || "";
   if($("sendb")) $("sendb").onclick = () => go("?u=" + u.slug);
   const fd = d => new Date(d).toLocaleDateString("ar-u-nu-latn");
+  const age = d => { const t = new Date(d), n = new Date(); let a = n.getFullYear() - t.getFullYear(); if(n < new Date(n.getFullYear(), t.getMonth() + 0, t.getDate())) a--; return a; };
+  const put = (n, l) => { const d = mk("div"); d.append(mk("b", null, Number(n).toLocaleString("en")), mk("small", null, l)); $("st3").appendChild(d); };
   const ex = (await db.rpc("profile_extra", { uid: u.id })).data, X = Array.isArray(ex) ? ex[0] : ex;
   if(me){
     const link = linkOf(u.slug);
@@ -857,24 +861,53 @@ async function profilePage(s){
     $("tg").href = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(SHARE_TXT);
     const lk = Number(X && X.lk || 0), pm = (await db.from("messages").select("is_public,reply").eq("to_user", u.id)).data || [];
     window._st = { likes: lk, msgs: pm.length, pubs: pm.filter(m => m.is_public).length, replies: pm.filter(m => m.reply).length }; drawStats();
-    const pv = $("prv"), row = (label, inp, ck, txt) => { const d = mk("div"); d.appendChild(mk("div","lbl",label)); d.appendChild(inp); const l = mk("label","chk"); l.append(ck, " " + txt); d.appendChild(l); pv.appendChild(d); };
-    const c1 = mk("input"), c2 = mk("input"), c3 = mk("input"), bd = mk("input"), rs = mk("input");
-    c1.type = c2.type = c3.type = "checkbox"; bd.type = "date"; rs.maxLength = 60; rs.placeholder = "مثال: الرياض، السعودية";
-    c1.checked = !!(X && X.s_lk); c2.checked = !!(X && X.s_bd); c3.checked = !!(X && X.s_rs); bd.value = (X && X.bd) || ""; rs.value = (X && X.rs) || "";
-    const lkLine = mk("div","lbl"); lkLine.innerHTML = ic("thumb") + " عدد المعجبين بصفحتك: <b>" + lk.toLocaleString("en") + "</b> (لا يراه غيرك إلا إذا سمحت)"; pv.appendChild(lkLine);
-    const t1 = mk("div"); const l1 = mk("label","chk"); l1.append(c1, " السماح للمسجّلين برؤية عدد المعجبين"); t1.appendChild(l1); pv.appendChild(t1);
-    row("تاريخ الميلاد", bd, c2, "إظهاره للمسجّلين"); row("مكان الإقامة", rs, c3, "إظهاره للمسجّلين");
-    const sv = mk("button", null, "حفظ"), nt = mk("div","note"); pv.append(sv, nt);
+    const mine = pm.filter(m => m.is_public).length, reps = pm.filter(m => m.reply).length;
+    $("meta").textContent = "عضو منذ " + fd(u.created_at);
+    put(lk, "معجبون"); put(mine, "منشورة"); put(reps, "ردود"); $("st3").style.gridTemplateColumns = "repeat(3,1fr)";
+    $("eb").onclick = () => go("?profile"); $("ib").onclick = () => go("?login");
+    const pv = $("prv"), ck = $("chk2"), sm = mk("div","sumry");
+    const st = { sn: !X || X.sn !== false, lk: !!(X && X.s_lk), bd: !!(X && X.s_bd), rs: !!(X && X.s_rs) };
+    const inBd = mk("input"), inRs = mk("input");
+    inBd.type = "date"; inBd.value = (X && X.bd) || ""; inRs.maxLength = 60; inRs.placeholder = "مثال: عين الدفلى، الجزائر"; inRs.value = (X && X.rs) || "";
+    const vis = () => { const L = []; if(st.sn) L.push("عضو منذ " + fd(u.created_at)); if(st.lk) L.push("المعجبون: " + lk.toLocaleString("en")); if(st.bd && inBd.value) L.push("العمر: " + age(inBd.value) + " سنة"); if(st.rs && inRs.value.trim()) L.push("الإقامة: " + inRs.value.trim()); return L; };
+    const checkDone = () => {
+      const it = [[!!u.bio, "أضف نبذة عنك", "?profile"], [!!u.avatar, "اختر صورة رمزية", "?profile"], [!!(inBd.value || inRs.value.trim()), "أضف عمرك أو مكان إقامتك في الخصوصية أدناه", null], [pm.length > 0, "شارك رابطك لتصلك أول رسالة", null]];
+      const n = it.filter(x => x[0]).length; ck.hidden = n === it.length; ck.innerHTML = "";
+      ck.appendChild(mk("h2", null, "أكمل صفحتك (" + n + " من " + it.length + ")"));
+      it.forEach(x => { const r = mk("div","lbl",(x[0] ? "✓ " : "○ ") + x[1]); if(!x[0] && x[2]){ r.style.cursor = "pointer"; r.onclick = () => go(x[2]); } ck.appendChild(r); });
+    };
+    const draw = () => { const L = vis(); sm.textContent = L.length ? L.join(" · ") : "لا شيء من معلوماتك الإضافية ظاهر للآخرين."; checkDone(); };
+    const opt = (key, title, desc, extra) => {
+      const d = mk("div","prow"), l = mk("label","chk"), c = mk("input"), t = mk("span");
+      c.type = "checkbox"; c.checked = st[key]; c.onchange = () => { st[key] = c.checked; draw(); };
+      t.innerHTML = "<b>" + title + "</b><br><small>" + desc + "</small>"; l.append(c, t); d.appendChild(l); if(extra) d.appendChild(extra); pv.appendChild(d);
+    };
+    pv.appendChild(mk("p","tag","أنت وحدك ترى كل تفاصيل هذه الصفحة. اختر ما يراه الآخرون، وهم المسجّلون فقط."));
+    const bdW = mk("div"); bdW.append(mk("div","lbl","تاريخ ميلادك (لا يراه غيرك)"), inBd);
+    const rsW = mk("div"); rsW.append(mk("div","lbl","مكان الإقامة"), inRs);
+    opt("sn", "إظهار تاريخ انضمامي", "يرى المسجّلون «عضو منذ ...» في صفحتك.");
+    opt("lk", "إظهار عدد المعجبين", "بدونه لا يرى العدد إلا أنت.");
+    opt("bd", "إظهار عمري", "يظهر العمر فقط، ولا يظهر يوم الميلاد.", bdW);
+    opt("rs", "إظهار مكان إقامتي", "مثل مدينتك وبلدك.", rsW);
+    inBd.oninput = inRs.oninput = draw;
+    pv.append(mk("div","lbl","ما يراه الآخرون عنك الآن:"), sm);
+    const sv = mk("button", null, "حفظ"), vw = mk("button","ghost","عرض صفحتي كما يراها الآخرون"), nt = mk("div","note"); pv.append(sv, vw, nt);
+    vw.onclick = () => {
+      const w = $("pvw"); w.hidden = !w.hidden; w.innerHTML = ""; if(w.hidden) return;
+      w.appendChild(mk("h2", null, "هكذا يراك المسجّلون")); w.appendChild(mk("b", null, u.username)); if(u.bio) w.appendChild(mk("p","tag",u.bio));
+      const L = vis(); (L.length ? L : ["لا معلومات إضافية ظاهرة"]).forEach(x => w.appendChild(mk("div","lbl",x)));
+    };
     sv.onclick = async()=>{
       sv.disabled = true;
-      const r2 = await db.from("profiles").update({ show_likes: c1.checked, birthdate: bd.value || null, show_birth: c2.checked, residence: rs.value.trim() || null, show_residence: c3.checked }).eq("id", u.id);
-      sv.disabled = false; say("note2", "", false); nt.textContent = r2.error ? "تعذّر الحفظ، حاول لاحقًا" : "تم الحفظ"; nt.className = "note" + (r2.error ? "" : " good");
+      const r2 = await db.from("profiles").update({ show_since: st.sn, show_likes: st.lk, birthdate: inBd.value || null, show_birth: st.bd, residence: inRs.value.trim() || null, show_residence: st.rs }).eq("id", u.id);
+      sv.disabled = false; nt.textContent = r2.error ? "تعذّر الحفظ، حاول لاحقًا" : "تم الحفظ"; nt.className = "note" + (r2.error ? "" : " good");
     };
-  } else if(X && (X.lk != null || X.bd || X.rs)){
-    const xt = $("xt"); xt.hidden = false;
-    if(X.lk != null){ const d = mk("div","lbl"); d.innerHTML = ic("thumb") + " المعجبون: <b>" + Number(X.lk).toLocaleString("en") + "</b>"; xt.appendChild(d); }
-    if(X.bd) xt.appendChild(mk("div","lbl","تاريخ الميلاد: " + fd(X.bd)));
-    if(X.rs) xt.appendChild(mk("div","lbl","مكان الإقامة: " + X.rs));
+    draw();
+  } else {
+    $("meta").textContent = (!X || X.sn !== false) ? "عضو منذ " + fd(u.created_at) : "";
+    put(pubs, "منشورة"); if(X && X.lk != null) put(X.lk, "معجبون");
+    $("st3").style.gridTemplateColumns = "repeat(" + $("st3").children.length + ",1fr)";
+    if(X && (X.bd || X.rs)){ const xt = $("xt"); xt.hidden = false; if(X.bd) xt.appendChild(mk("div","lbl","العمر: " + age(X.bd) + " سنة")); if(X.rs) xt.appendChild(mk("div","lbl","مكان الإقامة: " + X.rs)); }
   }
   if(!me){
     const lkBtn = $("lk"); let liked = false;
