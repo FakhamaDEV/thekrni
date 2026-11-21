@@ -618,10 +618,8 @@ async function dashboard(user){
   if(p.banned) return bannedPage();
   const isAdmin = (await db.rpc("is_admin")).data === true;
   const link = linkOf(p.slug);
-  el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك الخاص. انشره ليرسل لك الناس رسائل مجهولة.</p><p class="tag lkn" id="lkn"></p></div>
-  <div class="glass"><div class="link sel" id="lnk"></div>
-    <div class="shr"><a class="shb wa" id="wa" target="_blank" rel="noopener">واتساب</a><a class="shb tg" id="tg" target="_blank" rel="noopener">تيليجرام</a><button class="shb" id="copy">نسخ الرابط</button></div><div class="shr"><button class="shb ghost" id="share">مشاركة</button><button class="shb ghost" id="qrb">رمز QR</button></div><div class="qrbox" id="qrbox"></div>${isAdmin ? `<button class="ghost" id="adm">لوحة الإدارة</button>` : ""}</div>
-  <div class="glass"><h2>إحصائياتي</h2><div class="stats" id="stt"></div><div class="badges" id="bdg"></div></div>
+  el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">رابطك وإحصائياتك وخصوصيتك في صفحتك الشخصية.</p><button class="sbtn" id="mp" style="margin:6px 0 0">صفحتي الشخصية</button></div>
+  ${isAdmin ? `<div class="glass"><button class="ghost" id="adm" style="margin:0">لوحة الإدارة</button></div>` : ""}
   <div class="glass" id="fbox" hidden><h2>${ic("star")} الرسائل المميزة</h2><div id="flist"></div></div>
   <div class="glass"><div class="top"><h2>الرسائل الواردة</h2><span class="num" id="cnt">0</span></div>
     <p class="tag">اضغط «نشر في صفحتي» لتظهر الرسالة وردّك للجميع، دون اسم المرسل.</p><div id="list">${SKEL}</div></div>
@@ -629,16 +627,10 @@ async function dashboard(user){
   <div class="glass"><h2>المزيد</h2>${lrows()}</div>`);
   setAv($("av"), p); $("nm").textContent = p.username;
   [$("av"), $("nm")].forEach(e => { e.style.cursor = "pointer"; e.onclick = () => go("?p=" + p.slug); }); $("lnk").textContent = link;
-  const cp = async b => { try{ await navigator.clipboard.writeText(link); b.textContent = "تم النسخ ✓"; }catch(e){ b.textContent = "انسخ الرابط يدويًا"; } };
-  $("copy").onclick = () => cp($("copy"));
-  $("share").onclick = () => navigator.share ? navigator.share({ title: N(), text: SHARE_TXT, url: link }).catch(()=>{}) : cp($("share"));
-  $("qrb").onclick = () => qrShow(link);
-  $("wa").href = "https://wa.me/?text=" + encodeURIComponent(SHARE_TXT + "\n" + link);
-  $("tg").href = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(SHARE_TXT);
+  $("mp").onclick = () => go("?p=" + p.slug);
   window._me = { slug: p.slug, username: p.username };
   if(isAdmin) $("adm").onclick = () => go("?admin");
   await wireBar(user);
-  db.rpc("like_count", { uid: user.id }).then(r => { if($("lkn")) $("lkn").innerHTML = ic("thumb") + " عدد المعجبين بصفحتك: " + Number(r.data || 0).toLocaleString("en"); window._st = Object.assign(window._st || {}, { likes: Number(r.data || 0) }); drawStats(); });
   reload = () => loadMsgs(user);
   loadMsgs(user); loadSent();
 }
@@ -844,11 +836,46 @@ async function profilePage(s){
   const pubs = (await db.from("public_messages").select("id", { count:"exact", head:true }).eq("to_user", u.id)).count ?? 0;
   el(`${BAR()}${HOME}<div class="hero" style="padding:14px 0 6px"><div class="avatar" id="av"></div><div class="who" id="who"></div><p class="tag" id="bio"></p>
     <p class="mini">عضو منذ ${esc(new Date(u.created_at).toLocaleDateString("ar-u-nu-latn"))} · ${pubs.toLocaleString("en")} رسالة منشورة</p></div>
-  <div class="glass sm center"><button id="sendb" class="bigbtn">${ic("send")} أرسل رسالة مجهولة</button>${me ? "" : `<button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button><div class="note" id="lkn2"></div>`}</div>
+  ${me ? `<div class="glass"><div class="link sel" id="lnk"></div>
+    <div class="shr"><a class="shb wa" id="wa" target="_blank" rel="noopener">واتساب</a><a class="shb tg" id="tg" target="_blank" rel="noopener">تيليجرام</a><button class="shb" id="copy">نسخ الرابط</button></div><div class="shr"><button class="shb ghost" id="share">مشاركة</button><button class="shb ghost" id="qrb">رمز QR</button></div><div class="qrbox" id="qrbox"></div></div>
+  <div class="glass"><h2>إحصائياتي</h2><div class="stats" id="stt"></div><div class="badges" id="bdg"></div></div>
+  <div class="glass" id="prv"><h2>الخصوصية والمعلومات</h2></div>` : `<div class="glass sm center"><button id="sendb" class="bigbtn">${ic("send")} أرسل رسالة مجهولة</button><button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button><div class="note" id="lkn2"></div></div><div class="glass sm" id="xt" hidden></div>`}
   <div id="pub"></div>
   ${!me && on("show_reports") ? `<div class="glass sm center"><button class="ghost sbtn" id="rp" style="margin:0">إبلاغ عن هذا الحساب</button><div id="rbox"></div></div>` : ""}`);
   wireBar(s.user); setAv($("av"), u); $("who").textContent = u.username; $("bio").textContent = u.bio || "";
-  $("sendb").onclick = () => go("?u=" + u.slug);
+  if($("sendb")) $("sendb").onclick = () => go("?u=" + u.slug);
+  const fd = d => new Date(d).toLocaleDateString("ar-u-nu-latn");
+  const ex = (await db.rpc("profile_extra", { uid: u.id })).data, X = Array.isArray(ex) ? ex[0] : ex;
+  if(me){
+    const link = linkOf(u.slug);
+    $("lnk").textContent = link;
+    const cp = async b => { try{ await navigator.clipboard.writeText(link); b.textContent = "تم النسخ ✓"; }catch(e){ b.textContent = "انسخ الرابط يدويًا"; } };
+    $("copy").onclick = () => cp($("copy"));
+    $("share").onclick = () => navigator.share ? navigator.share({ title: N(), text: SHARE_TXT, url: link }).catch(()=>{}) : cp($("share"));
+    $("qrb").onclick = () => qrShow(link);
+    $("wa").href = "https://wa.me/?text=" + encodeURIComponent(SHARE_TXT + "\n" + link);
+    $("tg").href = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(SHARE_TXT);
+    const lk = Number(X && X.lk || 0), pm = (await db.from("messages").select("is_public,reply").eq("to_user", u.id)).data || [];
+    window._st = { likes: lk, msgs: pm.length, pubs: pm.filter(m => m.is_public).length, replies: pm.filter(m => m.reply).length }; drawStats();
+    const pv = $("prv"), row = (label, inp, ck, txt) => { const d = mk("div"); d.appendChild(mk("div","lbl",label)); d.appendChild(inp); const l = mk("label","chk"); l.append(ck, " " + txt); d.appendChild(l); pv.appendChild(d); };
+    const c1 = mk("input"), c2 = mk("input"), c3 = mk("input"), bd = mk("input"), rs = mk("input");
+    c1.type = c2.type = c3.type = "checkbox"; bd.type = "date"; rs.maxLength = 60; rs.placeholder = "مثال: الرياض، السعودية";
+    c1.checked = !!(X && X.s_lk); c2.checked = !!(X && X.s_bd); c3.checked = !!(X && X.s_rs); bd.value = (X && X.bd) || ""; rs.value = (X && X.rs) || "";
+    const lkLine = mk("div","lbl"); lkLine.innerHTML = ic("thumb") + " عدد المعجبين بصفحتك: <b>" + lk.toLocaleString("en") + "</b> (لا يراه غيرك إلا إذا سمحت)"; pv.appendChild(lkLine);
+    const t1 = mk("div"); const l1 = mk("label","chk"); l1.append(c1, " السماح للمسجّلين برؤية عدد المعجبين"); t1.appendChild(l1); pv.appendChild(t1);
+    row("تاريخ الميلاد", bd, c2, "إظهاره للمسجّلين"); row("مكان الإقامة", rs, c3, "إظهاره للمسجّلين");
+    const sv = mk("button", null, "حفظ"), nt = mk("div","note"); pv.append(sv, nt);
+    sv.onclick = async()=>{
+      sv.disabled = true;
+      const r2 = await db.from("profiles").update({ show_likes: c1.checked, birthdate: bd.value || null, show_birth: c2.checked, residence: rs.value.trim() || null, show_residence: c3.checked }).eq("id", u.id);
+      sv.disabled = false; say("note2", "", false); nt.textContent = r2.error ? "تعذّر الحفظ، حاول لاحقًا" : "تم الحفظ"; nt.className = "note" + (r2.error ? "" : " good");
+    };
+  } else if(X && (X.lk != null || X.bd || X.rs)){
+    const xt = $("xt"); xt.hidden = false;
+    if(X.lk != null){ const d = mk("div","lbl"); d.innerHTML = ic("thumb") + " المعجبون: <b>" + Number(X.lk).toLocaleString("en") + "</b>"; xt.appendChild(d); }
+    if(X.bd) xt.appendChild(mk("div","lbl","تاريخ الميلاد: " + fd(X.bd)));
+    if(X.rs) xt.appendChild(mk("div","lbl","مكان الإقامة: " + X.rs));
+  }
   if(!me){
     const lkBtn = $("lk"); let liked = false;
     const lkSet = () => lkBtn.classList.toggle("on", liked);
@@ -868,6 +895,7 @@ async function sendPage(key){
   const p = await db.from("profiles").select("id,username,slug,banned,avatar,prompt").eq("slug", key).maybeSingle();
   if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
   const s = await getSession(), mx = MAXLEN();
+  if(s && s.user.id === p.data.id) return go("?p=" + p.data.slug);
   el(`${s ? BAR() : ""}${HOME}${annHtml(false)}<div class="hero" style="padding:14px 0 6px"><a class="pl" id="pl"><div class="avatar" id="av"></div><div class="who" id="who"></div></a>
     <p class="tag" style="margin:0">رسالتك مجهولة، فاكتب بحرية وبلطف</p></div>
   <div class="glass sm send" id="box"><div id="prm"></div>
@@ -876,13 +904,13 @@ async function sendPage(key){
     <div class="cnt" id="c">0 / ${mx.toLocaleString("en")}</div>
     ${s ? `<label class="chk"><input type="checkbox" id="show"> إظهار اسمي لصاحب الصفحة</label><p class="mini" style="margin:0">يحتفظ الموقع بسجلّ المرسلين المسجّلين لأغراض الحماية.</p>` : ""}
     <button id="send" class="bigbtn">${ic("send")} أرسل الرسالة</button><div class="note" id="note"></div>
-    <p class="mini center">لن يظهر اسمك لصاحب الصفحة إلا إذا اخترت ذلك.</p></div>`);
+    ${s ? `<p class="mini center">لن يظهر اسمك لصاحب الصفحة إلا إذا اخترت ذلك.</p>` : ""}</div>`);
   if(s) wireBar(s.user);
   setAv($("av"), p.data); $("who").textContent = p.data.username;
   $("pl").onclick = () => go("?p=" + p.data.slug);
   if(p.data.prompt){ const pr = mk("div","prompt"); pr.appendChild(mk("b","hl","سؤال صاحب الصفحة: ")); pr.appendChild(document.createTextNode(p.data.prompt)); $("prm").appendChild(pr); }
   const upd = () => { $("c").textContent = $("body").value.length.toLocaleString("en") + " / " + mx.toLocaleString("en"); };
-  ["أحببت أسلوبك","شكرًا لأنك موجود","أتمنى لك التوفيق","نصيحتي لك: "].forEach(t => { const c = mk("span", null, t); c.onclick = () => { const b = $("body"); b.value = (b.value ? b.value.trimEnd() + " " : "") + t; b.focus(); upd(); }; $("qs").appendChild(c); });
+  ["نصيحتي لك: "].forEach(t => { const c = mk("span", null, t); c.onclick = () => { const b = $("body"); b.value = (b.value ? b.value.trimEnd() + " " : "") + t; b.focus(); upd(); }; $("qs").appendChild(c); });
   $("body").oninput = upd;
   $("send").onclick = async()=>{
     const t = $("body").value.trim();
