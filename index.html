@@ -626,7 +626,7 @@ async function dashboard(user){
   <div class="glass"><h2>الرسائل التي أرسلتها</h2><p class="tag">هنا ترى هل قرأ المستلم رسالتك أم لا. نص الرسالة لا يظهر لك بعد إرسالها. وبعد أن يقرأها المستلم يمكنك إزالتها من هذه القائمة، وتبقى عنده.</p><div id="sent">${SKEL}</div></div>
   <div class="glass"><h2>المزيد</h2>${lrows()}</div>`);
   setAv($("av"), p); $("nm").textContent = p.username;
-  [$("av"), $("nm")].forEach(e => { e.style.cursor = "pointer"; e.onclick = () => go("?p=" + p.slug); }); $("lnk").textContent = link;
+  [$("av"), $("nm")].forEach(e => { e.style.cursor = "pointer"; e.onclick = () => go("?p=" + p.slug); });
   $("mp").onclick = () => go("?p=" + p.slug);
   window._me = { slug: p.slug, username: p.username };
   if(isAdmin) $("adm").onclick = () => go("?admin");
