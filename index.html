@@ -186,6 +186,14 @@ button.sbtn{display:inline-flex;align-items:center;gap:6px}.sbtn .ico{width:1.05
 .qrbox canvas{max-width:260px;width:100%}
 .dev{color:var(--gold);font-weight:700}.dev:hover{text-decoration:underline}
 a.shb .ico{width:20px;height:20px;margin-left:8px}
+.bigbtn{height:56px;font-size:18px;display:flex;align-items:center;justify-content:center;gap:8px}
+.send textarea{font-size:17px;line-height:1.8}
+.qs{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 8px}
+.qs span{padding:7px 14px;border:1px solid var(--line);border-radius:20px;font-size:14px;cursor:pointer;color:var(--mut)}
+.qs span:hover{color:var(--gold);border-color:var(--gold)}
+.pl{display:block;cursor:pointer}
+.center{text-align:center}
+button.sbtn.on{background:var(--gold);color:#04201a;border-color:var(--gold)}
 </style>
 <style id="custom"></style>
 </head>
@@ -229,6 +237,7 @@ const I = {
   reply:'<path d="M9 7L4 12l5 5"/><path d="M4 12h9a6 6 0 0 1 6 6v1"/>',
   trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
   image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 17l-5-5-9 8"/>',
+  send:'<path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/>',
   fb:'<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8a1 1 0 0 1 1-1z"/>'
 };
 const ic = n => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
@@ -334,7 +343,7 @@ const hcToken = () => (window.hcaptcha && hcId !== null) ? hcaptcha.getResponse(
 const hcReset = () => { if(window.hcaptcha && hcId !== null) hcaptcha.reset(hcId); };
 
 function routeOf(){
-  for(const k of ["admin","profile","login","signup","featured","about","guide","tips","safety","respect","suggest"]) if(params.has(k)) return k;
+  for(const k of ["admin","profile","login","signup","featured","about","guide","tips","safety","respect","suggest","p"]) if(params.has(k)) return k;
   return params.get("u") ? "send" : "home";
 }
 async function render(route, s){
@@ -347,6 +356,7 @@ async function render(route, s){
     case "about": return aboutPage(s);
     case "guide": case "tips": case "safety": case "respect": return guidePage(s, route);
     case "suggest": return suggestPage(s);
+    case "p": return profilePage(s);
     case "send": return sendPage(params.get("u").trim().toLowerCase());
     default: return landing(s);
   }
@@ -533,7 +543,7 @@ function landing(s){
   if($("sgo")) $("sgo").onclick = () => go("?suggest");
   if(s){
     wireBar(s.user); $("ub1").onclick = () => go("?login");
-    ensureProfile(s.user).then(p => { if(!p) return; if(p.banned) return bannedPage(); if($("unm")){ $("unm").textContent = p.username; setAv($("av2"), p); } });
+    ensureProfile(s.user).then(p => { if(!p) return; if(p.banned) return bannedPage(); if($("unm")){ $("unm").textContent = p.username; setAv($("av2"), p); [$("av2"), $("unm")].forEach(e => { e.style.cursor = "pointer"; e.onclick = () => go("?p=" + p.slug); }); } });
   } else { wireOut(); [$("go"), $("go3")].forEach(b => { if(b) b.onclick = () => go("?signup"); }); $("go2").onclick = () => go("?login"); }
 }
 
@@ -617,7 +627,8 @@ async function dashboard(user){
     <p class="tag">اضغط «نشر في صفحتي» لتظهر الرسالة وردّك للجميع، دون اسم المرسل.</p><div id="list">${SKEL}</div></div>
   <div class="glass"><h2>الرسائل التي أرسلتها</h2><p class="tag">هنا ترى هل قرأ المستلم رسالتك أم لا. نص الرسالة لا يظهر لك بعد إرسالها. وبعد أن يقرأها المستلم يمكنك إزالتها من هذه القائمة، وتبقى عنده.</p><div id="sent">${SKEL}</div></div>
   <div class="glass"><h2>المزيد</h2>${lrows()}</div>`);
-  setAv($("av"), p); $("nm").textContent = p.username; $("lnk").textContent = link;
+  setAv($("av"), p); $("nm").textContent = p.username;
+  [$("av"), $("nm")].forEach(e => { e.style.cursor = "pointer"; e.onclick = () => go("?p=" + p.slug); }); $("lnk").textContent = link;
   const cp = async b => { try{ await navigator.clipboard.writeText(link); b.textContent = "تم النسخ ✓"; }catch(e){ b.textContent = "انسخ الرابط يدويًا"; } };
   $("copy").onclick = () => cp($("copy"));
   $("share").onclick = () => navigator.share ? navigator.share({ title: N(), text: SHARE_TXT, url: link }).catch(()=>{}) : cp($("share"));
@@ -786,47 +797,93 @@ async function editPage(user){
   };
 }
 
-async function sendPage(key){
-  const p = await db.from("profiles").select("id,username,slug,banned,bio,avatar,prompt").eq("slug", key).maybeSingle();
-  if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
-  const s = await getSession();
-  const canReport = s && s.user.id !== p.data.id, mx = MAXLEN();
-  el(`${s ? BAR() : ""}${HOME}${annHtml(false)}<div class="hero" style="padding:14px 0 6px"><div class="avatar" id="av"></div>
-    <p class="tag" style="margin:0">أرسل رسالة مجهولة إلى</p><div class="who" id="who"></div><button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button><div class="note" id="lkn2"></div><p class="tag" id="bio"></p></div>
-  <div class="glass sm" id="box"><h2>اكتب رسالتك</h2><div id="prm"></div>
-    <p class="tag" style="margin:0 0 6px">كن لطيفًا في كلامك، فالكلمة الطيبة تصل إلى صاحبها.</p>
-    <textarea id="body" rows="5" maxlength="${mx}" placeholder="اكتب رسالتك هنا"></textarea>
-    <div class="cnt" id="c">الأحرف: 0 / ${mx.toLocaleString("en")}</div>
-    ${s ? `<label class="chk"><input type="checkbox" id="show"> إظهار اسمي لصاحب الرابط</label><p class="tag" style="font-size:13px;margin:0">يحتفظ الموقع بسجلّ المرسل المسجّل لأغراض الحماية، ولا يراه صاحب الرابط ما لم تُظهر اسمك.</p>` : ""}
-    <button id="send">إرسال الرسالة</button><div class="note" id="note"></div></div>
+function reportUI(box, s, targetId){
+  box.innerHTML = `<p class="tag">اختر سبب الإبلاغ:</p><div class="chips" id="rs"></div><textarea id="rd" rows="3" maxlength="300" placeholder="اشرح سبب الإبلاغ (اختياري)"></textarea><button id="rsend" disabled>إرسال البلاغ</button><div class="note" id="rn"></div>`;
+  let reason = "";
+  ["إساءة","انتحال","إزعاج"].forEach(x => { const c = mk("div","chip",x); c.onclick = () => { reason = x; [...$("rs").children].forEach(y => y.classList.toggle("on", y === c)); $("rsend").disabled = false; }; $("rs").appendChild(c); });
+  $("rsend").onclick = async()=>{
+    $("rsend").disabled = true;
+    const r = await db.from("reports").insert({ reporter_id: s.user.id, reported_id: targetId, reason, details: $("rd").value.trim() || null });
+    if(r.error){ $("rsend").disabled = false; const m = r.error.message || ""; return say("rn", r.error.code === "23505" ? "سبق أن أبلغت عن هذا الحساب" : m.includes("TOOFAST") ? "أرسلت بلاغات كثيرة، حاول لاحقًا" : "تعذّر إرسال البلاغ"); }
+    say("rn","تم إرسال البلاغ، شكرًا لك", true);
+  };
+}
+async function renderPub(box, ownerId, s){
+  const pm = await db.from("public_messages").select("id,body,reply,created_at").eq("to_user", ownerId).order("created_at",{ascending:false}).limit(20);
+  if(!pm.data || !pm.data.length) return;
+  const ids = pm.data.map(m => m.id), cnts = {}, mine = new Set();
+  ((await db.rpc("thanks_counts", { uid: ownerId })).data || []).forEach(x => cnts[x.message_id] = Number(x.cnt));
+  if(s) ((await db.from("message_thanks").select("message_id").eq("user_id", s.user.id).in("message_id", ids)).data || []).forEach(x => mine.add(x.message_id));
+  const g = mk("div","glass sm"); g.appendChild(mk("h2", null, "رسائل منشورة"));
+  pm.data.forEach(m => {
+    const d = mk("div","msg"); d.appendChild(mk("p", null, m.body)); if(m.reply) d.appendChild(mk("p","rep","الرد: " + m.reply));
+    const b = mk("button","th");
+    const draw = () => { b.className = "th" + (mine.has(m.id) ? " on" : ""); b.innerHTML = ic("thumb") + " شكرًا " + (cnts[m.id] || 0).toLocaleString("en"); };
+    draw();
+    b.onclick = async()=>{
+      if(!s){ toast("سجّل الدخول لتشكر صاحب الرسالة"); return; }
+      const had = mine.has(m.id);
+      const r = had ? await db.from("message_thanks").delete().eq("user_id", s.user.id).eq("message_id", m.id) : await db.from("message_thanks").insert({ message_id: m.id, user_id: s.user.id });
+      if(r.error){ toast("تعذّر تنفيذ العملية"); return; }
+      if(had){ mine.delete(m.id); cnts[m.id] = Math.max(0, (cnts[m.id] || 1) - 1); } else { mine.add(m.id); cnts[m.id] = (cnts[m.id] || 0) + 1; }
+      draw();
+    };
+    d.appendChild(b); g.appendChild(d);
+  });
+  box.appendChild(g);
+}
+async function profilePage(s){
+  if(!s){
+    el(`${TOPOUT()}${HOME}<div class="glass sm" style="text-align:center;margin-top:22px"><div class="logo">${ic("lock")}</div><h2 style="margin:14px 0 6px;color:var(--txt)">الصفحة الشخصية للمسجّلين فقط</h2><p class="tag">يجب التسجيل أولًا لعرض الصفحات الشخصية.</p>${on("allow_signup") ? `<button id="go">أنشئ حسابك</button>` : ""}<button class="ghost" id="go2">تسجيل الدخول</button></div>`);
+    wireOut(); if($("go")) $("go").onclick = () => go("?signup"); $("go2").onclick = () => go("?login"); return;
+  }
+  const key = (params.get("p") || "").trim().toLowerCase();
+  const r = await db.from("profiles").select("id,username,slug,banned,created_at,bio,avatar,prompt").eq("slug", key).maybeSingle();
+  if(!r.data || r.data.banned){ el(`${BAR()}${HOME}<div class="glass sm" style="text-align:center;margin-top:22px"><p class="sub">هذا المستخدم غير موجود أو غير متاح</p></div>`); wireBar(s.user); return; }
+  const u = r.data, me = s.user.id === u.id;
+  const pubs = (await db.from("public_messages").select("id", { count:"exact", head:true }).eq("to_user", u.id)).count ?? 0;
+  el(`${BAR()}${HOME}<div class="hero" style="padding:14px 0 6px"><div class="avatar" id="av"></div><div class="who" id="who"></div><p class="tag" id="bio"></p>
+    <p class="mini">عضو منذ ${esc(new Date(u.created_at).toLocaleDateString("ar-u-nu-latn"))} · ${pubs.toLocaleString("en")} رسالة منشورة</p></div>
+  <div class="glass sm center"><button id="sendb" class="bigbtn">${ic("send")} أرسل رسالة مجهولة</button>${me ? "" : `<button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button><div class="note" id="lkn2"></div>`}</div>
   <div id="pub"></div>
-  ${(!s && on("allow_signup")) || on("show_reports") ? `<div class="glass sm" style="text-align:center">${!s && on("allow_signup") ? `<b>هل تريد رابطك الخاص؟</b><button class="ghost" id="mine">أنشئ حسابك</button>` : ""}${on("show_reports") ? `<button class="ghost sbtn" id="rp" style="margin:10px 0 0">إبلاغ عن هذا الحساب</button>` : ""}<div id="rbox"></div></div>` : ""}`);
+  ${!me && on("show_reports") ? `<div class="glass sm center"><button class="ghost sbtn" id="rp" style="margin:0">إبلاغ عن هذا الحساب</button><div id="rbox"></div></div>` : ""}`);
+  wireBar(s.user); setAv($("av"), u); $("who").textContent = u.username; $("bio").textContent = u.bio || "";
+  $("sendb").onclick = () => go("?u=" + u.slug);
+  if(!me){
+    const lkBtn = $("lk"); let liked = false;
+    const lkSet = () => lkBtn.classList.toggle("on", liked);
+    db.from("profile_likes").select("liked_id").eq("liker_id", s.user.id).eq("liked_id", u.id).maybeSingle().then(x => { liked = !!x.data; lkSet(); });
+    lkBtn.onclick = async()=>{
+      lkBtn.disabled = true;
+      const x = liked ? await db.from("profile_likes").delete().eq("liker_id", s.user.id).eq("liked_id", u.id) : await db.from("profile_likes").insert({ liker_id: s.user.id, liked_id: u.id });
+      lkBtn.disabled = false;
+      if(x.error) return say("lkn2","تعذّر تنفيذ العملية، حاول لاحقًا");
+      liked = !liked; lkSet();
+    };
+    if($("rp")) $("rp").onclick = () => reportUI($("rbox"), s, u.id);
+  }
+  renderPub($("pub"), u.id, s);
+}
+async function sendPage(key){
+  const p = await db.from("profiles").select("id,username,slug,banned,avatar,prompt").eq("slug", key).maybeSingle();
+  if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
+  const s = await getSession(), mx = MAXLEN();
+  el(`${s ? BAR() : ""}${HOME}${annHtml(false)}<div class="hero" style="padding:14px 0 6px"><a class="pl" id="pl"><div class="avatar" id="av"></div><div class="who" id="who"></div></a>
+    <p class="tag" style="margin:0">رسالتك مجهولة، فاكتب بحرية وبلطف</p></div>
+  <div class="glass sm send" id="box"><div id="prm"></div>
+    <textarea id="body" rows="6" maxlength="${mx}" placeholder="اكتب رسالتك هنا..."></textarea>
+    <div class="qs" id="qs"></div>
+    <div class="cnt" id="c">0 / ${mx.toLocaleString("en")}</div>
+    ${s ? `<label class="chk"><input type="checkbox" id="show"> إظهار اسمي لصاحب الصفحة</label><p class="mini" style="margin:0">يحتفظ الموقع بسجلّ المرسلين المسجّلين لأغراض الحماية.</p>` : ""}
+    <button id="send" class="bigbtn">${ic("send")} أرسل الرسالة</button><div class="note" id="note"></div>
+    <p class="mini center">لن يظهر اسمك لصاحب الصفحة إلا إذا اخترت ذلك.</p></div>`);
   if(s) wireBar(s.user);
   setAv($("av"), p.data); $("who").textContent = p.data.username;
-  if(p.data.bio) $("bio").textContent = p.data.bio;
+  $("pl").onclick = () => go("?p=" + p.data.slug);
   if(p.data.prompt){ const pr = mk("div","prompt"); pr.appendChild(mk("b","hl","سؤال صاحب الصفحة: ")); pr.appendChild(document.createTextNode(p.data.prompt)); $("prm").appendChild(pr); }
-  const lkBtn = $("lk"); let liked = false;
-  const lkSet = () => lkBtn.classList.toggle("on", liked);
-  if(s) db.from("profile_likes").select("liked_id").eq("liker_id", s.user.id).eq("liked_id", p.data.id).maybeSingle().then(r => { liked = !!r.data; lkSet(); });
-  lkBtn.onclick = async()=>{
-    if(!s) return say("lkn2","سجّل الدخول لتتمكن من الإعجاب");
-    if(s.user.id === p.data.id) return say("lkn2","لا يمكنك الإعجاب بصفحتك");
-    lkBtn.disabled = true;
-    const r = liked ? await db.from("profile_likes").delete().eq("liker_id", s.user.id).eq("liked_id", p.data.id) : await db.from("profile_likes").insert({ liker_id: s.user.id, liked_id: p.data.id });
-    lkBtn.disabled = false;
-    if(r.error) return say("lkn2","تعذّر تنفيذ العملية، حاول لاحقًا");
-    liked = !liked; lkSet();
-  };
-  $("body").oninput = ()=>{ $("c").textContent = "الأحرف: " + $("body").value.length.toLocaleString("en") + " / " + mx.toLocaleString("en"); };
-  if($("mine")) $("mine").onclick = () => go("?signup");
-  if($("rp")) $("rp").onclick = ()=>{
-    if(!s){ $("rbox").innerHTML = `<p class="tag">يجب تسجيل الدخول للإبلاغ.</p><button class="sbtn" id="rl">تسجيل الدخول</button>`; $("rl").onclick = () => go("?login"); return; }
-    if(!canReport){ $("rbox").innerHTML = `<p class="tag">لا يمكنك الإبلاغ عن حسابك.</p>`; return; }
-    $("rbox").innerHTML = `<p class="tag">اختر سبب الإبلاغ:</p><div class="chips" id="rs"></div><div class="note" id="rn"></div>`;
-    ["إساءة","انتحال","إزعاج"].forEach(x => { const c = mk("div","chip",x); c.onclick = async()=>{
-      const r = await db.from("reports").insert({ reporter_id: s.user.id, reported_id: p.data.id, reason: x });
-      say("rn", r.error ? (r.error.code === "23505" ? "سبق أن أبلغت عن هذا الحساب" : "تعذّر إرسال البلاغ") : "تم إرسال البلاغ، شكرًا لك", !r.error); }; $("rs").appendChild(c); });
-  };
+  const upd = () => { $("c").textContent = $("body").value.length.toLocaleString("en") + " / " + mx.toLocaleString("en"); };
+  ["أحببت أسلوبك","شكرًا لأنك موجود","أتمنى لك التوفيق","نصيحتي لك: "].forEach(t => { const c = mk("span", null, t); c.onclick = () => { const b = $("body"); b.value = (b.value ? b.value.trimEnd() + " " : "") + t; b.focus(); upd(); }; $("qs").appendChild(c); });
+  $("body").oninput = upd;
   $("send").onclick = async()=>{
     const t = $("body").value.trim();
     if(!t) return say("note","اكتب رسالتك أولًا");
@@ -839,34 +896,18 @@ async function sendPage(key){
     if($("cta")) $("cta").onclick = () => go("?signup");
     $("again").onclick = () => sendPage(key);
   };
-  const pm = await db.from("public_messages").select("id,body,reply,created_at").eq("to_user", p.data.id).order("created_at",{ascending:false}).limit(20);
-  if(pm.data && pm.data.length){
-    const ids = pm.data.map(m => m.id), cnts = {}, mine = new Set();
-    ((await db.rpc("thanks_counts", { uid: p.data.id })).data || []).forEach(x => cnts[x.message_id] = Number(x.cnt));
-    if(s) ((await db.from("message_thanks").select("message_id").eq("user_id", s.user.id).in("message_id", ids)).data || []).forEach(x => mine.add(x.message_id));
-    const g = mk("div","glass sm"); g.appendChild(mk("h2", null, "رسائل منشورة"));
-    pm.data.forEach(m => {
-      const d = mk("div","msg"); d.appendChild(mk("p", null, m.body)); if(m.reply) d.appendChild(mk("p","rep","الرد: " + m.reply));
-      const b = mk("button","th");
-      const draw = () => { b.className = "th" + (mine.has(m.id) ? " on" : ""); b.innerHTML = ic("thumb") + " شكرًا " + (cnts[m.id] || 0).toLocaleString("en"); };
-      draw();
-      b.onclick = async()=>{
-        if(!s){ toast("سجّل الدخول لتشكر صاحب الرسالة"); return; }
-        const had = mine.has(m.id);
-        const r = had ? await db.from("message_thanks").delete().eq("user_id", s.user.id).eq("message_id", m.id) : await db.from("message_thanks").insert({ message_id: m.id, user_id: s.user.id });
-        if(r.error){ toast("تعذّر تنفيذ العملية"); return; }
-        if(had){ mine.delete(m.id); cnts[m.id] = Math.max(0, (cnts[m.id] || 1) - 1); } else { mine.add(m.id); cnts[m.id] = (cnts[m.id] || 0) + 1; }
-        draw();
-      };
-      d.appendChild(b); g.appendChild(d);
-    });
-    $("pub").appendChild(g);
-  }
 }
 
 // ===== لوحة الإدارة =====
-const accounts = async () => (await db.rpc("admin_profiles")).data || [];
+const ADM = { accs: null };
+const accounts = async force => { if(!ADM.accs || force){ const r = await db.rpc("admin_profiles"); if(r.error) throw r.error; ADM.accs = r.data || []; } return ADM.accs; };
 const nameMap = async () => { const m = {}; (await accounts()).forEach(a => m[a.id] = a.username); return m; };
+const act = async (b, fn) => { b.disabled = true; try{ await fn(); }catch(e){ toast("حدث خطأ، حاول مرة أخرى"); } b.disabled = false; };
+async function adminTab(btn, fn){
+  [...$("tabs").children].forEach(b => b.classList.toggle("on", b === btn));
+  const box = $("ad"); box.innerHTML = SKEL;
+  try{ await fn(); }catch(e){ box.innerHTML = ""; const r = mk("button","sbtn","إعادة المحاولة"); r.onclick = () => adminTab(btn, fn); box.append(mk("p","note","تعذّر تحميل هذا القسم."), r); }
+}
 const csv = (rows, name) => {
   const q = v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
   const txt = "\ufeff" + rows.map(r => r.map(q).join(",")).join("\n");
@@ -875,43 +916,52 @@ const csv = (rows, name) => {
 async function adminPage(){
   document.body.classList.add("sel-ok");
   if((await db.rpc("is_admin")).data !== true){ el(`${HOME}<div class="glass"><p class="sub">لا تملك صلاحية الدخول إلى هذه الصفحة</p></div>`); return; }
-  el(`${HOME}<div class="hero" style="padding:8px 0 0"><h1 class="brand" style="font-size:40px">لوحة الإدارة</h1></div><div class="tabs" id="tabs"></div><div class="glass" id="ad">جارٍ التحميل...</div>`);
-  [["الإحصائيات",aStats],["الحسابات",aAcc],["الرسائل",aMsg],["البلاغات",aRep],["طلبات الحذف",aDel],["الاقتراحات",aSug],["الإعلان",aAnn],["إشعار للجميع",aCast],["إعدادات الموقع",aSet],["الكلمات الممنوعة",aWords],["المشرفون",aAdm],["أدوات",aTools]].forEach(([t,f]) => { const b = mk("button","sbtn ghost",t); b.onclick = f; $("tabs").appendChild(b); });
-  aStats();
+  el(`${HOME}<div class="hero" style="padding:8px 0 0"><h1 class="brand" style="font-size:40px">لوحة الإدارة</h1></div><div class="tabs" id="tabs"></div><div class="glass" id="ad">${SKEL}</div>`);
+  [["الإحصائيات",aStats],["الحسابات",aAcc],["الرسائل",aMsg],["البلاغات",aRep],["طلبات الحذف",aDel],["الاقتراحات",aSug],["الإعلان",aAnn],["إشعار للجميع",aCast],["إعدادات الموقع",aSet],["الكلمات الممنوعة",aWords],["المشرفون",aAdm],["أدوات",aTools]].forEach(([t,f]) => { const b = mk("button","sbtn ghost",t); b.onclick = () => adminTab(b, f); $("tabs").appendChild(b); });
+  adminTab($("tabs").firstChild, aStats);
 }
 async function aStats(){
   const d0 = new Date(); d0.setHours(0,0,0,0); const iso = d0.toISOString(), td = q => q.gte("created_at", iso);
-  const r = await Promise.all([cnt("profiles"),cnt("profiles",td),cnt("profiles",q=>q.eq("banned",true)),cnt("messages"),cnt("messages",td),cnt("suggestions"),cnt("reports"),cnt("deletion_requests",q=>q.eq("status","pending"),"user_id"),cnt("visits"),cnt("visits",td),cnt("visits",q=>td(q).eq("device","جوال")),cnt("visits",q=>td(q).eq("device","حاسوب"))]);
+  const r = await Promise.allSettled([cnt("profiles"),cnt("profiles",td),cnt("profiles",q=>q.eq("banned",true)),cnt("messages"),cnt("messages",td),cnt("suggestions"),cnt("reports"),cnt("deletion_requests",q=>q.eq("status","pending"),"user_id"),cnt("visits"),cnt("visits",td),cnt("visits",q=>td(q).eq("device","جوال")),cnt("visits",q=>td(q).eq("device","حاسوب"))]);
   const L = ["عدد الحسابات","حسابات جديدة اليوم","الحسابات الموقوفة","عدد الرسائل","رسائل اليوم","عدد الاقتراحات","عدد البلاغات","طلبات حذف معلّقة","إجمالي الزيارات","زيارات اليوم","زيارات اليوم من الجوال","زيارات اليوم من الحاسوب"];
   const box = $("ad"); box.innerHTML = "";
-  L.forEach((l,i) => { const x = mk("div","stat"); x.append(mk("span", null, l), mk("b", null, r[i].toLocaleString("en"))); box.appendChild(x); });
+  L.forEach((l,i) => { const x = mk("div","stat"); x.append(mk("span", null, l), mk("b", null, r[i].status === "fulfilled" ? r[i].value.toLocaleString("en") : "—")); box.appendChild(x); });
 }
 async function aAcc(){
   const all = await accounts(), box = $("ad"); box.innerHTML = "";
   const q = mk("input"); q.placeholder = "ابحث بالاسم أو الرابط أو البريد"; box.appendChild(q);
   const list = mk("div"); box.appendChild(list);
+  let shown = 40, tm;
+  const refresh = async () => { await accounts(true); aAcc(); };
+  const accRow = a => {
+    const d = mk("div","msg");
+    d.appendChild(mk("p", null, a.username + " — " + (a.gender || "غير محدد") + (a.banned ? " — موقوف" : "")));
+    d.appendChild(mk("small", null, "الرابط: " + a.slug + " • " + new Date(a.created_at).toLocaleDateString("ar-u-nu-latn")));
+    if(a.bio || a.prompt) d.appendChild(mk("small","from","النبذة: " + (a.bio || "—") + " | السؤال: " + (a.prompt || "—")));
+    const row = mk("div");
+    const dt = mk("button","sbtn","التفاصيل"); dt.onclick = () => adminTab($("tabs").children[1], () => aDetail(a));
+    const bn = mk("button","sbtn ghost", a.banned ? "إلغاء الإيقاف" : "إيقاف الحساب");
+    bn.onclick = () => act(bn, async()=>{ const r = await db.from("profiles").update({ banned: !a.banned }).eq("id", a.id); if(r.error) throw r.error; await refresh(); });
+    const rn = mk("button","sbtn ghost","تغيير الاسم");
+    rn.onclick = () => act(rn, async()=>{ const v = prompt("الاسم الجديد:", a.username); if(!v) return; const u = normName(v); if(!nameOk(u)) return toast(NAME_MSG); const r = await db.from("profiles").update({ username: u }).eq("id", a.id); if(r.error) return toast("تعذّر التغيير (قد يكون الاسم محجوزًا)"); await refresh(); });
+    const rs = mk("button","sbtn ghost","تغيير الرابط");
+    rs.onclick = () => act(rs, async()=>{ const v = prompt("الرابط الجديد:", a.slug); if(!v) return; const u = v.trim().toLowerCase(); if(!slugOk(u)) return toast(SLUG_MSG); const r = await db.from("profiles").update({ slug: u }).eq("id", a.id); if(r.error) return toast("تعذّر التغيير (قد يكون الرابط محجوزًا)"); await refresh(); });
+    const dl = mk("button","sbtn red","حذف نهائي");
+    dl.onclick = () => act(dl, async()=>{ if(!confirm("حذف الحساب نهائيًا مع كل رسائله؟")) return; const r = await db.rpc("admin_delete_account", { uid: a.id }); if(r.error) return toast("تعذّر الحذف"); await refresh(); });
+    row.append(dt, bn, rn, rs);
+    if(a.bio || a.prompt){ const cl = mk("button","sbtn ghost","مسح النبذة والسؤال"); cl.onclick = () => act(cl, async()=>{ await db.from("profiles").update({ bio: null, prompt: null }).eq("id", a.id); await refresh(); }); row.append(cl); }
+    row.append(dl); d.appendChild(row); return d;
+  };
   const draw = () => {
     list.innerHTML = "";
-    const v = q.value.trim().toLowerCase(); all.filter(a => [a.username, a.slug, a.email, a.bio].some(x => (x || "").toLowerCase().includes(v))).forEach(a => {
-      const d = mk("div","msg");
-      d.appendChild(mk("p", null, a.username + " — " + (a.gender || "غير محدد") + (a.banned ? " — موقوف" : "")));
-      if(a.bio || a.prompt) d.appendChild(mk("small","from","النبذة: " + (a.bio || "—") + " | السؤال: " + (a.prompt || "—")));
-      d.appendChild(mk("small", null, "الرابط: " + a.slug + " • " + new Date(a.created_at).toLocaleDateString("ar-u-nu-latn")));
-      const row = mk("div");
-      const bn = mk("button","sbtn ghost", a.banned ? "إلغاء الإيقاف" : "إيقاف الحساب");
-      bn.onclick = async()=>{ await db.from("profiles").update({ banned: !a.banned }).eq("id", a.id); aAcc(); };
-      const rn = mk("button","sbtn ghost","تغيير الاسم");
-      rn.onclick = async()=>{ const v = prompt("الاسم الجديد:", a.username); if(!v) return; const u = normName(v); if(!nameOk(u)) return alert(NAME_MSG); const r = await db.from("profiles").update({ username: u }).eq("id", a.id); if(r.error) alert("تعذّر التغيير (قد يكون الاسم محجوزًا)"); aAcc(); };
-      const rs = mk("button","sbtn ghost","تغيير الرابط");
-      rs.onclick = async()=>{ const v = prompt("الرابط الجديد:", a.slug); if(!v) return; const u = v.trim().toLowerCase(); if(!slugOk(u)) return alert(SLUG_MSG); const r = await db.from("profiles").update({ slug: u }).eq("id", a.id); if(r.error) alert("تعذّر التغيير (قد يكون الرابط محجوزًا)"); aAcc(); };
-      const dl = mk("button","sbtn red","حذف نهائي");
-      dl.onclick = async()=>{ if(!confirm("حذف الحساب نهائيًا مع كل رسائله؟")) return; const r = await db.rpc("admin_delete_account", { uid: a.id }); if(r.error) alert("تعذّر الحذف"); aAcc(); };
-      const cl = mk("button","sbtn ghost","مسح النبذة والسؤال"); cl.onclick = async()=>{ await db.from("profiles").update({ bio: null, prompt: null }).eq("id", a.id); aAcc(); };
-      const dt = mk("button","sbtn","التفاصيل"); dt.onclick = () => aDetail(a);
-      row.append(dt, bn, rn, rs); if(a.bio || a.prompt) row.append(cl); row.append(dl); d.appendChild(row); list.appendChild(d);
-    });
+    const v = q.value.trim().toLowerCase();
+    const f = all.filter(a => [a.username, a.slug, a.email, a.bio].some(x => (x || "").toLowerCase().includes(v)));
+    if(!f.length){ list.textContent = "لا توجد نتائج"; return; }
+    f.slice(0, shown).forEach(a => list.appendChild(accRow(a)));
+    if(f.length > shown){ const m = mk("button","ghost","عرض المزيد (" + (f.length - shown).toLocaleString("en") + ")"); m.onclick = () => { shown += 40; draw(); }; list.appendChild(m); }
   };
-  q.oninput = draw; draw();
+  q.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { shown = 40; draw(); }, 180); };
+  draw();
 }
 async function aDetail(a){
   const box = $("ad"); box.innerHTML = SKEL;
@@ -922,7 +972,7 @@ async function aDetail(a){
     db.from("deletion_requests").select("status").eq("user_id", a.id).maybeSingle()
   ]);
   box.innerHTML = "";
-  const back = mk("button","sbtn ghost","رجوع للحسابات"); back.onclick = aAcc; box.appendChild(back);
+  const back = mk("button","sbtn ghost","رجوع للحسابات"); back.onclick = () => adminTab($("tabs").children[1], aAcc); box.appendChild(back);
   [["الاسم", a.username],["الرابط", a.slug],["البريد", a.email || "—"],["الجنس", a.gender || "غير محدد"],["الحالة", a.banned ? "موقوف" : "نشط"],
    ["تاريخ التسجيل", fmt(a.created_at)],["آخر دخول", a.last_sign_in ? fmt(a.last_sign_in) : "—"],["النبذة", a.bio || "—"],["سؤال الصفحة", a.prompt || "—"],
    ["الرسائل الواردة", msgs],["الرسائل المنشورة", pubs],["بلاغات ضده", repIn],["بلاغات قدّمها", repOut],["الإعجابات", likes],["اقتراحاته", sugs],
@@ -931,7 +981,7 @@ async function aDetail(a){
   const row = mk("div");
   const op = mk("button","sbtn","فتح صفحته العامة"); op.onclick = () => window.open(location.pathname + "?u=" + a.slug, "_blank");
   const bn = mk("button","sbtn ghost", a.banned ? "إلغاء الإيقاف" : "إيقاف الحساب");
-  bn.onclick = async()=>{ await db.from("profiles").update({ banned: !a.banned }).eq("id", a.id); a.banned = !a.banned; aDetail(a); };
+  bn.onclick = () => act(bn, async()=>{ const r = await db.from("profiles").update({ banned: !a.banned }).eq("id", a.id); if(r.error) throw r.error; a.banned = !a.banned; await aDetail(a); });
   row.append(op, bn); box.appendChild(row);
 }
 async function aMsg(){
@@ -952,6 +1002,7 @@ async function aRep(){
   const box = $("ad"); box.innerHTML = "";
   (data || []).forEach(r => {
     const d = mk("div","msg"); d.append(mk("p", null, "المبلَّغ عنه: " + (names[r.reported_id] || "؟") + " — السبب: " + r.reason), mk("small", null, "المبلِّغ: " + (names[r.reporter_id] || "؟") + " • " + fmt(r.created_at)));
+    if(r.details) d.appendChild(mk("p","rep","التفاصيل: " + r.details));
     const row = mk("div");
     const bn = mk("button","sbtn ghost","إيقاف المبلَّغ عنه"); bn.onclick = async()=>{ await db.from("profiles").update({ banned:true }).eq("id", r.reported_id); alert("تم الإيقاف"); };
     const x = mk("button","sbtn red","حذف البلاغ"); x.onclick = async()=>{ await db.from("reports").delete().eq("id", r.id); aRep(); };
