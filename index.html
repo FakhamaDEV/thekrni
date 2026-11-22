@@ -2,8 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
+<script>try{if(localStorage.getItem("theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#04201a">
 <title>ذكّرني</title>
 <meta name="description" content="أنشئ رابطك الخاص واستقبل رسائل مجهولة">
@@ -12,7 +13,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
 <style>
-:root{--bg:#f6f1e3;--bg2:#efe7d0;--gold:#9a6f08;--gold2:#7a5604;--txt:#1d2b25;--mut:#5b6b63;--glass:rgba(0,0,0,.035);--line:rgba(120,85,10,.28);--w:0,0,0;--g:154,111,8;--k:255,255,255;--ink:#1a1400;--rep:#6b4e08;--hi:#6b4e08;--err:#c0392b;--ph:#7d8c84;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[data-theme="light"]{--bg:#f6f1e3;--bg2:#efe7d0;--gold:#8a5f00;--gold2:#6b4a02;--txt:#1d2b25;--mut:#4f5f57;--glass:rgba(0,0,0,.04);--line:rgba(120,85,10,.35);--w:0,0,0;--g:138,95,0;--k:255,255,255;--ink:#ffffff;--rep:#6b4e08;--hi:#6b4e08;--err:#b03a2e;--ph:#7d8c84;--field:#ffffff;color-scheme:light}
+[data-theme="light"] body{background:radial-gradient(circle at 80% -10%,rgba(60,160,120,.15),transparent 45%),linear-gradient(160deg,var(--bg),var(--bg2))}
+
+:root{--w:255,255,255;--g:227,185,74;--k:0,0,0;--ink:#04201a;--rep:#f6e7b0;--hi:#fff3c4;--err:#ff9b8f;--ph:#8aa397;--field:rgba(0,0,0,.2);--bg:var(--ink);--bg2:#0a3a2c;--gold:#e3b94a;--gold2:#b88a1e;--txt:#f4efe0;--mut:#9fb8ac;--glass:rgba(255,255,255,.06);--line:rgba(227,185,74,.28);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
 body{margin:0;font-family:Tajawal,Tahoma,sans-serif;color:var(--txt);min-height:100vh;min-height:100dvh;
@@ -214,10 +218,13 @@ button.sbtn.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
 .vis{color:var(--gold)}.hid{color:var(--mut)}
 .ic.thm{min-width:48px}
 
-input,textarea,select{background:#fff;color:var(--txt)}
+input,textarea,select{background:var(--field);color:var(--txt)}
 .kbd{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:12px;background:rgba(var(--g),.12);color:var(--gold);font-size:13px;font-weight:700;margin-bottom:6px}
 .kbd .ico{width:16px;height:16px}
 .kchips .chip{flex:none}
+
+[data-theme="light"] button{box-shadow:0 4px 14px rgba(138,95,0,.25)}
+[data-theme="light"] .glass{box-shadow:0 2px 10px rgba(0,0,0,.04)}
 </style>
 <style id="custom"></style>
 </head>
@@ -339,12 +346,21 @@ async function ensureProfile(user){
 const annHtml = home => (!ANN || !(home || ANN.show_all)) ? "" : `<div class="ann">${ANN.title ? `<b>${esc(ANN.title)}</b>` : ""}<p>${esc(ANN.body)}</p></div>`;
 function toast(t, f){ const d = mk("div","toast",t); if(f) d.onclick = f; document.body.appendChild(d); setTimeout(() => d.remove(), 5000); }
 function setBadge(n){ window._nb = n; const b = $("bd"); if(!b) return; b.textContent = n.toLocaleString("en"); b.hidden = n <= 0; }
+const themeIcon = () => ic(document.documentElement.dataset.theme === "light" ? "moon" : "sun");
+function toggleTheme(){
+  const light = document.documentElement.dataset.theme === "light";
+  if(light) delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = "light";
+  try{ localStorage.setItem("theme", light ? "dark" : "light"); }catch(e){}
+  document.querySelectorAll(".thm").forEach(b => { b.innerHTML = themeIcon() + (b.dataset.l ? "<small>المظهر</small>" : ""); });
+}
 const BAR = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr">
+    <button class="ic thm" id="thm" data-l="1" title="المظهر">${themeIcon()}<small>المظهر</small></button>
     <button class="ic" id="icn">${ic("bell")}<small>الإشعارات</small><i class="bd" id="bd" hidden></i></button>
   <button class="ic" id="ica">${ic("user")}<small>حسابي</small></button>
   <button class="ic" id="ico">${ic("logout")}<small>خروج</small></button></div></div>`;
 async function wireBar(user){
   $("tbh").onclick = () => go("");
+  $("thm").onclick = toggleTheme;
   $("icn").onclick = () => notifPage(user);
   $("ica").onclick = () => go("?profile");
   $("ico").onclick = async()=>{ await db.auth.signOut(); go(""); };
@@ -365,7 +381,7 @@ function mountCaptcha(){
   const box = $("hc"); if(!box) return;
   let tries = 0;
   const t = setInterval(() => {
-    if(window.hcaptcha){ clearInterval(t); hcId = hcaptcha.render(box, { sitekey: HC_KEY, theme: "light" }); }
+    if(window.hcaptcha){ clearInterval(t); hcId = hcaptcha.render(box, { sitekey: HC_KEY, theme: document.documentElement.dataset.theme === "light" ? "light" : "dark" }); }
     else if(++tries > 40){ clearInterval(t); say("note","تعذّر تحميل مربع التحقق، جرّب شبكة أخرى."); }
   }, 250);
 }
@@ -479,8 +495,8 @@ async function loadFeat(){
   const a = mk("button","ghost","عرض كل الرسائل المختارة"); a.onclick = () => go("?featured"); g.appendChild(a); box.appendChild(g);
 }
 const SKEL = '<div class="skel"></div><div class="skel"></div>';
-const TOPOUT = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr"><button class="ghost sbtn" id="nl" style="margin:0">دخول</button>${on("allow_signup") ? `<button class="sbtn" id="ns" style="margin:0">حساب جديد</button>` : ""}</div></div>`;
-const wireOut = () => { $("tbh").onclick = () => go(""); $("nl").onclick = () => go("?login"); if($("ns")) $("ns").onclick = () => go("?signup"); };
+const TOPOUT = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr"><button class="ic thm" id="thm" title="المظهر">${themeIcon()}</button><button class="ghost sbtn" id="nl" style="margin:0">دخول</button>${on("allow_signup") ? `<button class="sbtn" id="ns" style="margin:0">حساب جديد</button>` : ""}</div></div>`;
+const wireOut = () => { $("tbh").onclick = () => go(""); if($("thm")) $("thm").onclick = toggleTheme; $("nl").onclick = () => go("?login"); if($("ns")) $("ns").onclick = () => go("?signup"); };
 const quickRow = (slug, active) => `<div class="qrow"><a class="qb${active === "inbox" ? " on" : ""}" href="?login">صندوق رسائلي</a><a class="qb${active === "edit" ? " on" : ""}" href="?profile">تعديل حسابي</a><a class="qb${active === "privacy" ? " on" : ""}" href="?privacy">الخصوصية والإشعارات</a><a class="qb${active === "page" ? " on" : ""}" href="?p=${esc(slug)}">صفحتي</a></div>`;
 const checklistHtml = p => {
   const items = [["أضف نبذة عنك", !!p.bio, "?profile"], ["اختر صورتك الرمزية", !!p.avatar, "?profile"], ["شارك رابطك مع أصدقائك", !!LS.get("shared"), "#lnk"]];
