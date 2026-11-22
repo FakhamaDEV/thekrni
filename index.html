@@ -2,9 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<script>try{if(localStorage.getItem("theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="dark light">
+<meta name="color-scheme" content="light">
 <meta name="theme-color" content="#04201a">
 <title>ذكّرني</title>
 <meta name="description" content="أنشئ رابطك الخاص واستقبل رسائل مجهولة">
@@ -12,13 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
-<style>:root{--w:255,255,255;--g:227,185,74;--k:0,0,0;--ink:#04201a;--rep:#f6e7b0;--hi:#fff3c4;--err:#ff9b8f;--ph:#8aa397}
-[data-theme="light"]{--bg:#f6f1e3;--bg2:#efe7d0;--gold:#9a6f08;--gold2:#7a5604;--txt:#1d2b25;--mut:#5b6b63;--glass:rgba(0,0,0,.035);--line:rgba(120,85,10,.28);--w:0,0,0;--g:154,111,8;--k:255,255,255;--ink:#ffffff;--rep:#7a5a0c;--hi:#6b4e08;--err:#c0392b;--ph:#7d8c84;color-scheme:light}
-[data-theme="light"] body{background:radial-gradient(circle at 80% -10%,rgba(60,160,120,.15),transparent 45%),linear-gradient(160deg,var(--bg),var(--bg2))}
-[data-theme="light"] input,[data-theme="light"] textarea,[data-theme="light"] select{background:#fff;color:var(--txt)}
-[data-theme="light"] .link{background:#fff}
-
-:root{--bg:var(--ink);--bg2:#0a3a2c;--gold:#e3b94a;--gold2:#b88a1e;--txt:#f4efe0;--mut:#9fb8ac;--glass:rgba(255,255,255,.06);--line:rgba(227,185,74,.28);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+<style>
+:root{--bg:#f6f1e3;--bg2:#efe7d0;--gold:#9a6f08;--gold2:#7a5604;--txt:#1d2b25;--mut:#5b6b63;--glass:rgba(0,0,0,.035);--line:rgba(120,85,10,.28);--w:0,0,0;--g:154,111,8;--k:255,255,255;--ink:#1a1400;--rep:#6b4e08;--hi:#6b4e08;--err:#c0392b;--ph:#7d8c84;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
 body{margin:0;font-family:Tajawal,Tahoma,sans-serif;color:var(--txt);min-height:100vh;min-height:100dvh;
@@ -219,6 +213,11 @@ button.sbtn.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
 .tg input:checked+i{background:var(--gold)}.tg input:checked+i:after{right:23px}
 .vis{color:var(--gold)}.hid{color:var(--mut)}
 .ic.thm{min-width:48px}
+
+input,textarea,select{background:#fff;color:var(--txt)}
+.kbd{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:12px;background:rgba(var(--g),.12);color:var(--gold);font-size:13px;font-weight:700;margin-bottom:6px}
+.kbd .ico{width:16px;height:16px}
+.kchips .chip{flex:none}
 </style>
 <style id="custom"></style>
 </head>
@@ -268,6 +267,7 @@ const I = {
   eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
   pin:'<path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
   cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  heart:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
   fb:'<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8a1 1 0 0 1 1-1z"/>'
 };
 const ic = n => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
@@ -339,21 +339,12 @@ async function ensureProfile(user){
 const annHtml = home => (!ANN || !(home || ANN.show_all)) ? "" : `<div class="ann">${ANN.title ? `<b>${esc(ANN.title)}</b>` : ""}<p>${esc(ANN.body)}</p></div>`;
 function toast(t, f){ const d = mk("div","toast",t); if(f) d.onclick = f; document.body.appendChild(d); setTimeout(() => d.remove(), 5000); }
 function setBadge(n){ window._nb = n; const b = $("bd"); if(!b) return; b.textContent = n.toLocaleString("en"); b.hidden = n <= 0; }
-const themeIcon = () => ic(document.documentElement.dataset.theme === "light" ? "moon" : "sun");
-function toggleTheme(){
-  const light = document.documentElement.dataset.theme === "light";
-  if(light) delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = "light";
-  try{ localStorage.setItem("theme", light ? "dark" : "light"); }catch(e){}
-  document.querySelectorAll(".thm").forEach(b => { b.innerHTML = themeIcon() + (b.dataset.l ? "<small>المظهر</small>" : ""); });
-}
 const BAR = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr">
-  <button class="ic thm" id="thm" data-l="1" title="المظهر">${themeIcon()}<small>المظهر</small></button>
-  <button class="ic" id="icn">${ic("bell")}<small>الإشعارات</small><i class="bd" id="bd" hidden></i></button>
+    <button class="ic" id="icn">${ic("bell")}<small>الإشعارات</small><i class="bd" id="bd" hidden></i></button>
   <button class="ic" id="ica">${ic("user")}<small>حسابي</small></button>
   <button class="ic" id="ico">${ic("logout")}<small>خروج</small></button></div></div>`;
 async function wireBar(user){
   $("tbh").onclick = () => go("");
-  $("thm").onclick = toggleTheme;
   $("icn").onclick = () => notifPage(user);
   $("ica").onclick = () => go("?profile");
   $("ico").onclick = async()=>{ await db.auth.signOut(); go(""); };
@@ -374,7 +365,7 @@ function mountCaptcha(){
   const box = $("hc"); if(!box) return;
   let tries = 0;
   const t = setInterval(() => {
-    if(window.hcaptcha){ clearInterval(t); hcId = hcaptcha.render(box, { sitekey: HC_KEY, theme: "dark" }); }
+    if(window.hcaptcha){ clearInterval(t); hcId = hcaptcha.render(box, { sitekey: HC_KEY, theme: "light" }); }
     else if(++tries > 40){ clearInterval(t); say("note","تعذّر تحميل مربع التحقق، جرّب شبكة أخرى."); }
   }, 250);
 }
@@ -488,8 +479,8 @@ async function loadFeat(){
   const a = mk("button","ghost","عرض كل الرسائل المختارة"); a.onclick = () => go("?featured"); g.appendChild(a); box.appendChild(g);
 }
 const SKEL = '<div class="skel"></div><div class="skel"></div>';
-const TOPOUT = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr"><button class="ic thm" id="thm" title="المظهر">${themeIcon()}</button><button class="ghost sbtn" id="nl" style="margin:0">دخول</button>${on("allow_signup") ? `<button class="sbtn" id="ns" style="margin:0">حساب جديد</button>` : ""}</div></div>`;
-const wireOut = () => { $("tbh").onclick = () => go(""); if($("thm")) $("thm").onclick = toggleTheme; $("nl").onclick = () => go("?login"); if($("ns")) $("ns").onclick = () => go("?signup"); };
+const TOPOUT = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr"><button class="ghost sbtn" id="nl" style="margin:0">دخول</button>${on("allow_signup") ? `<button class="sbtn" id="ns" style="margin:0">حساب جديد</button>` : ""}</div></div>`;
+const wireOut = () => { $("tbh").onclick = () => go(""); $("nl").onclick = () => go("?login"); if($("ns")) $("ns").onclick = () => go("?signup"); };
 const quickRow = (slug, active) => `<div class="qrow"><a class="qb${active === "inbox" ? " on" : ""}" href="?login">صندوق رسائلي</a><a class="qb${active === "edit" ? " on" : ""}" href="?profile">تعديل حسابي</a><a class="qb${active === "privacy" ? " on" : ""}" href="?privacy">الخصوصية والإشعارات</a><a class="qb${active === "page" ? " on" : ""}" href="?p=${esc(slug)}">صفحتي</a></div>`;
 const checklistHtml = p => {
   const items = [["أضف نبذة عنك", !!p.bio, "?profile"], ["اختر صورتك الرمزية", !!p.avatar, "?profile"], ["شارك رابطك مع أصدقائك", !!LS.get("shared"), "#lnk"]];
@@ -695,6 +686,8 @@ function msgCard(m, user, main){
   const d = mk("div","msg"); if(main) d.id = "m" + m.id;
   if(m.fresh) d.appendChild(mk("span","new","جديدة"));
   if(m.sender_name) d.appendChild(mk("small","from","من: " + m.sender_name));
+  const KMAP = { "نصيحة":"book", "مصارحة":"eye", "اعتذار":"leaf", "تذكير بالخير":"sun", "كلام من القلب":"heart" };
+  if(m.kind && KMAP[m.kind]){ const kb = mk("span","kbd"); kb.innerHTML = ic(KMAP[m.kind]) + " " + esc(m.kind); d.appendChild(kb); }
   d.appendChild(mk("p","sel", m.body));
   if(m.reply) d.appendChild(mk("p","rep","ردّك: " + m.reply));
   d.appendChild(mk("small", null, fmt(m.created_at) + (m.is_public ? " • منشورة في صفحتك" : " • خاصة")));
@@ -713,14 +706,14 @@ function msgCard(m, user, main){
   del.onclick = async()=>{ if(!confirm("هل تريد حذف هذه الرسالة؟")) return; await db.from("messages").delete().eq("id", m.id); loadMsgs(user); };
   const blk = mkb("sbtn ghost","ban","حظر المرسل");
   blk.onclick = async()=>{ if(!confirm("حظر هذا المرسل من مراسلتك؟ لن تُكشف هويته.")) return; const r = await db.rpc("block_sender", { mid: m.id }); toast(r.error ? "تعذّر تنفيذ الحظر" : "تم تنفيذ الحظر. إذا كان المرسل غير مسجّل فلا يمكن حظره."); };
-  row.append(st, pub, rp, blk, del);
+  row.append(st, pub, rp, ...(m.sender_name ? [blk] : []), del);
   if(m.is_public){ const sh = mkb("sbtn ghost","image","مشاركة كصورة"); sh.onclick = () => shareCard(m); row.append(sh); }
   d.appendChild(row);
   return d;
 }
 
 async function loadMsgs(user){
-  const { data, error } = await db.from("messages").select("id,to_user,body,sender_name,is_public,reply,created_at,read_at,starred").eq("to_user", user.id).order("created_at",{ascending:false});
+  const { data, error } = await db.from("messages").select("id,to_user,body,sender_name,is_public,reply,created_at,read_at,starred,kind").eq("to_user", user.id).order("created_at",{ascending:false});
   const box = $("list"); if(!box) return; box.innerHTML = "";
   if(error) return box.textContent = "تعذّر تحميل الرسائل";
   $("cnt").textContent = data.length;
@@ -979,34 +972,33 @@ async function privacyPage(user){
   if(location.hash === "#notif") $("notif").scrollIntoView({ block:"start" });
 }
 async function sendPage(key){
-  const p = await db.from("profiles").select("id,username,slug,banned,avatar,prompt").eq("slug", key).maybeSingle();
+  const p = await db.from("profiles").select("id,username,slug,banned").eq("slug", key).maybeSingle();
   if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
   const s = await getSession(), mx = MAXLEN();
-  el(`${s ? BAR() : ""}${HOME}${annHtml(false)}<div class="hero" style="padding:14px 0 6px"><a class="pl" id="pl"><div class="avatar" id="av"></div><div class="who" id="who"></div></a>
-    <p class="tag" style="margin:0">رسالتك مجهولة، فاكتب بحرية وبلطف</p></div>
-  <div class="glass sm send" id="box"><div id="prm"></div>
-    <textarea id="body" rows="6" maxlength="${mx}" placeholder="اكتب رسالتك هنا..."></textarea>
-    <div class="qs" id="qs"></div>
-    <div class="cnt" id="c">0 / ${mx.toLocaleString("en")}</div>
-    ${s ? `<label class="chk"><input type="checkbox" id="show"> إظهار اسمي لصاحب الصفحة</label><p class="mini" style="margin:0">يحتفظ الموقع بسجلّ المرسلين المسجّلين لأغراض الحماية.</p>` : ""}
-    <button id="send" class="bigbtn">${ic("send")} أرسل الرسالة</button><div class="note" id="note"></div>
-    <p class="mini center">لن يظهر اسمك لصاحب الصفحة إلا إذا اخترت ذلك.</p></div>`);
+  const KINDS = [["نصيحة","book"],["مصارحة","eye"],["اعتذار","leaf"],["تذكير بالخير","sun"],["كلام من القلب","heart"]];
+  let kind = "";
+  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><div class="who" id="who"></div><p class="tag">قل ما في قلبك بلطف، ولن يعرف أحد من أنت إلا إذا اخترت ذلك</p></div>
+  <div class="glass sm send" id="box">
+    <div class="lbl">نوع الرسالة (اختياري)</div><div class="chips kchips" id="kinds"></div>
+    <textarea id="body" rows="6" maxlength="${mx}" placeholder="اكتب رسالتك هنا"></textarea>
+    ${s ? `<label class="chk"><input type="checkbox" id="show"> أرسلها باسمي</label>` : ""}
+    <button id="send" class="bigbtn">${ic("send")} إرسال</button><div class="note" id="note"></div></div>`);
   if(s) wireBar(s.user);
-  setAv($("av"), p.data); $("who").textContent = p.data.username;
-  $("pl").onclick = () => go("?p=" + p.data.slug);
-  if(p.data.prompt){ const pr = mk("div","prompt"); pr.appendChild(mk("b","hl","سؤال صاحب الصفحة: ")); pr.appendChild(document.createTextNode(p.data.prompt)); $("prm").appendChild(pr); }
-  const upd = () => { $("c").textContent = $("body").value.length.toLocaleString("en") + " / " + mx.toLocaleString("en"); };
-  ["أحببت أسلوبك","شكرًا لأنك موجود","أتمنى لك التوفيق","نصيحتي لك: "].forEach(t => { const c = mk("span", null, t); c.onclick = () => { const b = $("body"); b.value = (b.value ? b.value.trimEnd() + " " : "") + t; b.focus(); upd(); }; $("qs").appendChild(c); });
-  $("body").oninput = upd;
+  $("who").textContent = p.data.username;
+  KINDS.forEach(([label, icon]) => {
+    const c = mk("div","chip"); c.innerHTML = ic(icon) + " " + esc(label);
+    c.onclick = () => { kind = kind === label ? "" : label; [...$("kinds").children].forEach(x => x.classList.toggle("on", x === c && kind === label)); };
+    $("kinds").appendChild(c);
+  });
   $("send").onclick = async()=>{
     const t = $("body").value.trim();
     if(!t) return say("note","اكتب رسالتك أولًا");
     $("send").disabled = true;
-    const r = await db.from("messages").insert({ to_user: p.data.id, body: t, sender_name: (s && $("show").checked) ? "show" : null });
+    const r = await db.from("messages").insert({ to_user: p.data.id, body: t, kind: kind || null, sender_name: (s && $("show") && $("show").checked) ? "show" : null });
     $("send").disabled = false;
-    if(r.error){ const m = r.error.message || ""; return say("note", m.includes("BANNED") ? "هذا المستخدم غير متاح" : m.includes("TOOFAST") ? "وصلت رسائل كثيرة الآن، حاول بعد قليل" : m.includes("BADWORD") ? "رسالتك تحتوي على كلمات غير مسموحة" : m.includes("NOVISITOR") ? "الإرسال متاح للمسجّلين فقط حاليًا" : m.includes("BLOCKED") ? "لا يمكن إرسال الرسالة إلى هذا الحساب حاليًا" : m.includes("TOOLONG") ? "الرسالة أطول من المسموح" : "حدث خطأ، حاول مرة أخرى"); }
+    if(r.error){ const m = r.error.message || ""; return say("note", m.includes("BANNED") ? "هذا المستخدم غير متاح" : m.includes("TOOFAST") ? "وصلت رسائل كثيرة الآن، حاول بعد قليل" : m.includes("BADWORD") ? "رسالتك تحتوي على كلمات غير مسموحة" : m.includes("NOVISITOR") ? "الإرسال متاح للمسجّلين فقط حاليًا" : m.includes("TOOLONG") ? "الرسالة أطول من المسموح" : m.includes("BLOCKED") ? "لا يمكن إرسال الرسالة إلى هذا الحساب حاليًا" : "حدث خطأ، حاول مرة أخرى"); }
     const cta = s ? "" : (on("allow_signup") ? `<div class="cta"><b>تريد أن يرسل لك الناس رسائل مثلها؟</b><ul><li>تحصل على رابطك الخاص لتنشره.</li><li>تعرف إن كان المستلم قرأ رسائلك التي ترسلها وأنت مسجّل.</li><li>أنت من يقرر ما يُنشر من رسائلك.</li></ul><button id="cta">أنشئ حسابك في دقيقة</button></div>` : "");
-    $("box").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>تم إرسال رسالتك</b></div>${cta}<button class="ghost" id="again">إرسال رسالة أخرى</button>`;
+    $("box").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>وصلت رسالتك</b></div>${cta}<button class="ghost" id="again">إرسال رسالة أخرى</button>`;
     if($("cta")) $("cta").onclick = () => go("?signup");
     $("again").onclick = () => sendPage(key);
   };
