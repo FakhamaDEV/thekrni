@@ -395,15 +395,15 @@ function routeOf(){
 async function render(route, s){
   if(SET.maintenance === "1" && route !== "admin") return maintPage();
   switch(route){
-    case "admin": return s ? adminPage() : authPage("login");
-    case "profile": return s ? editPage(s.user) : authPage("login");
+    case "admin": return s ? adminPage() : authPage("login", NEED_LOGIN);
+    case "profile": return s ? editPage(s.user) : authPage("login", NEED_LOGIN);
     case "login": case "signup": return s ? dashboard(s.user) : authPage(route);
     case "featured": return featuredPage(s);
     case "about": return aboutPage(s);
     case "guide": case "tips": case "safety": case "respect": return guidePage(s, route);
     case "suggest": return suggestPage(s);
     case "p": return profilePage(s);
-    case "privacy": return s ? privacyPage(s.user) : authPage("login");
+    case "privacy": return s ? privacyPage(s.user) : authPage("login", NEED_LOGIN);
     case "send": return sendPage(params.get("u").trim().toLowerCase());
     default: return landing(s);
   }
@@ -601,11 +601,12 @@ function landing(s){
   } else { wireOut(); [$("go"), $("go3")].forEach(b => { if(b) b.onclick = () => go("?signup"); }); $("go2").onclick = () => go("?login"); }
 }
 
-function authPage(mode){
+const NEED_LOGIN = "هذه الصفحة تتطلب تسجيل الدخول. سجّل الدخول أو أنشئ حسابًا للمتابعة.";
+function authPage(mode, notice){
   const su = mode === "signup";
   if(su && !on("allow_signup")){ el(`${HOME}<div class="glass sm"><p class="sub">التسجيل مغلق مؤقتًا، حاول لاحقًا.</p></div>`); return; }
   el(`${HOME}<div class="hero" style="padding:12px 0 4px"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:clamp(36px,10vw,46px)">${esc(N())}</h1></div>
-  <div class="glass sm"><h2>${su ? "أنشئ حسابك" : "أهلًا بعودتك"}</h2>
+  <div class="glass sm"><h2>${su ? "أنشئ حسابك" : "أهلًا بعودتك"}</h2>${notice ? `<div class="warn">${esc(notice)}</div>` : ""}
     ${su ? `<div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>` : ""}
     <input id="email" type="email" placeholder="البريد الإلكتروني" dir="ltr" autocomplete="email">
     ${su ? `<input id="username" placeholder="اسمك الذي يظهر لأصدقائك" maxlength="25" autocomplete="off">
