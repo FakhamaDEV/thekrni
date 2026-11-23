@@ -113,8 +113,6 @@ h1.brand{background:none;-webkit-text-fill-color:currentColor;color:var(--gold)}
 .feats .fi .ico{width:24px;height:24px}
 .ic .ico{width:22px;height:22px}
 .ok .big .ico{width:54px;height:54px;color:var(--gold)}
-.like{display:inline-flex;align-items:center;gap:8px;width:auto;padding:9px 20px;margin:8px 0 0;background:rgba(var(--w),0.05);color:var(--txt);border:1px solid var(--line)}
-.like.on{background:var(--gold);color:var(--ink)}
 .cta{background:rgba(var(--g),0.08);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0;text-align:right}
 .cta ul{margin:8px 0;padding-right:20px;line-height:2}
 .flash{animation:fl 2.5s ease}
@@ -185,7 +183,6 @@ a{color:inherit;text-decoration:none}
 @media(min-width:700px){.feat2{grid-template-columns:repeat(4,1fr)}}
 .hero .logo{margin:0 auto 18px}h1.brand{margin:8px 0 6px;line-height:1.35}
 button.sbtn{display:inline-flex;align-items:center;gap:6px}.sbtn .ico{width:1.05em;height:1.05em}
-.like{padding:10px 18px}.like .ico{width:22px;height:22px}
 .lkn{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--gold)}
 .qrbox canvas{max-width:260px;width:100%}
 .dev{color:var(--gold);font-weight:700}.dev:hover{text-decoration:underline}
@@ -225,6 +222,18 @@ input,textarea,select{background:var(--field);color:var(--txt)}
 
 [data-theme="light"] button{box-shadow:0 4px 14px rgba(138,95,0,.25)}
 [data-theme="light"] .glass{box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.glass h2{margin-bottom:12px}
+.glass .lbl{margin-top:14px}
+#edp textarea,#edp input{margin:6px 0 4px}
+#edp{border-color:var(--gold)}
+.envl{display:grid !important;grid-template-columns:52px 1fr;gap:6px 14px;align-items:center;background:linear-gradient(135deg,#1d1845,#0d2b3a);border:1px solid #6cb6ff44;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 0 24px #6cb6ff1f}
+.msg.envl{border-right:1px solid #6cb6ff44}
+.envl p{margin:0;font-size:17px;color:#eaf4ff}
+.envl .new{justify-self:start}
+.envl small{grid-column:2}
+.envi{grid-row:1 / 4;width:46px;height:46px;border-radius:50%;background:#6cb6ff22;display:flex;align-items:center;justify-content:center;flex:none;color:#9fd3ff}
+.envi .ico{width:22px;height:22px}
+
 </style>
 <style id="custom"></style>
 </head>
@@ -421,17 +430,17 @@ async function start(){
 const FB = "https://www.facebook.com/share/1E34bY6N7D/";
 const SHARE_TXT = "تذكيرٌ بالخير، أو نصيحةٌ طيبة، أو كلمةٌ تنفع وتبقى.";
 const mkb = (cls, icon, text) => { const b = mk("button", cls); b.innerHTML = ic(icon) + " " + esc(text); return b; };
-const ZK = '<div class="zk"><span>﴿ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ ﴾</span><small>سورة الرعد · 28</small></div>';
+const ZK = '<div class="zk"><span>﴿ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ ﴾</span></div>';
 const AV_ICONS = ["chat","star","leaf","sun","bolt","shield","bell","book","coffee","thumb","lock","user"];
 const AV_COLORS = ["#e3b94a","#5fd1a5","#6cb6ff","#ff8fa3","#b39cff","#ffa94d"];
 const avOf = a => { const m = /^([a-z]{2,10}):([0-5])$/.exec(a || ""); return m && AV_ICONS.includes(m[1]) ? { icon: m[1], color: AV_COLORS[+m[2]] } : null; };
 const setAv = (e, p) => { if(!e) return; const a = avOf(p && p.avatar); if(a){ e.innerHTML = ic(a.icon); e.style.background = a.color; } else { e.textContent = (p && p.username) ? p.username[0] : "؟"; e.style.background = ""; } };
 const motdHtml = () => SET.motd ? `<div class="motd">${ic("star")}<div><b>رسالة اليوم</b><br>${esc(SET.motd)}</div></div>` : "";
-const BADGES = [["أولى الرسائل","msgs",1],["10 رسائل","msgs",10],["100 رسالة","msgs",100],["أول رد","replies",1],["أول رسالة منشورة","pubs",1],["10 معجبين","likes",10]];
+const BADGES = [["أولى الرسائل","msgs",1],["10 رسائل","msgs",10],["100 رسالة","msgs",100],["أول رد","replies",1],["أول رسالة منشورة","pubs",1]];
 function drawStats(){
   const st = window._st || {}, a = $("stt"), b = $("bdg"); if(!a) return;
   a.innerHTML = "";
-  [["الرسائل","msgs"],["المنشورة","pubs"],["الردود","replies"],["المعجبون","likes"]].forEach(([l,k]) => { const d = mk("div"); d.append(mk("b", null, (st[k] || 0).toLocaleString("en")), mk("small", null, l)); a.appendChild(d); });
+  [["الرسائل","msgs"],["المنشورة","pubs"],["الردود","replies"]].forEach(([l,k]) => { const d = mk("div"); d.append(mk("b", null, (st[k] || 0).toLocaleString("en")), mk("small", null, l)); a.appendChild(d); });
   b.innerHTML = "";
   BADGES.forEach(([l,k,n]) => { const e = mk("span", "bdg" + ((st[k] || 0) >= n ? " on" : "")); e.innerHTML = ic("star") + " " + esc(l); b.appendChild(e); });
 }
@@ -673,9 +682,9 @@ async function dashboard(user){
   if(p.banned) return bannedPage();
   const isAdmin = (await db.rpc("is_admin")).data === true;
   const link = linkOf(p.slug);
-  el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك الخاص. انشره ليرسل لك الناس رسائل مجهولة.</p><p class="tag lkn" id="lkn"></p></div>
+  el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك الخاص. انشره ليرسل لك الناس رسائل مجهولة.</p></div>
   ${quickRow(p.slug, "inbox")}${checklistHtml(p)}<div class="glass"><div class="link sel" id="lnk"></div>
-    <div class="shr"><a class="shb wa" id="wa" target="_blank" rel="noopener">واتساب</a><a class="shb tg" id="tg" target="_blank" rel="noopener">تيليجرام</a><button class="shb" id="copy">نسخ الرابط</button></div><div class="shr"><button class="shb ghost" id="share">مشاركة</button><button class="shb ghost" id="qrb">رمز QR</button></div><div class="qrbox" id="qrbox"></div>${isAdmin ? `<button class="ghost" id="adm">لوحة الإدارة</button>` : ""}</div>
+    <div class="shr"><button class="shb" id="copy">نسخ الرابط</button></div><div class="shr"><button class="shb ghost" id="share">مشاركة</button><button class="shb ghost" id="qrb">رمز QR</button></div><div class="qrbox" id="qrbox"></div>${isAdmin ? `<button class="ghost" id="adm">لوحة الإدارة</button>` : ""}</div>
   <div class="glass"><h2>إحصائياتي</h2><div class="stats" id="stt"></div><div class="badges" id="bdg"></div></div>
   <div class="glass" id="fbox" hidden><h2>${ic("star")} الرسائل المميزة</h2><div id="flist"></div></div>
   <div class="glass"><div class="top"><h2>الرسائل الواردة</h2><span class="num" id="cnt">0</span></div>
@@ -688,13 +697,10 @@ async function dashboard(user){
   $("copy").onclick = () => cp($("copy"));
   $("share").onclick = () => navigator.share ? navigator.share({ title: N(), text: SHARE_TXT, url: link }).catch(()=>{}) : cp($("share"));
   $("qrb").onclick = () => qrShow(link);
-  ["copy","share","wa","tg","qrb"].forEach(id => $(id).addEventListener("click", () => LS.set("shared", true)));
-  $("wa").href = "https://wa.me/?text=" + encodeURIComponent(SHARE_TXT + "\n" + link);
-  $("tg").href = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(SHARE_TXT);
+  ["copy","share","qrb"].forEach(id => $(id).addEventListener("click", () => LS.set("shared", true)));
   window._me = { slug: p.slug, username: p.username };
   if(isAdmin) $("adm").onclick = () => go("?admin");
   await wireBar(user);
-  db.rpc("like_count", { uid: user.id }).then(r => { if($("lkn")) $("lkn").innerHTML = ic("thumb") + " عدد المعجبين بصفحتك: " + Number(r.data || 0).toLocaleString("en"); window._st = Object.assign(window._st || {}, { likes: Number(r.data || 0) }); drawStats(); });
   reload = () => loadMsgs(user);
   loadMsgs(user); loadSent();
 }
@@ -703,7 +709,7 @@ function msgCard(m, user, main){
   const d = mk("div","msg"); if(main) d.id = "m" + m.id;
   if(m.fresh) d.appendChild(mk("span","new","جديدة"));
   if(m.sender_name) d.appendChild(mk("small","from","من: " + m.sender_name));
-  const KMAP = { "نصيحة":"book", "مصارحة":"eye", "اعتذار":"leaf", "تذكير بالخير":"sun", "كلام من القلب":"heart" };
+  const KMAP = { "نصيحة":"book", "مصارحة":"eye", "اعتذار":"leaf", "تذكير بالخير":"sun" };
   if(m.kind && KMAP[m.kind]){ const kb = mk("span","kbd"); kb.innerHTML = ic(KMAP[m.kind]) + " " + esc(m.kind); d.appendChild(kb); }
   d.appendChild(mk("p","sel", m.body));
   if(m.reply) d.appendChild(mk("p","rep","ردّك: " + m.reply));
@@ -741,7 +747,7 @@ async function loadMsgs(user){
   const fav = data.filter(m => m.starred);
   fb.hidden = !fav.length;
   fav.forEach(m => fl.appendChild(msgCard(m, user)));
-  if(!data.length) return void (box.innerHTML = `<div class="ok"><b>شارك رابطك لتصلك أول رسالة</b><small class="tag">انشره في واتساب أو ستوري إنستغرام، وسيصلك أصدقاؤك.</small></div>`);
+  if(!data.length) return void (box.innerHTML = `<div class="ok"><b>شارك رابطك لتصلك أول رسالة</b><small class="tag">انشره في ستوري إنستغرام أو أي مكان، وسيصلك أصدقاؤك.</small></div>`);
   data.forEach(m => box.appendChild(msgCard(m, user, true)));
   const hm = location.hash.match(/^#m(\d+)$/); if(hm){ const t = $("m" + hm[1]); if(t){ t.scrollIntoView({ block:"center" }); t.classList.add("flash"); } history.replaceState(null, "", location.pathname + location.search); }
   if(ids.length){ await db.from("messages").update({ read_at: new Date().toISOString() }).in("id", ids); db.from("notifications").update({ read:true }).eq("user_id", user.id).eq("kind","message").then(()=>setBadge(0), ()=>{}); }
@@ -770,7 +776,9 @@ async function notifPage(user){
   if(!data || !data.length) box.textContent = "لا توجد إشعارات.";
   (data || []).forEach(n => {
     const d = mk("div","msg nitem"); if(!n.read) d.appendChild(mk("span","new","جديد"));
-    d.appendChild(mk("p", null, n.body));
+    const isMsg = n.kind === "message";
+    if(isMsg){ d.classList.add("envl"); d.insertAdjacentHTML("afterbegin", '<span class="envi">' + ic("lock") + '</span>'); }
+    d.appendChild(mk("p", null, isMsg ? "وصلتك رسالة من شخص ما" : n.body));
     const f = n.ref ? () => go("?login#m" + n.ref) : n.link ? () => go(n.link) : (n.kind === "delete" ? () => go("?profile") : null);
     d.appendChild(mk("small", null, fmt(n.created_at) + (f ? " • اضغط للفتح" : "")));
     if(f) d.onclick = f; else d.style.cursor = "default";
@@ -792,11 +800,9 @@ async function editPage(user){
   <div class="glass sm"><h2>رابطك الخاص</h2><p class="tag" dir="ltr" style="text-align:right">${esc(linkOf(p.slug))}</p><p class="tag">يمكن تغييره مرة كل شهرين، وسيتوقف الرابط القديم.</p>
     <input id="ns2" dir="ltr" maxlength="25" placeholder="رابط جديد" ${l2 ? "disabled" : ""}>
     <button id="sl" ${l2 ? "disabled" : ""}>حفظ الرابط</button><div class="note" id="n4">${l2}</div></div>
-  <div class="glass sm"><h2>ملفي الشخصي</h2>
+  <div class="glass sm"><h2>صورتي الرمزية</h2><p class="tag">نبذتك وعمرك ومكان إقامتك تعدّلها من صفحتك الشخصية.</p>
     <div class="lbl">الصورة الرمزية</div><div class="pick" id="pk"></div><div class="sw" id="sw"></div>
-    <div class="lbl">نبذة عنك (120 حرفًا كحد أقصى)</div><textarea id="bio" rows="2" maxlength="120" placeholder="اكتب سطرًا عن نفسك"></textarea>
-    <div class="lbl">سؤال لزوّار صفحتك (اختياري)</div><input id="prm" maxlength="100" placeholder="مثال: انصحني بشيء">
-    <button id="spf">حفظ الملف الشخصي</button><div class="note" id="n6"></div></div>
+    <button id="spf">حفظ الصورة</button><div class="note" id="n6"></div></div>
   <div class="glass sm"><h2>الجنس</h2><div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>
     <button id="sgd">حفظ الجنس</button><div class="note" id="n2"></div></div>
   <div class="glass sm"><h2>كلمة المرور</h2><input id="np" type="password" placeholder="كلمة المرور الجديدة (8 أحرف على الأقل)" dir="ltr" autocomplete="new-password">
@@ -807,7 +813,6 @@ async function editPage(user){
     <div class="note" id="n5"></div></div>`);
   await wireBar(user);
   let selIcon = "", selColor = 0; { const a = avOf(p.avatar); if(a){ selIcon = a.icon; selColor = AV_COLORS.indexOf(a.color); } }
-  $("bio").value = p.bio || ""; $("prm").value = p.prompt || "";
   const drawPick = () => {
     $("pk").innerHTML = ""; $("sw").innerHTML = "";
     const l0 = mk("div", selIcon ? "" : "on", (p.username || "؟")[0]); l0.onclick = () => { selIcon = ""; drawPick(); }; $("pk").appendChild(l0);
@@ -816,7 +821,7 @@ async function editPage(user){
   };
   drawPick();
   $("spf").onclick = async()=>{
-    const r = await db.from("profiles").update({ avatar: selIcon ? selIcon + ":" + selColor : null, bio: $("bio").value.trim() || null, prompt: $("prm").value.trim() || null }).eq("id", user.id);
+    const r = await db.from("profiles").update({ avatar: selIcon ? selIcon + ":" + selColor : null }).eq("id", user.id);
     say("n6", r.error ? ((r.error.message || "").includes("BADWORD") ? "النص يحتوي على كلمات غير مسموحة" : "تعذّر الحفظ") : "تم الحفظ", !r.error);
   };
   let gender = "";
@@ -892,6 +897,38 @@ async function renderPub(box, ownerId, s){
   });
   box.appendChild(g);
 }
+function edPanel(u, mine){
+  const old = $("edp"); if(old){ old.remove(); return; }
+  const box = mk("div","glass"); box.id = "edp";
+  box.appendChild(mk("h2", null, "تعديل صفحتي"));
+  const cy = new Date().getFullYear();
+  const bio = mk("textarea"); bio.rows = 2; bio.maxLength = 120; bio.value = u.bio || ""; bio.placeholder = "اكتب سطرًا عن نفسك";
+  const hasP = u.prompt !== undefined || mine.prompt !== undefined;
+  const prm = mk("input"); prm.maxLength = 100; prm.value = u.prompt || mine.prompt || ""; prm.placeholder = "مثال: انصحني بشيء";
+  const yr = mk("input"); yr.type = "number"; yr.inputMode = "numeric"; yr.dir = "ltr"; yr.min = cy - 100; yr.max = cy - 13; yr.placeholder = "مثال: " + (cy - 25); yr.value = mine.birth_year || "";
+  const loc = mk("input"); loc.maxLength = 40; loc.placeholder = "مثال: عين الدفلى، الجزائر"; loc.value = mine.location || "";
+  const nt = mk("div","note"), sv = mk("button", null, "حفظ التعديلات");
+  box.appendChild(mk("div","lbl","نبذة عنك (120 حرفًا كحد أقصى)")); box.appendChild(bio);
+  if(hasP){ box.appendChild(mk("div","lbl","سؤال لزوّار صفحتك (اختياري)")); box.appendChild(prm); }
+  box.appendChild(mk("div","lbl","سنة الميلاد (لا يراها غيرك إلا إذا سمحت)")); box.appendChild(yr);
+  box.appendChild(mk("div","lbl","مكان الإقامة")); box.appendChild(loc);
+  box.append(sv, nt);
+  sv.onclick = async()=>{
+    const y = yr.value.trim(), year = y ? Number(y) : null;
+    if(year !== null && !(year >= cy - 100 && year <= cy - 13)) { nt.textContent = "سنة الميلاد غير صحيحة، العمر المسموح من 13 إلى 100 سنة"; return; }
+    const patch = { bio: bio.value.trim() || null, birth_year: year, location: loc.value.trim() || null };
+    if(hasP) patch.prompt = prm.value.trim() || null;
+    sv.disabled = true;
+    const r = await db.from("profiles").update(patch).eq("id", u.id);
+    sv.disabled = false;
+    if(r.error){ const m = r.error.message || ""; nt.className = "note"; nt.textContent = m.includes("BADWORD") ? "النص يحتوي على كلمات غير مسموحة" : m.includes("BADYEAR") ? "سنة الميلاد غير مقبولة" : "تعذّر الحفظ، حاول لاحقًا"; return; }
+    nt.className = "note good"; nt.textContent = "تم الحفظ";
+    setTimeout(() => go("?p=" + u.slug), 600);
+  };
+  $("ed").closest(".glass").insertAdjacentElement("afterend", box);
+  box.scrollIntoView({ block: "start", behavior: "smooth" });
+}
+
 async function profilePage(s){
   if(!s){
     el(`${TOPOUT()}${HOME}<div class="glass sm" style="text-align:center;margin-top:22px"><div class="logo">${ic("lock")}</div><h2 style="margin:14px 0 6px;color:var(--txt)">الصفحة الشخصية للمسجّلين فقط</h2><p class="tag">يجب التسجيل أولًا لعرض الصفحات الشخصية.</p>${on("allow_signup") ? `<button id="go">أنشئ حسابك</button>` : ""}<button class="ghost" id="go2">تسجيل الدخول</button></div>`);
@@ -902,34 +939,22 @@ async function profilePage(s){
   const u = r.data && r.data[0];
   if(!u){ el(`${BAR()}${HOME}<div class="glass sm center" style="margin-top:22px"><p class="sub">${r.error ? "تعذّر تحميل الصفحة، حاول مرة أخرى" : "هذا المستخدم غير موجود أو غير متاح"}</p></div>`); wireBar(s.user); return; }
   const me = s.user.id === u.id, full = me && !guest;
-  let likes = 0;
-  if(full) likes = Number((await db.rpc("like_count", { uid: u.id })).data || 0);
   const stat = (n, l) => `<div><b>${Number(n || 0).toLocaleString("en")}</b><small>${l}</small></div>`;
   el(`${BAR()}${HOME}${guest ? `<div class="warn center">أنت تشاهد صفحتك كما يراها غيرك. <a class="hl" href="?p=${esc(u.slug)}">رجوع</a></div>` : ""}${full ? quickRow(u.slug, "page") : ""}
-  <div class="ig"><div class="avatar" id="av"></div><div class="igr"><div class="who" id="who"></div><div class="igs">${full ? stat(likes, "معجبون") : ""}${stat(u.pubs, "منشورة")}${stat(u.replies, "ردود")}</div></div></div>
+  <div class="ig"><div class="avatar" id="av"></div><div class="igr"><div class="who" id="who"></div><div class="igs">${stat(u.pubs, "منشورة")}${stat(u.replies, "ردود")}</div></div></div>
   <p class="tag center" id="bio"></p>
   <div class="infos" id="infos"></div>
-  <div class="glass sm center">${full ? `<button id="ed" class="bigbtn">${ic("edit")} تعديل</button><button class="ghost" id="asg">${ic("eye")} عرض كزائر</button>` : `<button id="sendb" class="bigbtn">${ic("send")} أرسل رسالة مجهولة</button>${me ? "" : `<button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button><div class="note" id="lkn2"></div>`}`}</div>
+  <div class="glass sm center">${full ? `<button id="ed" class="bigbtn">${ic("edit")} تعديل</button><button class="ghost" id="asg">${ic("eye")} عرض كزائر</button>` : `<button id="sendb" class="bigbtn">${ic("send")} أرسل رسالة مجهولة</button>`}</div>
   <div id="pub"></div>
   ${!me && on("show_reports") ? `<div class="glass sm center"><button class="ghost sbtn" id="rp" style="margin:0">إبلاغ عن هذا الحساب</button><div id="rbox"></div></div>` : ""}`);
   wireBar(s.user); setAv($("av"), u); $("who").textContent = u.username; $("bio").textContent = u.bio || "";
   [["cal", u.member_since ? "عضو منذ " + new Date(u.member_since).toLocaleDateString("ar-u-nu-latn") : ""], ["pin", u.location || ""], ["user", u.age != null ? u.age + " سنة" : ""]].forEach(([i, t]) => {
     if(!t) return; const d = mk("span","inf"); d.innerHTML = ic(i); d.appendChild(document.createTextNode(" " + t)); $("infos").appendChild(d);
   });
-  if(full){ $("ed").onclick = () => go("?profile"); $("asg").onclick = () => go("?p=" + u.slug + "&v=1"); }
+  if(full){ $("ed").onclick = async () => edPanel(u, ((await db.rpc("my_profile")).data || [])[0] || {}); $("asg").onclick = () => go("?p=" + u.slug + "&v=1"); }
   else {
     $("sendb").onclick = () => go("?u=" + u.slug);
     if(!me){
-      const lkBtn = $("lk"); let liked = false;
-      const lkSet = () => lkBtn.classList.toggle("on", liked);
-      db.from("profile_likes").select("liked_id").eq("liker_id", s.user.id).eq("liked_id", u.id).maybeSingle().then(x => { liked = !!x.data; lkSet(); });
-      lkBtn.onclick = async()=>{
-        lkBtn.disabled = true;
-        const x = liked ? await db.from("profile_likes").delete().eq("liker_id", s.user.id).eq("liked_id", u.id) : await db.from("profile_likes").insert({ liker_id: s.user.id, liked_id: u.id });
-        lkBtn.disabled = false;
-        if(x.error) return say("lkn2","تعذّر تنفيذ العملية، حاول لاحقًا");
-        liked = !liked; lkSet();
-      };
       if($("rp")) $("rp").onclick = () => reportUI($("rbox"), s, u.id);
     }
   }
@@ -941,34 +966,31 @@ async function privacyPage(user){
   if(p.banned) return bannedPage();
   const mp = ((await db.rpc("my_profile")).data || [])[0] || {};
   const priv = Object.assign({ member_since: true, location: false, age: false }, mp.privacy || {});
-  const nf = Object.assign({ message: true, reply: true, like: true }, mp.notif_prefs || {});
+  const nf = Object.assign({ message: true, reply: true }, mp.notif_prefs || {});
   const yr = new Date().getFullYear();
   const row = (id, title, desc, on_) => `<div class="sw2"><div><b>${esc(title)}</b><small>${esc(desc)}</small></div><label class="tg"><input type="checkbox" id="${id}" ${on_ ? "checked" : ""}><i></i></label></div>`;
   el(`${BAR()}${HOME}${quickRow(p.slug, "privacy")}<div class="hero" style="padding:8px 0 4px"><h1 class="brand" style="font-size:clamp(28px,8vw,38px)">الخصوصية والإشعارات</h1></div>
   <div class="glass"><h2>ما يراه الآخرون عنك الآن</h2><div id="sum"></div></div>
-  <div class="glass"><h2>معلوماتك</h2><div class="lbl">الإقامة</div><input id="loc" maxlength="40" placeholder="مثال: عين الدفلى، الجزائر">
-    <div class="lbl">سنة الميلاد (اختياري)</div><input id="yr" type="number" inputmode="numeric" min="${yr - 100}" max="${yr - 13}" placeholder="مثال: ${yr - 25}" dir="ltr"></div>
-  <div class="glass"><h2>ما الذي يظهر في صفحتك</h2>
+    <div class="glass"><h2>ما الذي يظهر في صفحتك</h2>
     ${row("pv_ms", "عضو منذ", "يظهر تاريخ انضمامك إلى الموقع في صفحتك.", priv.member_since)}
     ${row("pv_loc", "الإقامة", "تظهر مدينتك وبلدك في صفحتك.", priv.location)}
     ${row("pv_age", "العمر", "يظهر عمرك فقط، وليس سنة ميلادك.", priv.age)}</div>
   <div class="glass" id="notif"><h2>الإشعارات</h2>
     ${row("nf_msg", "رسالة جديدة", "يصلك إشعار عند وصول رسالة.", nf.message)}
     ${row("nf_rep", "رد على رسالتك", "يصلك إشعار عندما يردّ صاحب الصفحة على رسالة أرسلتها وأنت مسجّل.", nf.reply)}
-    ${row("nf_like", "إعجاب بصفحتك", "يصلك إشعار عندما يعجب أحد المسجّلين بصفحتك.", nf.like)}</div>
+    </div>
   <button id="psave">حفظ التغييرات</button><div class="note" id="pn"></div>
   <div class="glass"><h2>المرسلون المحظورون</h2><p class="tag">لا نكشف هوية أي مرسل. يمكنك إلغاء الحظر في أي وقت.</p><div id="bl"></div></div>`);
   await wireBar(user);
-  $("loc").value = mp.location || ""; $("yr").value = mp.birth_year || "";
   const drawSum = () => {
     const box = $("sum"); box.innerHTML = "";
-    const loc = $("loc").value.trim(), yv = $("yr").value.trim();
+    const loc = String(mp.location || "").trim(), yv = mp.birth_year ? String(mp.birth_year) : "";
     const items = [["الاسم والصورة الرمزية", "ظاهر", true], ["النبذة", p.bio ? "ظاهرة" : "غير مضافة", !!p.bio],
       ["عضو منذ", $("pv_ms").checked ? "ظاهر" : "مخفي", $("pv_ms").checked], ["الإقامة", !loc ? "غير مضافة" : $("pv_loc").checked ? "ظاهرة" : "مخفية", !!loc && $("pv_loc").checked],
       ["العمر", !yv ? "غير مضاف" : $("pv_age").checked ? "ظاهر" : "مخفي", !!yv && $("pv_age").checked], ["الرسائل المنشورة وردودها", "ظاهرة", true]];
     items.forEach(([l, t, v]) => { const d = mk("div","stat"); d.append(mk("span", null, l), mk("b", v ? "vis" : "hid", t)); box.appendChild(d); });
   };
-  ["loc","yr","pv_ms","pv_loc","pv_age"].forEach(id => { $(id).addEventListener("input", drawSum); $(id).addEventListener("change", drawSum); });
+  ["pv_ms","pv_loc","pv_age"].forEach(id => { $(id).addEventListener("input", drawSum); $(id).addEventListener("change", drawSum); });
   drawSum();
   const drawBlocks = async () => {
     const box = $("bl"); const r = await db.rpc("my_blocks"); box.innerHTML = "";
@@ -978,11 +1000,9 @@ async function privacyPage(user){
   };
   drawBlocks();
   $("psave").onclick = async()=>{
-    const loc = $("loc").value.trim() || null, yv = $("yr").value.trim(), year = yv ? Number(yv) : null;
-    if(year !== null && !(year >= yr - 100 && year <= yr - 13)) return say("pn","سنة الميلاد غير صحيحة، العمر المسموح من 13 إلى 100 سنة");
-    const r = await db.from("profiles").update({ location: loc, birth_year: year,
+    const r = await db.from("profiles").update({
       privacy: { member_since: $("pv_ms").checked, location: $("pv_loc").checked, age: $("pv_age").checked },
-      notif_prefs: { message: $("nf_msg").checked, reply: $("nf_rep").checked, like: $("nf_like").checked } }).eq("id", user.id);
+      notif_prefs: { message: $("nf_msg").checked, reply: $("nf_rep").checked } }).eq("id", user.id);
     if(r.error){ const m = r.error.message || ""; return say("pn", m.includes("BADWORD") ? "النص يحتوي على كلمات غير مسموحة" : m.includes("BADYEAR") ? "سنة الميلاد غير مقبولة" : "تعذّر الحفظ"); }
     say("pn","تم الحفظ", true);
   };
@@ -992,9 +1012,9 @@ async function sendPage(key){
   const p = await db.from("profiles").select("id,username,slug,banned,avatar").eq("slug", key).maybeSingle();
   if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
   const s = await getSession(), mx = MAXLEN();
-  const KINDS = [["نصيحة","book"],["مصارحة","eye"],["اعتذار","leaf"],["تذكير بالخير","sun"],["كلام من القلب","heart"]];
+  const KINDS = [["نصيحة","book"],["مصارحة","eye"],["اعتذار","leaf"],["تذكير بالخير","sun"]];
   let kind = "";
-  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><a class="pl" id="pl" title="عرض الصفحة الشخصية"><div class="avatar" id="av"></div><div class="who" id="who"></div></a>${s && s.user.id !== p.data.id ? `<button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button>` : ""}<p class="tag">قل ما في قلبك بلطف، ولن يعرف أحد من أنت إلا إذا اخترت ذلك</p></div>
+  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><a class="pl" id="pl" title="عرض الصفحة الشخصية"><div class="avatar" id="av"></div><div class="who" id="who"></div></a><p class="tag">قل ما في قلبك بلطف، ولن يعرف أحد من أنت إلا إذا اخترت ذلك</p></div>
   <div class="glass sm send" id="box">
     <div class="lbl">نوع الرسالة (اختياري)</div><div class="chips kchips" id="kinds"></div>
     <textarea id="body" rows="6" maxlength="${mx}" placeholder="اكتب رسالتك هنا"></textarea>
@@ -1003,18 +1023,6 @@ async function sendPage(key){
   if(s) wireBar(s.user);
   setAv($("av"), p.data); $("who").textContent = p.data.username;
   $("pl").onclick = () => go("?p=" + p.data.slug);
-  if(s && $("lk")){
-    let liked = false; const lkBtn = $("lk");
-    const lkSet = () => lkBtn.classList.toggle("on", liked);
-    db.from("profile_likes").select("liked_id").eq("liker_id", s.user.id).eq("liked_id", p.data.id).maybeSingle().then(x => { liked = !!x.data; lkSet(); });
-    lkBtn.onclick = async()=>{
-      lkBtn.disabled = true;
-      const x = liked ? await db.from("profile_likes").delete().eq("liker_id", s.user.id).eq("liked_id", p.data.id) : await db.from("profile_likes").insert({ liker_id: s.user.id, liked_id: p.data.id });
-      lkBtn.disabled = false;
-      if(x.error) return toast("تعذّر تنفيذ العملية، حاول لاحقًا");
-      liked = !liked; lkSet();
-    };
-  }
   KINDS.forEach(([label, icon]) => {
     const c = mk("div","chip"); c.innerHTML = ic(icon) + " " + esc(label);
     c.onclick = () => { kind = kind === label ? "" : label; [...$("kinds").children].forEach(x => x.classList.toggle("on", x === c && kind === label)); };
@@ -1101,17 +1109,17 @@ async function aAcc(){
 }
 async function aDetail(a){
   const box = $("ad"); box.innerHTML = SKEL;
-  const [msgs, pubs, repIn, repOut, likes, sugs, dr] = await Promise.all([
+  const [msgs, pubs, repIn, repOut, sugs, dr] = await Promise.all([
     cnt("messages", x => x.eq("to_user", a.id)), cnt("messages", x => x.eq("to_user", a.id).eq("is_public", true)),
     cnt("reports", x => x.eq("reported_id", a.id)), cnt("reports", x => x.eq("reporter_id", a.id)),
-    cnt("profile_likes", x => x.eq("liked_id", a.id), "liked_id"), cnt("suggestions", x => x.eq("user_id", a.id)),
+    cnt("suggestions", x => x.eq("user_id", a.id)),
     db.from("deletion_requests").select("status").eq("user_id", a.id).maybeSingle()
   ]);
   box.innerHTML = "";
   const back = mk("button","sbtn ghost","رجوع للحسابات"); back.onclick = () => adminTab($("tabs").children[1], aAcc); box.appendChild(back);
   [["الاسم", a.username],["الرابط", a.slug],["البريد", a.email || "—"],["الجنس", a.gender || "غير محدد"],["الحالة", a.banned ? "موقوف" : "نشط"],
    ["تاريخ التسجيل", fmt(a.created_at)],["آخر دخول", a.last_sign_in ? fmt(a.last_sign_in) : "—"],["النبذة", a.bio || "—"],["سؤال الصفحة", a.prompt || "—"],
-   ["الرسائل الواردة", msgs],["الرسائل المنشورة", pubs],["بلاغات ضده", repIn],["بلاغات قدّمها", repOut],["الإعجابات", likes],["اقتراحاته", sugs],
+   ["الرسائل الواردة", msgs],["الرسائل المنشورة", pubs],["بلاغات ضده", repIn],["بلاغات قدّمها", repOut],["اقتراحاته", sugs],
    ["طلب حذف", dr.data ? (dr.data.status === "pending" ? "معلّق" : "مرفوض") : "لا يوجد"]
   ].forEach(([l, v]) => { const d = mk("div","stat"); d.append(mk("span", null, l), mk("b", null, String(v))); box.appendChild(d); });
   const row = mk("div");
