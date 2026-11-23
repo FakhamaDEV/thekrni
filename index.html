@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<script>try{if(localStorage.getItem("theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0a1a1f">
+<title>ذكّرني</title>
+<meta name="description" content="أنشئ رابطك الخاص واستقبل رسائل مجهولة">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233ddbb4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-8l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z'/%3E%3Cpath d='M8 10h8M8 13h5'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=El+Messiri:wght@500;600;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
+<style>
+[data-theme="light"]{--bg:#eef3ea;--bg2:#dfeade;--gold:#0b6b52;--gold2:#095642;--txt:#15241d;--mut:#4c6357;--glass:rgba(11,107,82,.05);--line:rgba(11,107,82,.3);--w:0,0,0;--g:11,107,82;--k:255,255,255;--ink:#ffffff;--rep:#0a4f3d;--hi:#07402f;--err:#b03a2e;--ph:#7d8c84;--field:#ffffff;color-scheme:light}
+[data-theme="light"] body{background:radial-gradient(circle at 80% -10%,rgba(61,219,180,.18),transparent 45%),linear-gradient(160deg,var(--bg),var(--bg2))}
+[data-theme="light"] body::before{opacity:.35;filter:invert(1) hue-rotate(160deg)}
+
+:root{--w:255,255,255;--g:61,219,180;--k:0,0,0;--ink:#071410;--rep:#c5f2df;--hi:#c9fff0;--err:#ff8f80;--ph:#7fa295;--field:rgba(0,0,0,.25);--bg:#0a1a1f;--bg2:#0f2a2b;--gold:#3ddbb4;--gold2:#1fa883;--txt:#eaf3ee;--mut:#93b3a7;--glass:rgba(255,255,255,.055);--line:rgba(61,219,180,.26);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;font-family:Cairo,Tahoma,sans-serif;color:var(--txt);min-height:100vh;min-height:100dvh;
+background:radial-gradient(circle at 80% -10%,#3ddbb433,transparent 45%),linear-gradient(160deg,var(--bg),var(--bg2))}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%233ddbb4' stroke-opacity='0.05'%3E%3Cpath d='M60 8l14 38 38 14-38 14-14 38-14-38-38-14 38-14z'/%3E%3Ccircle cx='60' cy='60' r='22'/%3E%3Cpath d='M0 60h20M100 60h20M60 0v20M60 100v20'/%3E%3C/g%3E%3C/svg%3e")}
+.wrap{position:relative;z-index:1}
+.wrap{width:100%;max-width:760px;margin:0 auto;padding:14px 16px 30px}
+.sm{max-width:480px;margin-inline:auto}
+.tb{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 2px 12px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.tbrand{font-family:'El Messiri',Amiri,serif;font-size:28px;color:var(--gold);cursor:pointer}
+.tbr{display:flex;gap:6px;align-items:center}
+.ic{width:auto;min-width:58px;margin:0;padding:6px 8px;background:rgba(var(--w),0.05);border:1px solid var(--line);box-shadow:none;color:var(--txt);font-size:20px;border-radius:14px;position:relative;line-height:1.2}
+.ic small{display:block;font-size:11px;font-weight:400;color:var(--mut)}
+.bd{position:absolute;top:-6px;left:-4px;background:#e0533d;color:#fff;border-radius:12px;font-size:11px;font-style:normal;padding:1px 6px;font-weight:700}
+.hero{text-align:center;padding:30px 8px 20px}
+.moon{font-size:50px}
+h1.brand{font-family:'El Messiri',Amiri,serif;font-size:clamp(50px,14vw,72px);margin:4px 0 0;line-height:1.2;background:linear-gradient(180deg,var(--hi),var(--gold) 55%,var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:clamp(17px,4.6vw,20px);line-height:2;margin:8px 0 2px}
+.lead{font-family:'El Messiri',Amiri,serif;font-size:clamp(24px,6.6vw,34px);line-height:1.9;margin:10px 0 6px;color:var(--hi)}
+.lead em{font-style:normal;color:var(--gold)}
+.tag{color:var(--mut);font-size:15px;line-height:1.9}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(0,0,0,.14), inset 0 1px 0 rgba(var(--g),.07)}
+.glass h2{margin:0 0 10px;font-size:19px;color:var(--gold)}
+.steps{display:grid;gap:12px}
+.step{display:flex;gap:14px;align-items:center}
+.n{flex:none;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--ink);font-weight:700;font-size:19px;display:flex;align-items:center;justify-content:center}
+.step b{display:block}.step small{color:var(--mut)}
+.feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.feats .glass{margin:0;text-align:center;padding:14px 8px}
+.feats span{font-size:28px;display:block;margin-bottom:4px}
+.feats small{color:var(--mut);line-height:1.7}
+.zikr{text-align:center;color:var(--gold);font-family:Amiri,serif;font-size:24px;margin:16px 0 0}
+.respect{text-align:center;border-color:var(--gold)}
+.respect h2{font-family:Amiri,serif;font-size:clamp(22px,6vw,28px);margin-bottom:12px}
+.respect p{line-height:2.1;margin:10px 0;font-size:16.5px}
+.ann{border:2px solid var(--gold);background:rgba(var(--g),0.1);margin:12px 0 0;border-radius:18px;padding:14px 16px;text-align:center}
+.ann b{display:block;color:var(--gold);font-size:19px;margin-bottom:4px}
+.ann p{margin:0;line-height:1.9;white-space:pre-wrap}
+.tips{margin:0;padding:0;list-style:none}
+.tips li{padding:9px 0;border-bottom:1px dashed var(--line);line-height:1.9}
+.tips li:last-child{border:0}
+.tips b{color:var(--gold)}
+input,textarea,select{width:100%;padding:13px;margin:6px 0;border:1px solid var(--line);border-radius:14px;font-size:16px;font-family:inherit;background:rgba(var(--k),.2);color:var(--txt);outline:none}
+select option{color:#000}
+input[type=color]{padding:2px;height:44px}
+input::placeholder,textarea::placeholder{color:var(--ph)}
+input:focus,textarea:focus{border-color:var(--gold)}
+textarea{resize:vertical}
+button{width:100%;padding:14px;margin:6px 0;border:0;border-radius:14px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--ink);background:linear-gradient(135deg,var(--gold),var(--gold2))}
+button:active{transform:scale(.98)}
+button.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+button:disabled{opacity:.55}
+button.sbtn{width:auto;padding:7px 16px;font-size:14px;margin:6px 0 0 8px}
+button.red{background:#c0392b;color:#fff}
+.avatar{width:92px;height:92px;margin:0 auto 10px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:700;color:var(--ink);background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 0 0 5px rgba(var(--g),0.2)}
+.who{font-family:'El Messiri',Amiri,serif;font-size:clamp(30px,9vw,42px);margin:4px 0;color:var(--gold);word-break:break-word}
+.ub{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0 0;padding:12px 14px}
+.ub .av2{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:19px;color:var(--ink);background:linear-gradient(135deg,var(--gold),var(--gold2))}
+.ub b{flex:1;color:var(--gold);word-break:break-word;font-size:18px}
+.lbl{color:var(--mut);margin-top:8px;font-size:15px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.chip{flex:1;text-align:center;padding:10px 14px;border-radius:30px;border:1px solid var(--line);background:rgba(var(--w),0.03);cursor:pointer;font-size:16px}
+.chip.on{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--ink);font-weight:700;border-color:transparent}
+.chart{display:flex;align-items:flex-end;gap:6px;height:90px;margin:6px 0 14px}
+.chart .cbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.chart .cbar i{display:block;width:100%;max-width:34px;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--gold),var(--gold2));min-height:2px}
+.chart .cbar span{font-size:11px;color:var(--mut)}
+.chart.cvis .cbar i{background:rgba(var(--g),.45)}
+.cnt{text-align:left;color:var(--mut);font-size:13px;direction:ltr}
+.note{text-align:center;color:var(--err);min-height:22px;margin-top:6px}
+.note.good{color:var(--gold)}
+.warn{background:rgba(var(--g),0.08);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.8;color:var(--rep);margin:6px 0}
+.ok{text-align:center;padding:12px 4px}.ok .big{font-size:48px}.ok b{display:block;font-size:20px;color:var(--gold);margin:6px 0}
+.link{direction:ltr;word-break:break-all;background:rgba(var(--k),.25);padding:12px;border-radius:12px;font-size:14px;color:var(--gold);border:1px dashed var(--line)}
+.msg{background:rgba(var(--w),0.04);border-right:4px solid var(--gold);border-radius:14px;padding:13px;margin:10px 0}
+.msg p{margin:8px 0;line-height:1.9;white-space:pre-wrap;word-break:break-word}
+.msg small{color:var(--mut)}
+.msg .from{display:block;color:var(--gold);margin-bottom:4px}
+.msg .rep{border-right:3px solid var(--gold2);padding-right:10px;color:var(--rep)}
+.new{background:var(--gold);color:var(--ink);border-radius:10px;padding:1px 10px;font-size:12px;font-weight:700;margin-left:6px}
+.top{display:flex;justify-content:space-between;align-items:center}.top h2{margin:0}
+.num{background:var(--gold);color:var(--ink);border-radius:20px;padding:2px 14px;font-weight:700}
+.chk{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--txt)}
+.chk input{width:auto;margin:0}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.stat{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line)}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--gold);color:var(--ink);padding:12px 22px;border-radius:30px;font-weight:700;z-index:50}
+.hc{display:flex;justify-content:center;margin:8px 0;min-height:78px}
+footer{text-align:center;color:var(--mut);font-size:14px;margin-top:28px;padding-top:14px;border-top:1px solid var(--line)}
+footer b{color:var(--gold)}
+@media(min-width:700px){.wrap{padding:24px 24px 40px}.feats{grid-template-columns:repeat(3,1fr)}.glass{padding:24px}}
+.ico{width:1.15em;height:1.15em;vertical-align:-.2em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,.sel,body.sel-ok,body.sel-ok *{-webkit-user-select:text;user-select:text}
+button{background:var(--gold);box-shadow:none}
+h1.brand{background:none;-webkit-text-fill-color:currentColor;color:var(--gold)}
+.logo{width:56px;height:56px;margin:0 auto;display:flex;align-items:center;justify-content:center;border-radius:18px;background:linear-gradient(135deg,rgba(var(--g),.2),rgba(var(--g),.06));color:var(--gold);border:1px solid rgba(var(--g),.35);box-shadow:0 0 24px rgba(var(--g),.15)}
+.logo .ico{width:30px;height:30px}
+.hl{color:var(--gold);font-weight:700}
+.feats .fi{width:44px;height:44px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:rgba(var(--g),0.1);color:var(--gold)}
+.feats .fi .ico{width:24px;height:24px}
+.ic .ico{width:22px;height:22px}
+.ok .big .ico{width:54px;height:54px;color:var(--gold)}
+.cta{background:rgba(var(--g),0.08);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0;text-align:right}
+.cta ul{margin:8px 0;padding-right:20px;line-height:2}
+.flash{animation:fl 2.5s ease}
+@keyframes fl{0%,60%{box-shadow:0 0 0 3px var(--gold)}100%{box-shadow:none}}
+.toast,.nitem{cursor:pointer}
+.avatar .ico{width:46px;height:46px}.av2 .ico{width:24px;height:24px}
+.pick{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:8px 0}
+.pick div{aspect-ratio:1;border-radius:14px;display:flex;align-items:center;justify-content:center;border:2px solid transparent;background:rgba(var(--w),0.05);cursor:pointer;color:var(--txt);font-weight:700}
+.pick div.on{border-color:var(--gold)}
+.pick .ico{width:24px;height:24px}
+.sw{display:flex;gap:8px;margin:8px 0}.sw div{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent}.sw div.on{border-color:#fff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}.stats b{display:block;font-size:22px;color:var(--gold)}.stats small{color:var(--mut)}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.bdg{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);font-size:14px;opacity:.4}.bdg.on{opacity:1;background:rgba(var(--g),0.1);color:var(--gold)}
+.motd{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:12px;background:rgba(var(--w),0.03);line-height:1.9}.motd .ico{color:var(--gold);flex:none;margin-top:5px}
+.th{display:inline-flex;align-items:center;gap:6px;width:auto;padding:5px 14px;font-size:14px;margin:6px 0 0;background:transparent;color:var(--gold);border:1px solid var(--line)}.th.on{background:var(--gold);color:var(--ink)}
+.prompt{background:rgba(var(--g),0.08);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:0 0 8px;line-height:1.8}
+.qrbox{text-align:center}.qrbox canvas{max-width:100%;border-radius:12px;background:#fff;margin-top:8px}
+.zk{margin-bottom:16px}.zk b{display:block;font-family:Amiri,serif;font-size:26px;color:var(--gold)}.zk span{display:block;font-family:Amiri,serif;font-size:21px;color:var(--txt);margin-top:2px}.zk small{color:var(--mut)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.tb{position:sticky;top:0;z-index:5;background:var(--bg);margin:0 -16px 8px;padding:10px 16px 12px}
+#app>*{animation:fi .28s ease both}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#app>*,.flash{animation:none}}
+.skel{height:64px;border-radius:14px;margin:10px 0;background:linear-gradient(90deg,rgba(var(--w),0.04),rgba(var(--w),0.09),rgba(var(--w),0.04));background-size:200% 100%;animation:sk 1.3s infinite}
+.skel.big{height:240px}
+@keyframes sk{to{background-position:-200% 0}}
+.lead{font-family:'El Messiri',Amiri,serif;font-weight:700;font-size:clamp(28px,8vw,44px);line-height:1.5;margin:14px 0 8px;color:var(--txt)}
+.hero .sm button{height:50px}
+.sec{margin-top:26px}.sec>h2{font-size:22px;margin:0 0 4px;color:var(--txt)}.sec>p{margin:0 0 12px;color:var(--mut)}
+.icards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.icard{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:18px;border:1px solid var(--line);background:rgba(var(--w),0.03);transition:.2s}
+.icard:hover{border-color:var(--gold);transform:translateY(-2px)}
+.icard .fi{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(var(--g),0.1);color:var(--gold)}
+.icard b{font-size:16px}.icard small{color:var(--mut);line-height:1.7}
+.fnav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin:0 0 16px}
+.fnav a{color:var(--mut);font-size:14px}.fnav a:hover{color:var(--gold)}
+.tipc{display:flex;gap:14px;align-items:flex-start}.tipc b{display:block;color:var(--gold);margin-bottom:2px}.tipc p{margin:0;line-height:1.9}
+@media(min-width:700px){.icards{grid-template-columns:repeat(4,1fr)}}
+.zk{margin:6px 0 14px}.zk span{display:block;font-family:Amiri,serif;font-size:24px;color:var(--gold);line-height:1.8}.zk small{color:var(--mut);font-size:13px}
+.mini{font-size:13px;color:var(--mut);margin:8px 0 0}
+.demo{max-width:420px;margin:18px auto 0;border:1px solid var(--line);border-radius:22px;padding:16px;background:linear-gradient(160deg,rgba(var(--w),0.06),rgba(var(--w),0.02));text-align:right}
+.demo .dh{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:10px}
+.demo .dh i{font-style:normal;background:var(--gold);color:var(--ink);border-radius:12px;padding:1px 10px;font-size:12px}
+.demo .dm{background:rgba(var(--w),0.04);border-right:4px solid var(--gold);border-radius:14px;padding:12px;margin:8px 0}
+.dl{height:10px;border-radius:6px;background:rgba(var(--w),0.12);margin:7px 0}.w80{width:80%}.w60{width:60%}.w70{width:70%}.w40{width:40%}
+.dt{margin-top:8px;color:var(--gold);font-size:13px;display:flex;gap:6px;align-items:center}
+.band{margin-top:22px;text-align:center;border-radius:22px;padding:22px 16px;background:linear-gradient(135deg,rgba(var(--g),0.15),rgba(var(--g),0.05));border:1px solid var(--gold)}
+.band h2{margin:0 0 6px;color:var(--txt);font-size:22px}.band p{margin:0 0 12px;color:var(--mut)}
+.bn{display:flex;gap:10px;align-items:flex-start;padding:7px 0;line-height:1.8}.bn .ico{color:var(--gold);flex:none;margin-top:4px}
+.feat2{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;margin-top:24px}
+.f2{display:flex;gap:10px;align-items:flex-start}.f2 .fi{flex:none;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(var(--g),0.1);color:var(--gold)}
+.f2 b{display:block;margin-bottom:2px}.f2 small{color:var(--mut);line-height:1.7}
+.sugg{margin-top:22px;display:flex;align-items:center;gap:14px;border-radius:20px;padding:16px;border:1px dashed var(--gold);background:rgba(var(--g),0.06)}
+.sugg .fi{flex:none;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--gold);color:var(--ink)}
+.sugg b{display:block}.sugg small{color:var(--mut)}.sugg button{width:auto;margin:0;padding:10px 16px;flex:none}
+.lrow{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid rgba(var(--w),0.07)}
+.lrow:last-child{border:0}.lrow>.ico{color:var(--gold);width:24px;height:24px}
+.lrow span{flex:1}.lrow b{display:block}.lrow small{color:var(--mut)}.lrow .chev{width:18px;height:18px;color:var(--mut)}
+.acc summary{cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;color:var(--gold);list-style:none;font-size:18px}
+.acc summary::-webkit-details-marker{display:none}.acc summary:after{content:"+";margin-right:auto;font-size:24px}.acc[open] summary:after{content:"−"}
+.acc .accb{margin-top:12px}.acc .tipc{padding:10px 0;border-bottom:1px dashed var(--line)}.acc .tipc:last-child{border:0}
+.acc .accb p{line-height:2}
+.shr{display:flex;gap:8px;margin-top:8px}
+.shb{flex:1;display:flex;align-items:center;justify-content:center;height:46px;border-radius:12px;font-weight:700;font-size:15px;background:var(--gold);color:var(--ink);border:0;margin:0;cursor:pointer;font-family:inherit;padding:0}
+.shb.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}.shb.wa{background:#25d366}.shb.tg{background:#2aabee}
+.about p{line-height:2;margin:8px 0}.about b{font-weight:700}.more{display:inline-block;margin-top:6px;color:var(--gold);font-weight:700}
+@media(min-width:700px){.feat2{grid-template-columns:repeat(4,1fr)}}
+.hero .logo{margin:0 auto 18px}h1.brand{margin:8px 0 6px;line-height:1.35}
+button.sbtn{display:inline-flex;align-items:center;gap:6px}.sbtn .ico{width:1.05em;height:1.05em}
+.lkn{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--gold)}
+.qrbox canvas{max-width:260px;width:100%}
+.dev{color:var(--gold);font-weight:700}.dev:hover{text-decoration:underline}
+a.shb .ico{width:20px;height:20px;margin-left:8px}
+.bigbtn{height:56px;font-size:18px;display:flex;align-items:center;justify-content:center;gap:8px}
+.send textarea{font-size:17px;line-height:1.8}
+.qs{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 8px}
+.qs span{padding:7px 14px;border:1px solid var(--line);border-radius:20px;font-size:14px;cursor:pointer;color:var(--mut)}
+.qs span:hover{color:var(--gold);border-color:var(--gold)}
+.pl{display:block;cursor:pointer}
+.center{text-align:center}
+button.sbtn.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.qrow{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;margin:4px 0}
+.qb{flex:none;padding:9px 16px;border:1px solid var(--line);border-radius:20px;font-size:14px;font-weight:700;color:var(--gold);white-space:nowrap}
+.qb.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.lrow.dn{opacity:.55;pointer-events:none}
+.ig{display:flex;gap:16px;align-items:center;margin:14px 0}
+.ig .avatar{margin:0;flex:none}
+.igr{flex:1;min-width:0}.igr .who{text-align:right;font-size:clamp(22px,6vw,30px)}
+.igs{display:flex;gap:18px;margin-top:6px}.igs>div{text-align:center}.igs b{display:block;font-size:20px}.igs small{color:var(--mut)}
+.infos{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;color:var(--mut);margin:6px 0 10px}
+.inf{display:inline-flex;align-items:center;gap:6px;font-size:14px}
+.sw2{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.sw2:last-child{border:0}.sw2 b{display:block}.sw2 small{color:var(--mut);line-height:1.7}
+.tg{position:relative;width:48px;height:28px;flex:none;display:block}
+.tg input{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;opacity:0;cursor:pointer;z-index:2}
+.tg i{position:absolute;inset:0;background:rgba(var(--w),.2);border-radius:20px;transition:.2s}
+.tg i:after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.tg input:checked+i{background:var(--gold)}.tg input:checked+i:after{right:23px}
+.vis{color:var(--gold)}.hid{color:var(--mut)}
+.ic.thm{min-width:48px}
+
+input,textarea,select{background:var(--field);color:var(--txt)}
+.kbd{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:12px;background:rgba(var(--g),.12);color:var(--gold);font-size:13px;font-weight:700;margin-bottom:6px}
+.kbd .ico{width:16px;height:16px}
+.kchips .chip{flex:none}
+
+[data-theme="light"] button{box-shadow:0 4px 14px rgba(138,95,0,.25)}
+[data-theme="light"] .glass{box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.glass h2{margin-bottom:12px}
+.glass .lbl{margin-top:14px}
+#edp textarea,#edp input{margin:6px 0 4px}
+#edp{border-color:var(--gold)}
+.envl{display:grid !important;grid-template-columns:52px 1fr;gap:6px 14px;align-items:center;background:linear-gradient(135deg,#1d1845,#0d2b3a);border:1px solid #6cb6ff44;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 0 24px #6cb6ff1f}
+.msg.envl{border-right:1px solid #6cb6ff44}
+.envl p{margin:0;font-size:17px;color:#eaf4ff}
+.envl .new{justify-self:start}
+.envl small{grid-column:2}
+.envi{grid-row:1 / 4;width:46px;height:46px;border-radius:50%;background:#6cb6ff22;display:flex;align-items:center;justify-content:center;flex:none;color:#9fd3ff}
+.envi .ico{width:22px;height:22px}
+
+</style>
+<style id="custom"></style>
+</head>
+<body>
+<div class="wrap"><div id="app"><div class="skel big"></div></div><footer id="ft"></footer></div>
+<script>
+// ====== بيانات المشروع ======
+const SUPABASE_URL = "https://pkyqkzqkxfcytvtsygse.supabase.co";
+const SUPABASE_KEY = "sb_publishable_ZIeFUW3JFOEHV7-wImxM1Q_g5JM4wHZ";
+const HC_KEY = "94766dfe-902c-4f4a-ac04-6f36f8b0719e";
+// =============================
+const db = window.supabase ? supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+const app = document.getElementById("app");
+const params = new URLSearchParams(location.search);
+const $ = id => document.getElementById(id);
+const mk = (t, c, x) => { const e = document.createElement(t); if(c) e.className = c; if(x != null) e.textContent = x; return e; };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const go = q => { location.href = location.pathname + q; };
+let chan = null, reload = null, ANN = null, SET = {}, hcId = null;
+const I = {
+  chat:'<path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-8l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/><path d="M8 10h8M8 13h5"/>',
+  lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/>',
+  ban:'<circle cx="12" cy="12" r="9"/><path d="M6 6l12 12"/>',
+  bolt:'<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',
+  check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/>',
+  shield:'<path d="M12 3l7 3v5c0 5-3.2 8.2-7 10-3.8-1.8-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+  bell:'<path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+  logout:'<path d="M10 4H5v16h5"/><path d="M15 8l4 4-4 4M19 12H9"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+  thumb:'<path d="M7 11v9H4v-9z"/><path d="M7 11l4-7c1.5 0 2.5 1 2.2 2.6L12.7 10H19a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.8 20H7"/>',
+  leaf:'<path d="M5 19c0-9 5-14 14-14 0 9-5 14-14 14z"/><path d="M5 19L13 11"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/>',
+  coffee:'<path d="M5 8h11v6a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 9h2a2 2 0 0 1 0 4h-2"/>',
+  chev:'<path d="M15 6l-6 6 6 6"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>',
+  unpub:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/><path d="M4 4l16 16"/>',
+  unstar:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/><path d="M4 4l16 16"/>',
+  reply:'<path d="M9 7L4 12l5 5"/><path d="M4 12h9a6 6 0 0 1 6 6v1"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 17l-5-5-9 8"/>',
+  send:'<path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/>',
+  moon:'<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>',
+  edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  pin:'<path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+  cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  heart:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+  fb:'<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8a1 1 0 0 1 1-1z"/>'
+};
+const ic = n => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
+const N = () => SET.site_name || "ذكّرني";
+const T = (k, d) => SET[k] || d;
+const on = k => SET[k] !== "0";
+const MAXLEN = () => Math.min(1000, Number(SET.max_msg_len) || 1000);
+const el = h => { reload = null; hcId = null; app.innerHTML = h; window.scrollTo(0,0); const b = $("home"); if(b) b.onclick = () => go(""); };
+const say = (id, t, good) => { const n = $(id); if(n){ n.textContent = t; n.classList.toggle("good", !!good); } };
+const HOME = `<button class="ghost sbtn" id="home" style="margin:10px 0 0">الصفحة الرئيسية</button>`;
+const NAME_RE = /^[\u0621-\u064A\u0660-\u0669a-z0-9_]+(?: [\u0621-\u064A\u0660-\u0669a-z0-9_]+)*$/;
+const NAME_MSG = "اسم المستخدم: من 3 إلى 25 حرفًا، عربيًا أو إنجليزيًا، ويمكن وضع مسافة بين الكلمات";
+const SLUG_MSG = "الرابط: من 3 إلى 25 حرفًا إنجليزيًا أو رقمًا أو _";
+const RESERVED = ["admin","login","signup","profile","notifications","support","help","about"];
+const normName = s => s.trim().replace(/\s+/g, " ").toLowerCase();
+const nameOk = s => s.length >= 3 && s.length <= 25 && NAME_RE.test(s);
+const slugOk = s => /^[a-z0-9_]{3,25}$/.test(s) && !RESERVED.includes(s);
+const linkOf = s => location.origin + location.pathname + "?u=" + s;
+const ERR = [
+  ["invalid login","البريد الإلكتروني أو كلمة المرور غير صحيحة"],
+  ["captcha","فشل التحقق، أعد المحاولة"],
+  ["already registered","هذا البريد الإلكتروني مسجّل مسبقًا"],
+  ["at least","كلمة المرور قصيرة جدًا"],
+  ["not confirmed","لم يتم تأكيد بريدك الإلكتروني بعد"],
+  ["rate limit","محاولات كثيرة، حاول لاحقًا"],
+  ["invalid","البريد الإلكتروني غير صالح"]
+];
+const arErr = e => { const m = ((e && e.message) || "").toLowerCase(); const f = ERR.find(x => m.includes(x[0])); return f ? f[1] : "حدث خطأ، حاول مرة أخرى"; };
+const fmt = d => new Date(d).toLocaleString("ar-u-nu-latn");
+const track = () => db ? db.from("visits").insert({ device: innerWidth < 768 ? "جوال" : "حاسوب" }).then(()=>{}, ()=>{}) : Promise.resolve();
+const getSession = async () => db ? (await db.auth.getSession()).data.session : null;
+const cnt = async (t, f, col) => { let q = db.from(t).select(col || "id", { count:"exact", head:true }); if(f) q = f(q); return (await q).count ?? 0; };
+const darken = h => { const n = parseInt(h.slice(1), 16); const f = v => Math.max(0, Math.round(v * .78)); return "#" + [n >> 16, (n >> 8) & 255, n & 255].map(v => f(v).toString(16).padStart(2, "0")).join(""); };
+
+const LS = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+function setFooter(){
+  $("ft").innerHTML = ZK + `<nav class="fnav"><a href="?about">عن الموقع</a><a href="?guide">الإرشادات</a><a href="?suggest">اقترح فكرة</a></nav>© 2026 <b>${esc(N())}</b> · تطوير <a class="dev" href="${FB}" target="_blank" rel="noopener noreferrer">${esc(T("footer_dev","FakhamaDev"))}</a>`;
+}
+function applySettings(){
+  const root = document.documentElement.style;
+  if(/^#[0-9a-f]{6}$/i.test(SET.accent || "")){ root.setProperty("--gold", SET.accent); root.setProperty("--gold2", darken(SET.accent)); } else { root.removeProperty("--gold"); root.removeProperty("--gold2"); }
+  if(/^#[0-9a-f]{6}$/i.test(SET.bg || "")){ root.setProperty("--bg", SET.bg); root.setProperty("--bg2", SET.bg); } else { root.removeProperty("--bg"); root.removeProperty("--bg2"); }
+  $("custom").textContent = SET.custom_css || "";
+  document.title = N();
+  setFooter();
+}
+async function loadSettings(){
+  if(!db) return;
+  const r = await db.from("site_settings").select("key,value");
+  if(r.error) return;
+  const n = {}; (r.data || []).forEach(x => n[x.key] = x.value);
+  SET = n; LS.set("set", n); applySettings();
+}
+async function loadAnn(){
+  if(!db) return;
+  const a = await db.from("announcements").select("title,body,show_all").eq("active", true).order("created_at", { ascending:false }).limit(1);
+  if(a.error) return;
+  ANN = (a.data && a.data[0]) || null; LS.set("ann", ANN);
+}
+const PCOLS = "username,slug,banned,username_changed_at,slug_changed_at,bio,avatar,prompt";
+async function ensureProfile(user){
+  const p = await db.from("profiles").select(PCOLS).eq("id", user.id).maybeSingle();
+  if(p.data) return p.data;
+  const m = user.user_metadata || {};
+  if(m.username && m.slug){
+    const r = await db.from("profiles").insert({ id: user.id, username: m.username, slug: m.slug, gender: m.gender || null });
+    if(!r.error) return { username: m.username, slug: m.slug, banned: false };
+  }
+  return null;
+}
+const annHtml = home => (!ANN || !(home || ANN.show_all)) ? "" : `<div class="ann">${ANN.title ? `<b>${esc(ANN.title)}</b>` : ""}<p>${esc(ANN.body)}</p></div>`;
+function toast(t, f){ const d = mk("div","toast",t); if(f) d.onclick = f; document.body.appendChild(d); setTimeout(() => d.remove(), 5000); }
+function setBadge(n){ window._nb = n; const b = $("bd"); if(!b) return; b.textContent = n.toLocaleString("en"); b.hidden = n <= 0; }
+const themeIcon = () => ic(document.documentElement.dataset.theme === "light" ? "moon" : "sun");
+function toggleTheme(){
+  const light = document.documentElement.dataset.theme === "light";
+  if(light) delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = "light";
+  try{ localStorage.setItem("theme", light ? "dark" : "light"); }catch(e){}
+  document.querySelectorAll(".thm").forEach(b => { b.innerHTML = themeIcon() + (b.dataset.l ? "<small>المظهر</small>" : ""); });
+}
+const BAR = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr">
+    <button class="ic thm" id="thm" data-l="1" title="المظهر">${themeIcon()}<small>المظهر</small></button>
+    <button class="ic" id="icn">${ic("bell")}<small>الإشعارات</small><i class="bd" id="bd" hidden></i></button>
+  <button class="ic" id="ica">${ic("user")}<small>حسابي</small></button>
+  <button class="ic" id="ico">${ic("logout")}<small>خروج</small></button></div></div>`;
+async function wireBar(user){
+  $("tbh").onclick = () => go("");
+  $("thm").onclick = toggleTheme;
+  $("icn").onclick = () => notifPage(user);
+  $("ica").onclick = () => go("?profile");
+  $("ico").onclick = async()=>{ await db.auth.signOut(); go(""); };
+  setBadge(await cnt("notifications", q => q.eq("read", false)));
+  if(chan) db.removeChannel(chan);
+  chan = db.channel("n" + user.id).on("postgres_changes", { event:"INSERT", schema:"public", table:"notifications", filter:"user_id=eq." + user.id },
+    pl => { setBadge((window._nb || 0) + 1); toast(pl.new.body, pl.new.ref ? () => go("?login#m" + pl.new.ref) : pl.new.link ? () => go(pl.new.link) : null); if(reload && pl.new.kind === "message") reload(); }).subscribe();
+}
+function bannedPage(){
+  el(`<div class="hero"><div class="logo">${ic("chat")}</div><p class="sub">تم إيقاف هذا الحساب</p><p class="tag">إن كان ذلك بالخطأ فتواصل مع إدارة الموقع.</p></div><button class="ghost" id="out">تسجيل الخروج</button>`);
+  $("out").onclick = async()=>{ await db.auth.signOut(); go(""); };
+}
+function maintPage(){
+  el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand">${esc(N())}</h1><p class="sub">${esc(T("maintenance_text","الموقع في صيانة قصيرة، سنعود قريبًا."))}</p></div>`);
+}
+// ===== التحقق (hCaptcha) =====
+function mountCaptcha(){
+  const box = $("hc"); if(!box) return;
+  let tries = 0;
+  const t = setInterval(() => {
+    if(window.hcaptcha){ clearInterval(t); hcId = hcaptcha.render(box, { sitekey: HC_KEY, theme: document.documentElement.dataset.theme === "light" ? "light" : "dark" }); }
+    else if(++tries > 40){ clearInterval(t); say("note","تعذّر تحميل مربع التحقق، جرّب شبكة أخرى."); }
+  }, 250);
+}
+const hcToken = () => (window.hcaptcha && hcId !== null) ? hcaptcha.getResponse(hcId) : "";
+const hcReset = () => { if(window.hcaptcha && hcId !== null) hcaptcha.reset(hcId); };
+
+function routeOf(){
+  for(const k of ["admin","profile","login","signup","featured","about","guide","tips","safety","respect","suggest","p","privacy"]) if(params.has(k)) return k;
+  return params.get("u") ? "send" : "home";
+}
+async function render(route, s){
+  if(SET.maintenance === "1" && route !== "admin") return maintPage();
+  switch(route){
+    case "admin": return s ? adminPage() : authPage("login", NEED_LOGIN);
+    case "profile": return s ? editPage(s.user) : authPage("login", NEED_LOGIN);
+    case "login": case "signup": return s ? dashboard(s.user) : authPage(route);
+    case "featured": return featuredPage(s);
+    case "about": return aboutPage(s);
+    case "guide": case "tips": case "safety": case "respect": return guidePage(s, route);
+    case "suggest": return suggestPage(s);
+    case "p": return profilePage(s);
+    case "privacy": return s ? privacyPage(s.user) : authPage("login", NEED_LOGIN);
+    case "send": return sendPage(params.get("u").trim().toLowerCase());
+    default: return landing(s);
+  }
+}
+async function start(){
+  SET = LS.get("set") || {}; ANN = LS.get("ann") || null; applySettings();
+  const route = routeOf(), s = await getSession();
+  if(route === "home" || route === "send") track();
+  render(route, s);
+  const before = JSON.stringify([SET, ANN]);
+  await Promise.all([loadSettings(), loadAnn()]);
+  if(JSON.stringify([SET, ANN]) !== before && (["home","about","guide","tips","safety","respect","featured","suggest"].includes(route) || SET.maintenance === "1")) render(route, s);
+}
+
+const FB = "https://www.facebook.com/share/1E34bY6N7D/";
+const SHARE_TXT = "تذكيرٌ بالخير، أو نصيحةٌ طيبة، أو كلمةٌ تنفع وتبقى.";
+const mkb = (cls, icon, text) => { const b = mk("button", cls); b.innerHTML = ic(icon) + " " + esc(text); return b; };
+const ZK = '<div class="zk"><span>﴿ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ ﴾</span></div>';
+const AV_ICONS = ["chat","star","leaf","sun","bolt","shield","bell","book","coffee","thumb","lock","user"];
+const AV_COLORS = ["#3ddbb4","#5fd1a5","#6cb6ff","#ff8fa3","#b39cff","#ffa94d"];
+const avOf = a => { const m = /^([a-z]{2,10}):([0-5])$/.exec(a || ""); return m && AV_ICONS.includes(m[1]) ? { icon: m[1], color: AV_COLORS[+m[2]] } : null; };
+const setAv = (e, p) => { if(!e) return; const a = avOf(p && p.avatar); if(a){ e.innerHTML = ic(a.icon); e.style.background = a.color; } else { e.textContent = (p && p.username) ? p.username[0] : "؟"; e.style.background = ""; } };
+const motdHtml = () => SET.motd ? `<div class="motd">${ic("star")}<div><b>رسالة اليوم</b><br>${esc(SET.motd)}</div></div>` : "";
+const BADGES = [["أولى الرسائل","msgs",1],["10 رسائل","msgs",10],["100 رسالة","msgs",100],["أول رد","replies",1],["أول رسالة منشورة","pubs",1]];
+function drawStats(){
+  const st = window._st || {}, a = $("stt"), b = $("bdg"); if(!a) return;
+  a.innerHTML = "";
+  [["الرسائل","msgs"],["المنشورة","pubs"],["الردود","replies"]].forEach(([l,k]) => { const d = mk("div"); d.append(mk("b", null, (st[k] || 0).toLocaleString("en")), mk("small", null, l)); a.appendChild(d); });
+  b.innerHTML = "";
+  BADGES.forEach(([l,k,n]) => { const e = mk("span", "bdg" + ((st[k] || 0) >= n ? " on" : "")); e.innerHTML = ic("star") + " " + esc(l); b.appendChild(e); });
+}
+async function shareCard(m){
+  try{ await document.fonts.load("700 28px Cairo"); }catch(e){}
+  const W = 1080, H = 1080, F = "Cairo, Tahoma, sans-serif", c = document.createElement("canvas"); c.width = W; c.height = H;
+  const x = c.getContext("2d");
+  const g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#0a1a1f"); g.addColorStop(1, "#0f2a2b"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  x.strokeStyle = "#3ddbb4"; x.lineWidth = 3; x.strokeRect(36, 36, W - 72, H - 72);
+  x.direction = "rtl"; x.textAlign = "center";
+  const wrap = (t, font, maxW) => { x.font = font; const out = []; String(t).split("\n").forEach(par => { let line = ""; par.split(" ").forEach(w => { const test = line ? line + " " + w : w; if(x.measureText(test).width > maxW && line){ out.push(line); line = w; } else line = test; }); out.push(line); }); return out; };
+  x.fillStyle = "#3ddbb4"; x.font = "700 56px " + F; x.fillText(N(), W / 2, 130);
+  const top = 190, bottom = H - 190, maxW = W - 220;
+  let size = 58, lh, rs, body, reply;
+  for(; size >= 30; size -= 2){
+    lh = Math.round(size * 1.55); rs = Math.round(size * .8);
+    body = wrap(m.body, "700 " + size + "px " + F, maxW);
+    reply = m.reply ? wrap(m.reply, "400 " + rs + "px " + F, maxW) : [];
+    if(body.length * lh + (reply.length ? 84 + reply.length * Math.round(rs * 1.5) : 0) <= bottom - top) break;
+  }
+  const maxL = Math.max(1, Math.floor((bottom - top) / lh)); if(body.length > maxL) body = body.slice(0, maxL);
+  const rlh = Math.round(rs * 1.5), total = body.length * lh + (reply.length ? 84 + reply.length * rlh : 0);
+  let y = top + Math.max(0, (bottom - top - total) / 2) + size;
+  x.fillStyle = "#f4efe0"; x.font = "700 " + size + "px " + F;
+  body.forEach(l => { x.fillText(l, W / 2, y); y += lh; });
+  if(reply.length){
+    y += 20; x.fillStyle = "#3ddbb4"; x.font = "700 " + Math.round(size * .7) + "px " + F; x.fillText("الرد", W / 2, y); y += Math.round(size * 1.1);
+    x.fillStyle = "#f6e7b0"; x.font = "400 " + rs + "px " + F; reply.forEach(l => { x.fillText(l, W / 2, y); y += rlh; });
+  }
+  x.strokeStyle = "#3ddbb466"; x.lineWidth = 2; x.beginPath(); x.moveTo(W / 2 - 120, H - 170); x.lineTo(W / 2 + 120, H - 170); x.stroke();
+  x.fillStyle = "#9fb8ac"; x.font = "400 30px " + F; wrap(SHARE_TXT, x.font, W - 220).slice(0, 2).forEach((l, i) => x.fillText(l, W / 2, H - 125 + i * 40));
+  x.fillStyle = "#3ddbb4"; x.font = "700 30px " + F; x.direction = "ltr"; x.fillText(linkOf(window._me.slug).replace(/^https?:\/\//, ""), W / 2, H - 52);
+  c.toBlob(async blob => {
+    const f = new File([blob], "message.png", { type: "image/png" });
+    if(navigator.canShare && navigator.canShare({ files: [f] })){ try{ await navigator.share({ files: [f], title: N() }); return; }catch(e){ if(e.name === "AbortError") return; } }
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "message.png"; a.click(); toast("تم حفظ الصورة");
+  }, "image/png");
+}
+function qrShow(link){
+  const box = $("qrbox"); box.textContent = "جارٍ التحميل...";
+  const draw = () => {
+    const q = qrcode(0, "M"); q.addData(link); q.make();
+    const n = q.getModuleCount(), sz = 12, pad = 24, size = n * sz + pad * 2;
+    const c = mk("canvas"); c.width = c.height = size; const x = c.getContext("2d");
+    x.fillStyle = "#fff"; x.fillRect(0, 0, size, size); x.fillStyle = "#000";
+    for(let r = 0; r < n; r++) for(let k = 0; k < n; k++) if(q.isDark(r, k)) x.fillRect(pad + k * sz, pad + r * sz, sz, sz);
+    box.innerHTML = ""; box.appendChild(c);
+    const b = mk("button","ghost","حفظ الصورة"); b.onclick = () => { const a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = "qr.png"; a.click(); };
+    box.appendChild(b);
+  };
+  if(window.qrcode) return draw();
+  const sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"; sc.onload = draw; sc.onerror = () => { box.textContent = "تعذّر تحميل أداة الرمز، جرّب شبكة أخرى."; };
+  document.head.appendChild(sc);
+}
+const featItem = m => { const d = mk("div","msg"); d.appendChild(mk("p", null, m.body)); if(m.reply) d.appendChild(mk("p","rep","الرد: " + m.reply)); const l = mk("small", null, "إلى: " + m.username); l.style.cursor = "pointer"; l.onclick = () => go("?u=" + m.slug); d.appendChild(l); return d; };
+async function loadFeat(){
+  if(!db) return;
+  const r = await db.rpc("featured_list", { lim: 3 }), box = $("feat");
+  if(!box || !r.data || !r.data.length) return;
+  const g = mk("div","glass"); g.appendChild(mk("h2", null, "رسائل مختارة"));
+  r.data.forEach(m => g.appendChild(featItem(m)));
+  const a = mk("button","ghost","عرض كل الرسائل المختارة"); a.onclick = () => go("?featured"); g.appendChild(a); box.appendChild(g);
+}
+const SKEL = '<div class="skel"></div><div class="skel"></div>';
+const TOPOUT = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr"><button class="ic thm" id="thm" title="المظهر">${themeIcon()}</button><button class="ghost sbtn" id="nl" style="margin:0">دخول</button>${on("allow_signup") ? `<button class="sbtn" id="ns" style="margin:0">حساب جديد</button>` : ""}</div></div>`;
+const wireOut = () => { $("tbh").onclick = () => go(""); if($("thm")) $("thm").onclick = toggleTheme; $("nl").onclick = () => go("?login"); if($("ns")) $("ns").onclick = () => go("?signup"); };
+const quickRow = (slug, active) => `<div class="qrow"><a class="qb${active === "inbox" ? " on" : ""}" href="?login">صندوق رسائلي</a><a class="qb${active === "edit" ? " on" : ""}" href="?profile">تعديل حسابي</a><a class="qb${active === "privacy" ? " on" : ""}" href="?privacy">الخصوصية والإشعارات</a><a class="qb${active === "page" ? " on" : ""}" href="?p=${esc(slug)}">صفحتي</a></div>`;
+const checklistHtml = p => {
+  const items = [["أضف نبذة عنك", !!p.bio, "?profile"], ["اختر صورتك الرمزية", !!p.avatar, "?profile"], ["شارك رابطك مع أصدقائك", !!LS.get("shared"), "#lnk"]];
+  const done = items.filter(i => i[1]).length;
+  if(done === items.length) return "";
+  return `<div class="glass"><div class="top"><h2>أكمل صفحتك</h2><span class="num">${done}/${items.length}</span></div>` + items.map(([t, d, h]) => `<a class="lrow${d ? " dn" : ""}" href="${h}">${ic(d ? "check" : "star")}<span><b>${esc(t)}</b></span>${d ? "" : ic("chev")}</a>`).join("") + `</div>`;
+};
+const lrows = () => `<a class="lrow" href="?guide">${ic("shield")}<span><b>الإرشادات</b><small>نصائح التعامل والأمان والاحترام</small></span>${ic("chev")}</a><a class="lrow" href="?suggest">${ic("bolt")}<span><b>اقترح فكرة</b><small>ساعدنا نطوّر الموقع</small></span>${ic("chev")}</a>`;
+function infoPage(s, title, intro, body){
+  el(`${s ? BAR() : TOPOUT()}${HOME}<div class="hero" style="padding:14px 0 6px"><h1 class="brand" style="font-size:clamp(32px,9vw,46px)">${esc(title)}</h1>${intro ? `<p class="tag">${esc(intro)}</p>` : ""}</div>${body}`);
+  if(s) wireBar(s.user); else wireOut();
+}
+const SAFE = [
+  ["كلمة مرور قوية وخاصة","لا تستخدم كلمة مرور موقع آخر، ويفضّل جملة طويلة سهلة الحفظ بدل كلمة قصيرة."],
+  ["إدارة الموقع لا تطلب كلمة مرورك أبدًا","لا تعطها لأحد، حتى لو قال إنه من الإدارة."],
+  ["احذر الروابط في الرسائل","لا تفتح روابط من مجهول، فقد تكون تصيّدًا لسرقة حسابك."],
+  ["زر الإبلاغ","استخدمه عند أي إساءة، واحذف الرسالة."],
+  ["ادخل من الرابط الرسمي فقط","انتبه من مواقع تشبه موقعنا وتطلب بياناتك."],
+  ["أنت تتحكم بما يُنشر","رسائلك خاصة، ولا تظهر للناس إلا إذا ضغطت «نشر في صفحتي». راجع الرسالة والرد قبل النشر."]
+];
+function guidePage(s, open){
+  const o = open === "guide" ? "tips" : open;
+  const list = a => a.map((t, i) => `<div class="tipc"><div class="n">${i + 1}</div><div><b>${esc(t[0])}</b><p>${esc(t[1])}</p></div></div>`).join("");
+  const sec = (k, title, icon, inner) => `<details class="glass acc" ${o === k ? "open" : ""}><summary>${ic(icon)}<span>${title}</span></summary><div class="accb">${inner}</div></details>`;
+  const notice = `<div class="warn"><b class="hl">تنبيه:</b> كثرة البلاغات على حساب قد تؤدي إلى تقييده أو حذفه، إذا ثبتت مخالفات مثل السبّ أو الشتم أو أي إساءة، وذلك بعد مراجعة البلاغات والتأكد منها.</div>`;
+  infoPage(s, "الإرشادات", "نصائح بسيطة تجعل تجربتك أجمل وأكثر أمانًا.",
+    notice + sec("tips","كيف نتعامل بلطف","chat", list(TIPS)) + sec("safety","كيف نحمي حسابنا","shield", list(SAFE)) +
+    sec("respect","الاحترام أساس التعامل بين الناس","star", `<p>احترم غيرك بكلامك وأفعالك، فالكلمة الطيبة صدقة، والأسلوب الراقي دليل على حسن التربية. لا تجرح مشاعر الآخرين، ولا تقلّل من شأن أحد، واختلف مع الناس بأدب واحترام.</p><p>تذكّر دائماً: عامل الناس كما تحب أن يعاملوك، فالاحترام لا يُفرض بالقوة، بل يُكتسب بالأخلاق، والكلمة الطيبة تترك أثراً جميلاً في القلوب.</p>`));
+}
+function aboutPage(s){
+  const q = (title, ans, open) => `<details class="glass acc" ${open ? "open" : ""}><summary><span>${title}</span></summary><div class="accb"><p>${ans}</p></div></details>`;
+  infoPage(s, "عن " + N(), "كل ما تريد معرفته في دقيقة.",
+    q("ما هو " + esc(N()) + "؟", "موقع يمنحك رابطًا خاصًا. تنشره في واتساب أو إنستغرام أو أي مكان، فيصلك ما يود الناس قوله لك في صندوق رسائل خاص بك.", true) +
+    q("كيف أبدأ؟", "أنشئ حسابًا مجانًا في أقل من دقيقة، ثم انسخ رابطك وشاركه.") +
+    q("هل أحتاج حسابًا لأرسل رسالة؟", "لا. أي شخص يفتح رابطك يكتب رسالته ويرسلها مباشرة.") +
+    q("هل يعرف صاحب الرابط من أرسل له؟", "لا، إلا إذا اختار المرسل المسجّل بنفسه أن يُظهر اسمه.") +
+    q("من يقرأ رسائلي؟", "أنت وحدك من بين المستخدمين. ولا تظهر للناس إلا إذا قررت نشرها في صفحتك.") +
+    q("هل الموقع مجاني؟", "نعم، وبدون إعلانات.") +
+    q("ماذا أفعل إذا وصلتني رسالة مسيئة؟", "احذفها. ويمكنك تغيير رابطك من «حسابي» لإيقاف الرابط القديم، وللإبلاغ عن حساب مسيء استخدم زر الإبلاغ في صفحته.") +
+    (on("allow_signup") ? `<div class="band"><h2>جرّب الآن</h2><p>أنشئ رابطك مجانًا وشاركه مع أصدقائك.</p><button id="ab">أنشئ رابطك</button></div>` : ""));
+  if($("ab")) $("ab").onclick = () => go(s ? "?login" : "?signup");
+}
+function suggestPage(s){
+  if(!on("show_suggestions")) return infoPage(s, "اقتراحات", "هذه الصفحة غير متاحة حاليًا.", "");
+  infoPage(s, "ساعدنا نطوّر الموقع", "اكتب أي فكرة أو ملاحظة، وسنقرأها بعناية. لا تحتاج حسابًا.",
+    `<div class="glass sm" id="sbox"><div class="lbl">نوع اقتراحك</div><div class="chips" id="sk"></div><textarea id="sg" rows="5" maxlength="480" placeholder="اكتب فكرتك هنا..."></textarea><div class="cnt" id="sc">0 / 480</div><button id="sgb">أرسل الاقتراح</button><div class="note" id="sgn"></div></div><div class="glass sm"><h2>التواصل مع المطور</h2><p class="tag">للتواصل المباشر أو الاستفسار، تفضّل بزيارة حساب المطور.</p><a class="shb" href="${FB}" target="_blank" rel="noopener noreferrer">${ic("fb")} حساب المطور على فيسبوك</a></div>`);
+  let kind = "فكرة"; const PH = { "فكرة":"اكتب فكرتك هنا...", "مشكلة":"اكتب مشكلتك هنا...", "تحسين":"اكتب اقتراح التحسين هنا..." };
+  ["فكرة","مشكلة","تحسين"].forEach(k => { const c = mk("div", "chip" + (k === kind ? " on" : ""), k); c.onclick = () => { kind = k; $("sg").placeholder = PH[k]; [...$("sk").children].forEach(x => x.classList.toggle("on", x === c)); }; $("sk").appendChild(c); });
+  $("sg").oninput = () => { $("sc").textContent = $("sg").value.length.toLocaleString("en") + " / 480"; };
+  $("sgb").onclick = async()=>{
+    const v = $("sg").value.trim();
+    if(!v) return say("sgn","اكتب اقتراحك أولًا");
+    $("sgb").disabled = true;
+    const r = await db.from("suggestions").insert({ user_id: s ? s.user.id : null, body: "[" + kind + "] " + v });
+    $("sgb").disabled = false;
+    if(r.error) return say("sgn", (r.error.message || "").includes("TOOFAST") ? "وصلتنا اقتراحات كثيرة الآن، حاول بعد قليل" : "تعذّر الإرسال، حاول مرة أخرى");
+    $("sbox").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>شكرًا لك!</b><small class="tag">وصل اقتراحك إلى فريق الموقع.</small></div>`;
+  };
+}
+async function featuredPage(s){
+  if(!db){ infoPage(s, "رسائل مختارة", "رسائل نشرها أصحابها واختارتها الإدارة.", `<div class="glass" id="fl2"></div>`); return; }
+  const r = await db.rpc("featured_list", { lim: 50 });
+  infoPage(s, "رسائل مختارة", "رسائل نشرها أصحابها واختارتها الإدارة.", `<div class="glass" id="fl2"></div>`);
+  const box = $("fl2"); (r.data || []).forEach(m => box.appendChild(featItem(m)));
+  if(!(r.data || []).length) box.textContent = "لا توجد رسائل مختارة بعد.";
+}
+const demoCard = () => `<div class="demo" aria-hidden="true"><div class="dh"><span>${ic("chat")} صندوق رسائلك</span><i>جديدة</i></div><div class="dm"><div class="dl w80"></div><div class="dl w60"></div><div class="dt">${ic("lock")} مجهول</div></div><div class="dm"><div class="dl w70"></div><div class="dl w40"></div></div></div>`;
+function landing(s){
+  const signup = on("allow_signup");
+  el(`${s ? BAR() : TOPOUT()}${annHtml(true)}${s ? `<div class="glass ub"><div class="av2" id="av2"></div><b id="unm">&nbsp;</b><button class="sbtn" id="ub1" style="margin:0">صندوق رسائلي</button></div>` : ""}
+  <div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand">${esc(N())}</h1>
+    <p class="lead">${SET.hero_lead ? esc(SET.hero_lead) : 'أخبرني برأيك <span class="hl">بسرّية</span>'}</p>
+    <p class="tag">${esc(T("hero_tag","رابطك الخاص يجمع لك كلمات أصدقائك الصادقة: نصيحة، دعاء، مصارحة أو تذكير بالخير، دون أن يظهر اسمهم، وأنت وحدك تقرؤها."))}</p>
+    ${s ? "" : `<div class="sm">${signup ? `<button id="go">أنشئ رابطك الآن، مجانًا</button>` : ""}<button class="ghost" id="go2">لدي حساب</button><p class="mini">التسجيل يستغرق أقل من دقيقة</p></div>`}</div>
+  <div class="glass about"><h2>ما هو ${esc(N())}؟</h2>
+    <p>موقع يعطيك <b class="hl">رابطًا خاصًا</b> تنشره لأصدقائك، فيكتبون لك رسائل <b class="hl">دون أن يظهر اسمهم</b>، وأنت وحدك تقرؤها.</p>
+    <p>فكّر فيه كأنه <b>صندوق سرّي خاص بك</b> على الإنترنت: تعرف رأي من حولك بصدق، وتستقبل كلماتهم الطيبة ونصائحهم ودعواتهم.</p>
+    <a class="more" href="?about">اقرأ المزيد</a></div>
+  ${s ? "" : demoCard()}  ${motdHtml()}
+  <div class="glass"><h2>كيف يعمل؟</h2><div class="steps">
+    <div class="step"><div class="n">1</div><div><b>أنشئ حسابك</b><small>اختر اسمك، ويصبح لك رابط خاص</small></div></div>
+    <div class="step"><div class="n">2</div><div><b>شارك رابطك</b><small>انشره في واتساب أو إنستغرام أو أي مكان</small></div></div>
+    <div class="step"><div class="n">3</div><div><b>اقرأ الرسائل</b><small>تصلك في صندوقك، والمرسل سرّي</small></div></div></div></div>
+  ${s || !signup ? "" : `<div class="glass"><h2>لماذا تنشئ حسابًا؟</h2>
+    <div class="bn">${ic("check")}<span>رابطك الخاص، تنشره فتصلك رسائل أصدقائك.</span></div>
+    <div class="bn">${ic("check")}<span>صندوق مرتب، وإشعار عند وصول كل رسالة.</span></div>
+    <div class="bn">${ic("check")}<span>أنت تقرّر ما يُنشر من رسائلك.</span></div>
+    <div class="bn">${ic("check")}<span>تعرف إن كان المستلم قرأ رسائلك التي ترسلها.</span></div></div>`}
+  <div class="feat2">
+    <div class="f2"><div class="fi">${ic("lock")}</div><div><b>مجهول</b><small>لا تعرف من أرسل لك، إلا إذا اختار أن يعرّفك بنفسه</small></div></div>
+    <div class="f2"><div class="fi">${ic("shield")}</div><div><b>آمن</b><small>رسائلك لا يراها غيرك من المستخدمين، ولا تُنشر إلا بقرارك</small></div></div>
+    <div class="f2"><div class="fi">${ic("ban")}</div><div><b>مجاني وبدون إعلانات</b><small>لا رسوم ولا إعلانات تزعجك</small></div></div>
+    <div class="f2"><div class="fi">${ic("bolt")}</div><div><b>خفيف وسهل الاستخدام</b><small>يفتح بسرعة، وخطواته واضحة</small></div></div></div>
+  <div id="feat"></div>
+  ${s || !signup ? "" : `<div class="band"><h2>جاهز لتبدأ؟</h2><p>أنشئ رابطك وشاركه مع أصدقائك، وانتظر أول رسالة.</p><button id="go3">أنشئ رابطك الآن</button></div>`}
+  ${on("show_suggestions") ? `<div class="sugg"><div class="fi">${ic("bolt")}</div><div style="flex:1"><b>عندك فكرة تطوّر الموقع؟</b><small>اقتراحك يصنع الفرق، ولا يحتاج حسابًا.</small></div><button id="sgo">شاركنا</button></div>` : ""}`);
+  loadFeat();
+  if($("sgo")) $("sgo").onclick = () => go("?suggest");
+  if(s){
+    wireBar(s.user); $("ub1").onclick = () => go("?login");
+    ensureProfile(s.user).then(p => { if(!p) return; if(p.banned) return bannedPage(); if($("unm")){ $("unm").textContent = p.username; setAv($("av2"), p); [$("av2"), $("unm")].forEach(e => { e.style.cursor = "pointer"; e.onclick = () => go("?p=" + p.slug); }); } });
+  } else { wireOut(); [$("go"), $("go3")].forEach(b => { if(b) b.onclick = () => go("?signup"); }); $("go2").onclick = () => go("?login"); }
+}
+
+const NEED_LOGIN = "هذه الصفحة تتطلب تسجيل الدخول. سجّل الدخول أو أنشئ حسابًا للمتابعة.";
+function authPage(mode, notice){
+  const su = mode === "signup";
+  if(su && !on("allow_signup")){ el(`${HOME}<div class="glass sm"><p class="sub">التسجيل مغلق مؤقتًا، حاول لاحقًا.</p></div>`); return; }
+  el(`${HOME}<div class="hero" style="padding:12px 0 4px"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:clamp(36px,10vw,46px)">${esc(N())}</h1></div>
+  <div class="glass sm"><h2>${su ? "أنشئ حسابك" : "أهلًا بعودتك"}</h2>${notice ? `<div class="warn">${esc(notice)}</div>` : ""}
+    ${su ? `<div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>` : ""}
+    <input id="email" type="email" placeholder="البريد الإلكتروني" dir="ltr" autocomplete="email">
+    ${su ? `<input id="username" placeholder="اسمك الذي يظهر لأصدقائك" maxlength="25" autocomplete="off">
+    <input id="slug" placeholder="رابطك الخاص (اختياري)" dir="ltr" maxlength="25" autocomplete="off">` : ""}
+    <input id="pass" type="password" placeholder="${su ? "كلمة المرور (8 أحرف على الأقل)" : "كلمة المرور"}" dir="ltr" autocomplete="${su ? "new-password" : "current-password"}">
+    ${su ? `<p class="mini">احفظ كلمة المرور، فلا يمكن استرجاعها حاليًا.</p>` : ""}
+    <div class="hc" id="hc"></div>
+    <button id="act">${su ? "إنشاء الحساب" : "دخول"}</button>
+    <button class="ghost" id="sw">${su ? "لدي حساب" : "إنشاء حساب جديد"}</button>
+    <div class="note" id="note"></div></div>`);
+  mountCaptcha();
+  $("sw").onclick = () => go(su ? "?login" : "?signup");
+  let gender = "";
+  if(su) $("gen").onclick = e => { const c = e.target.closest(".chip"); if(!c) return; gender = c.dataset.g; [...$("gen").children].forEach(x => x.classList.toggle("on", x === c)); };
+  const rnd = () => "u" + Math.random().toString(36).slice(2, 8);
+  $("act").onclick = async()=>{
+    const email = $("email").value.trim(), pass = $("pass").value;
+    say("note","");
+    if(!email || !pass) return say("note","أدخل البريد الإلكتروني وكلمة المرور");
+    const token = hcToken();
+    if(!token) return say("note","أكمل مربع التحقق أولًا");
+    if(!su){
+      $("act").disabled = true;
+      const { data, error } = await db.auth.signInWithPassword({ email, password: pass, options: { captchaToken: token } });
+      $("act").disabled = false;
+      if(error){ hcReset(); return say("note", arErr(error)); }
+      return params.has("admin") ? adminPage() : params.has("profile") ? editPage(data.user) : dashboard(data.user);
+    }
+    const u = normName($("username").value); let sl = $("slug").value.trim().toLowerCase(); const auto = !sl; if(auto) sl = rnd();
+    if(!gender) return say("note","اختر الجنس");
+    if(!nameOk(u)) return say("note", NAME_MSG);
+    if(!slugOk(sl)) return say("note", SLUG_MSG);
+    if(pass.length < 8) return say("note","كلمة المرور يجب أن تكون 8 أحرف على الأقل");
+    $("act").disabled = true;
+    const t1 = await db.from("profiles").select("id").eq("username", u).maybeSingle();
+    if(t1.data){ $("act").disabled = false; hcReset(); return say("note","هذا الاسم محجوز، اختر اسمًا آخر"); }
+    let t2 = await db.from("profiles").select("id").eq("slug", sl).maybeSingle();
+    for(let i = 0; auto && t2.data && i < 3; i++){ sl = rnd(); t2 = await db.from("profiles").select("id").eq("slug", sl).maybeSingle(); }
+    if(t2.data){ $("act").disabled = false; hcReset(); return say("note","هذا الرابط محجوز، اختر رابطًا آخر"); }
+    const { data, error } = await db.auth.signUp({ email, password: pass, options:{ captchaToken: token, data:{ username: u, slug: sl, gender } } });
+    if(error){ $("act").disabled = false; hcReset(); return say("note", arErr(error)); }
+    if(!data.session){ $("act").disabled = false; return say("note","تم إنشاء الحساب. أكّد بريدك الإلكتروني ثم سجّل الدخول.", true); }
+    const r = await db.from("profiles").insert({ id: data.user.id, username: u, slug: sl, gender });
+    $("act").disabled = false;
+    if(r.error) return say("note", r.error.code === "23505" ? "الاسم أو الرابط محجوز، اختر غيره" : "تعذّر إنشاء الحساب، حاول مرة أخرى");
+    dashboard(data.user);
+  };
+}
+
+const TIPS = [
+  ["احترم غيرك","عامل الناس كما تحب أن يعاملوك، فمَن رضّ عن الناس رضى الله عنه."],
+  ["اختر كلماتك بعناية","قال ﷺ: «من كان يؤم بالله واليوم الآخر فليقل خيرًا أو ليصمت»، فالكلمة الطيبة صدقة."],
+  ["تقبّل الاختلاف","ليس من الضروري أن نتفق في كل شيء، لكن يجب أن نحترم آراء بعضنا."],
+  ["لا تقلّل من شأن أحد","فلا شيء لأحد عند الله بإيمانه ولا حسبٌ على أحد بحسنه."],
+  ["استمع قبل أن تحكم","أعطِ الآخرين فرصة للتعبير عن أنفسهم."],
+  ["ابتعد عن السخرية والإهانة","قال تعالى: «ولا تنمزوا أنفسكم»، فالقوة الحقيقية في حسن الأخلاق."],
+  ["اعتذر عندما تخطئ","الاعتذار دليل على النضج وليس ضعفاً، وهذا من أخلق أهل الجنة."],
+  ["كن متواضعاً","لا يتكبر أحد على أحد، فالجنة عند أقدام الأمهات ومَن تواضع لله رفعه."]
+];
+
+async function dashboard(user){
+  const p = await ensureProfile(user);
+  if(!p){ el(`${HOME}<div class="hero"><div class="logo">${ic("chat")}</div><p class="sub">لم يتم العثور على حسابك، أو أن الاسم أو الرابط محجوز.</p></div><button class="ghost" id="out">تسجيل الخروج</button>`); $("out").onclick = async()=>{ await db.auth.signOut(); go(""); }; return; }
+  if(p.banned) return bannedPage();
+  const isAdmin = db ? (await db.rpc("is_admin")).data === true : false;
+  const link = linkOf(p.slug);
+  el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك الخاص. انشره ليرسل لك الناس كلماتهم الصادقة: نصيحة، دعاء أو تذكير بالخير، دون أن يظهر اسمهم</p></div>
+  ${quickRow(p.slug, "inbox")}${checklistHtml(p)}<div class="glass"><div class="link sel" id="lnk"></div>
+    <div class="shr"><button class="shb" id="copy">نسخ الرابط</button></div><div class="shr"><button class="shb ghost" id="share">مشاركة</button><button class="shb ghost" id="qrb">رمز QR</button></div><div class="qrbox" id="qrbox"></div>${isAdmin ? `<button class="ghost" id="adm">لوحة الإدارة</button>` : ""}</div>
+  <div class="glass"><h2>الرسائل الواردة</h2><div class="stats" id="stt"></div><div class="badges" id="bdg"></div></div>
+  <div class="glass" id="fbox" hidden><h2>${ic("star")} الرسائل المميزة</h2><div id="flist"></div></div>
+  <div class="glass"><div class="top"><h2>الرسائل الواردة</h2><span class="num" id="cnt">0</span></div>
+    <p class="tag">اضغط «نشر في صفحتي» لتظهر الرسالة وردّك للجميع، دون اسم المرسل.</p><div id="list">${SKEL}</div></div>
+  <div class="glass"><h2>الرسائل التي أرسلتها</h2><p class="tag">هنا ترى هل قرأ المستلم رسالتك أم لا. نص الرسالة لا يظهر لك بعد إرسالها. وبعد أن يقرأها المستلم يمكنك إزالتها من هذه القائمة، وتبقى عنده.</p><div id="sent">${SKEL}</div></div>
+  <div class="glass"><h2>المزيد</h2>${lrows()}</div>`);
+  setAv($("av"), p); $("nm").textContent = p.username;
+  [$("av"), $("nm")].forEach(e => { e.style.cursor = "pointer"; e.onclick = () => go("?p=" + p.slug); }); $("lnk").textContent = link;
+  const cp = async b => { try{ await navigator.clipboard.writeText(link); b.textContent = "تم النسخ ✓"; }catch(e){ b.textContent = "انسخ الرابط يدويًا"; } };
+  $("copy").onclick = () => cp($("copy"));
+  $("share").onclick = () => navigator.share ? navigator.share({ title: N(), text: SHARE_TXT, url: link }).catch(()=>{}) : cp($("share"));
+  $("qrb").onclick = () => qrShow(link);
+  ["copy","share","qrb"].forEach(id => $(id).addEventListener("click", () => LS.set("shared", true)));
+  window._me = { slug: p.slug, username: p.username };
+  if(isAdmin) $("adm").onclick = () => go("?admin");
+  await wireBar(user);
+  reload = () => loadMsgs(user);
+  loadMsgs(user); loadSent();
+}
+
+function msgCard(m, user, main){
+  const d = mk("div","msg"); if(main) d.id = "m" + m.id;
+  if(m.fresh) d.appendChild(mk("span","new","جديدة"));
+  if(m.sender_name) d.appendChild(mk("small","from","من: " + m.sender_name));
+  const KMAP = { "نصيحة":"book", "مصارحة":"eye", "اعتذار":"leaf", "تذكير بالخير":"sun" };
+  if(m.kind && KMAP[m.kind]){ const kb = mk("span","kbd"); kb.innerHTML = ic(KMAP[m.kind]) + " " + esc(m.kind); d.appendChild(kb); }
+  d.appendChild(mk("p","sel", m.body));
+  if(m.reply) d.appendChild(mk("p","rep","ردّك: " + m.reply));
+  d.appendChild(mk("small", null, fmt(m.created_at) + (m.is_public ? " • منشورة في صفحتك" : " • خاصة")));
+  const row = mk("div");
+  const up = async f => { await db.from("messages").update(f).eq("id", m.id); loadMsgs(user); };
+  const st = mkb("sbtn ghost", m.starred ? "unstar" : "star", m.starred ? "إزالة التمييز" : "تمييز"); st.onclick = () => up({ starred: !m.starred });
+  const pub = mkb("sbtn ghost", m.is_public ? "unpub" : "globe", m.is_public ? "إلغاء النشر" : "نشر في صفحتي"); pub.onclick = () => up({ is_public: !m.is_public });
+  const rp = mkb("sbtn ghost","reply","رد");
+  rp.onclick = ()=>{
+    rp.disabled = true;
+    const ta = mk("textarea"); ta.rows = 3; ta.maxLength = 1000; ta.placeholder = "اكتب ردّك"; ta.value = m.reply || "";
+    const sv = mk("button","sbtn","حفظ الرد"); sv.onclick = () => up({ reply: ta.value.trim() || null });
+    d.append(ta, sv);
+  };
+  const del = mkb("sbtn red","trash","حذف");
+  del.onclick = async()=>{ if(!confirm("هل تريد حذف هذه الرسالة؟")) return; await db.from("messages").delete().eq("id", m.id); loadMsgs(user); };
+  const blk = mkb("sbtn ghost","ban","حظر المرسل");
+  blk.onclick = async()=>{ if(!confirm("حظر هذا المرسل من مراسلتك؟ لن تُكشف هويته.")) return; const r = await db.rpc("block_sender", { mid: m.id }); toast(r.error ? "تعذّر تنفيذ الحظر" : "تم تنفيذ الحظر. إذا كان المرسل غير مسجّل فلا يمكن حظره."); };
+  row.append(st, pub, rp, ...(m.sender_name ? [blk] : []), del);
+  if(m.is_public){ const sh = mkb("sbtn ghost","image","مشاركة كصورة"); sh.onclick = () => shareCard(m); row.append(sh); }
+  d.appendChild(row);
+  return d;
+}
+
+async function loadMsgs(user){
+  const { data, error } = await db.from("messages").select("id,to_user,body,sender_name,is_public,reply,created_at,read_at,starred,kind").eq("to_user", user.id).order("created_at",{ascending:false});
+  const box = $("list"); if(!box) return; box.innerHTML = "";
+  if(error) return box.textContent = "تعذّر تحميل الرسائل";
+  $("cnt").textContent = data.length;
+  window._st = Object.assign(window._st || {}, { msgs: data.length, pubs: data.filter(m => m.is_public).length, replies: data.filter(m => m.reply).length }); drawStats();
+  const ids = data.filter(m => !m.read_at).map(m => m.id);
+  data.forEach(m => m.fresh = !m.read_at);
+  const fl = $("flist"), fb = $("fbox"); fl.innerHTML = "";
+  const fav = data.filter(m => m.starred);
+  fb.hidden = !fav.length;
+  fav.forEach(m => fl.appendChild(msgCard(m, user)));
+  if(!data.length) return void (box.innerHTML = `<div class="ok"><b>شارك رابطك لتصلك أول رسالة</b><small class="tag">انشره في ستوري إنستغرام أو أي مكان، وسيصلك أصدقاؤك.</small></div>`);
+  data.forEach(m => box.appendChild(msgCard(m, user, true)));
+  const hm = location.hash.match(/^#m(\d+)$/); if(hm){ const t = $("m" + hm[1]); if(t){ t.scrollIntoView({ block:"center" }); t.classList.add("flash"); } history.replaceState(null, "", location.pathname + location.search); }
+  if(ids.length){ await db.from("messages").update({ read_at: new Date().toISOString() }).in("id", ids); db.from("notifications").update({ read:true }).eq("user_id", user.id).eq("kind","message").then(()=>setBadge(0), ()=>{}); }
+}
+
+async function loadSent(){
+  const box = $("sent"); if(!box) return;
+  const { data, error } = await db.rpc("my_sent");
+  box.innerHTML = "";
+  if(error) return box.textContent = "تعذّر التحميل";
+  if(!data.length) return box.textContent = "لم ترسل رسائل بعد.";
+  data.forEach(m => {
+    const d = mk("div","msg");
+    d.appendChild(mk("p", null, "إلى: " + m.to_username));
+    d.appendChild(mk("small", null, (m.read_at ? "قرأها المستلم" : "لم يقرأها المستلم بعد") + " • " + fmt(m.created_at)));
+    if(m.read_at){ const h = mkb("sbtn ghost","unpub","إزالة من القائمة"); h.onclick = async()=>{ await db.rpc("hide_sent", { mid: m.id }); loadSent(); }; d.appendChild(mk("div")).appendChild(h); }
+    box.appendChild(d);
+  });
+}
+
+async function notifPage(user){
+  el(`${BAR()}${HOME}<div class="glass"><div class="top"><h2>الإشعارات</h2><a class="hl" href="?privacy#notif">الإعدادات</a></div><div id="nl2">${SKEL}</div></div>`);
+  await wireBar(user);
+  const { data } = await db.from("notifications").select("id,kind,ref,link,body,read,created_at").eq("user_id", user.id).order("created_at",{ascending:false}).limit(50);
+  const box = $("nl2"); box.innerHTML = "";
+  if(!data || !data.length) box.textContent = "لا توجد إشعارات.";
+  (data || []).forEach(n => {
+    const d = mk("div","msg nitem"); if(!n.read) d.appendChild(mk("span","new","جديد"));
+    const isMsg = n.kind === "message";
+    if(isMsg){ d.classList.add("envl"); d.insertAdjacentHTML("afterbegin", '<span class="envi">' + ic("lock") + '</span>'); }
+    d.appendChild(mk("p", null, isMsg ? "وصلتك رسالة من شخص ما" : n.body));
+    const f = n.ref ? () => go("?login#m" + n.ref) : n.link ? () => go(n.link) : (n.kind === "delete" ? () => go("?profile") : null);
+    d.appendChild(mk("small", null, fmt(n.created_at) + (f ? " • اضغط للفتح" : "")));
+    if(f) d.onclick = f; else d.style.cursor = "default";
+    box.appendChild(d); });
+  await db.from("notifications").update({ read:true }).eq("user_id", user.id).eq("read", false); setBadge(0);
+}
+
+async function editPage(user){
+  const p = await ensureProfile(user);
+  if(!p) return go("");
+  if(p.banned) return bannedPage();
+  const lock = t => { if(!t) return ""; const nx = new Date(t); nx.setMonth(nx.getMonth() + 2); return nx > new Date() ? "يمكنك التغيير بعد: " + nx.toLocaleDateString("ar-u-nu-latn") : ""; };
+  const l1 = lock(p.username_changed_at), l2 = lock(p.slug_changed_at);
+  const dr = (await db.from("deletion_requests").select("status").eq("user_id", user.id).maybeSingle()).data;
+  el(`${BAR()}${HOME}<div class="hero" style="padding:8px 0 0"><h1 class="brand" style="font-size:40px">حسابي</h1></div>${quickRow(p.slug, "edit")}
+  <div class="glass sm"><h2>اسم المستخدم</h2><p class="tag">الحالي: ${esc(p.username)} — يمكن تغييره مرة كل شهرين.</p>
+    <input id="nu" maxlength="25" placeholder="الاسم الجديد" ${l1 ? "disabled" : ""}>
+    <button id="sn" ${l1 ? "disabled" : ""}>حفظ الاسم</button><div class="note" id="n1">${l1}</div></div>
+  <div class="glass sm"><h2>رابطك الخاص</h2><p class="tag" dir="ltr" style="text-align:right">${esc(linkOf(p.slug))}</p><p class="tag">يمكن تغييره مرة كل شهرين، وسيتوقف الرابط القديم.</p>
+    <input id="ns2" dir="ltr" maxlength="25" placeholder="رابط جديد" ${l2 ? "disabled" : ""}>
+    <button id="sl" ${l2 ? "disabled" : ""}>حفظ الرابط</button><div class="note" id="n4">${l2}</div></div>
+  <div class="glass sm"><h2>صورتي الرمزية</h2><p class="tag">نبذتك وعمرك ومكان إقامتك تعدّلها من صفحتك الشخصية.</p>
+    <div class="lbl">الصورة الرمزية</div><div class="pick" id="pk"></div><div class="sw" id="sw"></div>
+    <button id="spf">حفظ الصورة</button><div class="note" id="n6"></div></div>
+  <div class="glass sm"><h2>الجنس</h2><div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>
+    <button id="sgd">حفظ الجنس</button><div class="note" id="n2"></div></div>
+  <div class="glass sm"><h2>كلمة المرور</h2><input id="np" type="password" placeholder="كلمة المرور الجديدة (8 أحرف على الأقل)" dir="ltr" autocomplete="new-password">
+    <button id="sp">تغيير كلمة المرور</button><div class="note" id="n3"></div></div>
+  <div class="glass sm"><h2>حذف الحساب</h2>
+    ${dr && dr.status === "pending" ? `<p class="tag">تم إرسال طلبك، يرجى الانتظار حتى يوافق فريق العمل على حذف حسابك.</p>` : `${dr ? `<p class="tag">تم رفض طلبك السابق. يمكنك إرسال طلب جديد.</p>` : `<p class="tag">لن يُحذف حسابك إلا بعد موافقة فريق العمل. اكتب سبب الحذف.</p>`}
+    <textarea id="dr" rows="3" maxlength="500" placeholder="سبب حذف الحساب"></textarea><button class="red" id="sd">إرسال طلب الحذف</button>`}
+    <div class="note" id="n5"></div></div>`);
+  await wireBar(user);
+  let selIcon = "", selColor = 0; { const a = avOf(p.avatar); if(a){ selIcon = a.icon; selColor = AV_COLORS.indexOf(a.color); } }
+  const drawPick = () => {
+    $("pk").innerHTML = ""; $("sw").innerHTML = "";
+    const l0 = mk("div", selIcon ? "" : "on", (p.username || "؟")[0]); l0.onclick = () => { selIcon = ""; drawPick(); }; $("pk").appendChild(l0);
+    AV_ICONS.forEach(n => { const d = mk("div", selIcon === n ? "on" : ""); d.innerHTML = ic(n); d.onclick = () => { selIcon = n; drawPick(); }; $("pk").appendChild(d); });
+    AV_COLORS.forEach((c, i) => { const d = mk("div", selColor === i ? "on" : ""); d.style.background = c; d.onclick = () => { selColor = i; drawPick(); }; $("sw").appendChild(d); });
+  };
+  drawPick();
+  $("spf").onclick = async()=>{
+    const r = await db.from("profiles").update({ avatar: selIcon ? selIcon + ":" + selColor : null }).eq("id", user.id);
+    say("n6", r.error ? ((r.error.message || "").includes("BADWORD") ? "النص يحتوي على كلمات غير مسموحة" : "تعذّر الحفظ") : "تم الحفظ", !r.error);
+  };
+  let gender = "";
+  $("gen").onclick = e => { const c = e.target.closest(".chip"); if(!c) return; gender = c.dataset.g; [...$("gen").children].forEach(x => x.classList.toggle("on", x === c)); };
+  $("sn").onclick = async()=>{
+    const u = normName($("nu").value);
+    if(!nameOk(u)) return say("n1", NAME_MSG);
+    if(u === p.username) return say("n1","هذا هو اسمك الحالي");
+    const r = await db.from("profiles").update({ username: u }).eq("id", user.id);
+    if(r.error){ const m = r.error.message || ""; return say("n1", m.includes("NAMELIMIT") ? "لا يمكن تغيير الاسم قبل مرور شهرين" : r.error.code === "23505" ? "اسم المستخدم محجوز" : "تعذّر تغيير الاسم"); }
+    say("n1","تم تغيير الاسم", true); setTimeout(() => go("?profile"), 800);
+  };
+  $("sl").onclick = async()=>{
+    const s = $("ns2").value.trim().toLowerCase();
+    if(!slugOk(s)) return say("n4", SLUG_MSG);
+    if(s === p.slug) return say("n4","هذا هو رابطك الحالي");
+    const r = await db.from("profiles").update({ slug: s }).eq("id", user.id);
+    if(r.error){ const m = r.error.message || ""; return say("n4", m.includes("SLUGLIMIT") ? "لا يمكن تغيير الرابط قبل مرور شهرين" : r.error.code === "23505" ? "هذا الرابط محجوز" : "تعذّر تغيير الرابط"); }
+    say("n4","تم تغيير الرابط", true); setTimeout(() => go("?profile"), 800);
+  };
+  $("sgd").onclick = async()=>{
+    if(!gender) return say("n2","اختر الجنس");
+    const r = await db.from("profiles").update({ gender }).eq("id", user.id);
+    say("n2", r.error ? "تعذّر الحفظ" : "تم الحفظ", !r.error);
+  };
+  $("sp").onclick = async()=>{
+    const v = $("np").value;
+    if(v.length < 8) return say("n3","كلمة المرور يجب أن تكون 8 أحرف على الأقل");
+    const r = await db.auth.updateUser({ password: v });
+    say("n3", r.error ? arErr(r.error) : "تم تغيير كلمة المرور", !r.error);
+  };
+  if($("sd")) $("sd").onclick = async()=>{
+    const reason = $("dr").value.trim();
+    if(!reason) return say("n5","اكتب سبب الحذف");
+    const r = dr ? await db.from("deletion_requests").update({ reason, status:"pending" }).eq("user_id", user.id) : await db.from("deletion_requests").insert({ user_id: user.id, reason });
+    if(r.error) return say("n5","تعذّر إرسال الطلب");
+    say("n5","تم إرسال طلبك، انتظر موافقة فريق العمل", true); setTimeout(() => go("?profile"), 1200);
+  };
+}
+
+function reportUI(box, s, targetId){
+  box.innerHTML = `<p class="tag">اختر سبب الإبلاغ:</p><div class="chips" id="rs"></div><textarea id="rd" rows="3" maxlength="300" placeholder="اشرح سبب الإبلاغ (اختياري)"></textarea><button id="rsend" disabled>إرسال البلاغ</button><div class="note" id="rn"></div>`;
+  let reason = "";
+  ["إساءة","انتحال","إزعاج"].forEach(x => { const c = mk("div","chip",x); c.onclick = () => { reason = x; [...$("rs").children].forEach(y => y.classList.toggle("on", y === c)); $("rsend").disabled = false; }; $("rs").appendChild(c); });
+  $("rsend").onclick = async()=>{
+    $("rsend").disabled = true;
+    const r = await db.from("reports").insert({ reporter_id: s.user.id, reported_id: targetId, reason, details: $("rd").value.trim() || null });
+    if(r.error){ $("rsend").disabled = false; const m = r.error.message || ""; return say("rn", r.error.code === "23505" ? "سبق أن أبلغت عن هذا الحساب" : m.includes("TOOFAST") ? "أرسلت بلاغات كثيرة، حاول لاحقًا" : "تعذّر إرسال البلاغ"); }
+    say("rn","تم إرسال البلاغ، شكرًا لك", true);
+  };
+}
+async function renderPub(box, ownerId, s){
+  const pm = await db.from("public_messages").select("id,body,reply,created_at").eq("to_user", ownerId).order("created_at",{ascending:false}).limit(20);
+  if(!pm.data || !pm.data.length) return;
+  const ids = pm.data.map(m => m.id), cnts = {}, mine = new Set();
+  ((await db.rpc("thanks_counts", { uid: ownerId })).data || []).forEach(x => cnts[x.message_id] = Number(x.cnt));
+  if(s) ((await db.from("message_thanks").select("message_id").eq("user_id", s.user.id).in("message_id", ids)).data || []).forEach(x => mine.add(x.message_id));
+  const g = mk("div","glass sm"); g.appendChild(mk("h2", null, "رسائل منشورة"));
+  pm.data.forEach(m => {
+    const d = mk("div","msg"); d.appendChild(mk("p", null, m.body)); if(m.reply) d.appendChild(mk("p","rep","الرد: " + m.reply));
+    const b = mk("button","th");
+    const draw = () => { b.className = "th" + (mine.has(m.id) ? " on" : ""); b.innerHTML = ic("thumb") + " شكرًا " + (cnts[m.id] || 0).toLocaleString("en"); };
+    draw();
+    b.onclick = async()=>{
+      if(!s){ toast("سجّل الدخول لتشكر صاحب الرسالة"); return; }
+      const had = mine.has(m.id);
+      const r = had ? await db.from("message_thanks").delete().eq("user_id", s.user.id).eq("message_id", m.id) : await db.from("message_thanks").insert({ message_id: m.id, user_id: s.user.id });
+      if(r.error){ toast("تعذّر تنفيذ العملية"); return; }
+      if(had){ mine.delete(m.id); cnts[m.id] = Math.max(0, (cnts[m.id] || 1) - 1); } else { mine.add(m.id); cnts[m.id] = (cnts[m.id] || 0) + 1; }
+      draw();
+    };
+    d.appendChild(b); g.appendChild(d);
+  });
+  box.appendChild(g);
+}
+function edPanel(u, mine){
+  const old = $("edp"); if(old){ old.remove(); return; }
+  const box = mk("div","glass"); box.id = "edp";
+  box.appendChild(mk("h2", null, "تعديل صفحتي"));
+  const cy = new Date().getFullYear();
+  const bio = mk("textarea"); bio.rows = 2; bio.maxLength = 120; bio.value = u.bio || ""; bio.placeholder = "اكتب سطرًا عن نفسك";
+  const hasP = u.prompt !== undefined || mine.prompt !== undefined;
+  const prm = mk("input"); prm.maxLength = 100; prm.value = u.prompt || mine.prompt || ""; prm.placeholder = "مثال: انصحني بشيء";
+  const yr = mk("input"); yr.type = "number"; yr.inputMode = "numeric"; yr.dir = "ltr"; yr.min = cy - 100; yr.max = cy - 13; yr.placeholder = "مثال: " + (cy - 25); yr.value = mine.birth_year || "";
+  const loc = mk("input"); loc.maxLength = 40; loc.placeholder = "مثال: عين الدفلى، الجزائر"; loc.value = mine.location || "";
+  const nt = mk("div","note"), sv = mk("button", null, "حفظ التعديلات");
+  box.appendChild(mk("div","lbl","نبذة عنك (120 حرفًا كحد أقصى)")); box.appendChild(bio);
+  if(hasP){ box.appendChild(mk("div","lbl","سؤال لزوّار صفحتك (اختياري)")); box.appendChild(prm); }
+  box.appendChild(mk("div","lbl","سنة الميلاد (لا يراها غيرك إلا إذا سمحت)")); box.appendChild(yr);
+  box.appendChild(mk("div","lbl","مكان الإقامة")); box.appendChild(loc);
+  box.append(sv, nt);
+  sv.onclick = async()=>{
+    const y = yr.value.trim(), year = y ? Number(y) : null;
+    if(year !== null && !(year >= cy - 100 && year <= cy - 13)) { nt.textContent = "سنة الميلاد غير صحيحة، العمر المسموح من 13 إلى 100 سنة"; return; }
+    const patch = { bio: bio.value.trim() || null, birth_year: year, location: loc.value.trim() || null };
+    if(hasP) patch.prompt = prm.value.trim() || null;
+    sv.disabled = true;
+    const r = await db.from("profiles").update(patch).eq("id", u.id);
+    sv.disabled = false;
+    if(r.error){ const m = r.error.message || ""; nt.className = "note"; nt.textContent = m.includes("BADWORD") ? "النص يحتوي على كلمات غير مسموحة" : m.includes("BADYEAR") ? "سنة الميلاد غير مقبولة" : "تعذّر الحفظ، حاول لاحقًا"; return; }
+    nt.className = "note good"; nt.textContent = "تم الحفظ";
+    setTimeout(() => go("?p=" + u.slug), 600);
+  };
+  $("ed").closest(".glass").insertAdjacentElement("afterend", box);
+  box.scrollIntoView({ block: "start", behavior: "smooth" });
+}
+
+async function profilePage(s){
+  if(!s){
+    el(`${TOPOUT()}${HOME}<div class="glass sm" style="text-align:center;margin-top:22px"><div class="logo">${ic("lock")}</div><h2 style="margin:14px 0 6px;color:var(--txt)">الصفحة الشخصية للمسجّلين فقط</h2><p class="tag">يجب التسجيل أولًا لعرض الصفحات الشخصية.</p>${on("allow_signup") ? `<button id="go">أنشئ حسابك</button>` : ""}<button class="ghost" id="go2">تسجيل الدخول</button></div>`);
+    wireOut(); if($("go")) $("go").onclick = () => go("?signup"); $("go2").onclick = () => go("?login"); return;
+  }
+  const key = (params.get("p") || "").trim().toLowerCase(), guest = params.has("v");
+  if(!db){ el(`${TOPOUT()}${HOME}<div class="glass sm" style="text-align:center;margin-top:22px"><p class="tag">تعذّر الاتصال بالخادم الآن، حاول تحديث الصفحة.</p></div>`); wireOut(); return; }
+  const r = await db.rpc("profile_public", { pslug: key });
+  const u = r.data && r.data[0];
+  if(!u){ el(`${BAR()}${HOME}<div class="glass sm center" style="margin-top:22px"><p class="sub">${r.error ? "تعذّر تحميل الصفحة، حاول مرة أخرى" : "هذا المستخدم غير موجود أو غير متاح"}</p></div>`); wireBar(s.user); return; }
+  const me = s.user.id === u.id, full = me && !guest;
+  const stat = (n, l) => `<div><b>${Number(n || 0).toLocaleString("en")}</b><small>${l}</small></div>`;
+  el(`${BAR()}${HOME}${guest ? `<div class="warn center">أنت تشاهد صفحتك كما يراها غيرك. <a class="hl" href="?p=${esc(u.slug)}">رجوع</a></div>` : ""}${full ? quickRow(u.slug, "page") : ""}
+  <div class="ig"><div class="avatar" id="av"></div><div class="igr"><div class="who" id="who"></div><div class="igs">${stat(u.pubs, "منشورة")}${stat(u.replies, "ردود")}</div></div></div>
+  <p class="tag center" id="bio"></p>
+  <div class="infos" id="infos"></div>
+  <div class="glass sm center">${full ? `<button id="ed" class="bigbtn">${ic("edit")} تعديل</button><button class="ghost" id="asg">${ic("eye")} عرض كزائر</button>` : `<button id="sendb" class="bigbtn">${ic("send")} أرسل رسالة مجهولة</button>`}</div>
+  <div id="pub"></div>
+  ${!me && on("show_reports") ? `<div class="glass sm center"><button class="ghost sbtn" id="rp" style="margin:0">إبلاغ عن هذا الحساب</button><div id="rbox"></div></div>` : ""}`);
+  wireBar(s.user); setAv($("av"), u); $("who").textContent = u.username; $("bio").textContent = u.bio || "";
+  [["cal", u.member_since ? "عضو منذ " + new Date(u.member_since).toLocaleDateString("ar-u-nu-latn") : ""], ["pin", u.location || ""], ["user", u.age != null ? u.age + " سنة" : ""]].forEach(([i, t]) => {
+    if(!t) return; const d = mk("span","inf"); d.innerHTML = ic(i); d.appendChild(document.createTextNode(" " + t)); $("infos").appendChild(d);
+  });
+  if(full){ $("ed").onclick = async () => edPanel(u, ((await db.rpc("my_profile")).data || [])[0] || {}); $("asg").onclick = () => go("?p=" + u.slug + "&v=1"); }
+  else {
+    $("sendb").onclick = () => go("?u=" + u.slug);
+    if(!me){
+      if($("rp")) $("rp").onclick = () => reportUI($("rbox"), s, u.id);
+    }
+  }
+  renderPub($("pub"), u.id, s);
+}
+async function privacyPage(user){
+  const p = await ensureProfile(user);
+  if(!p) return go("");
+  if(p.banned) return bannedPage();
+  const mp = ((await db.rpc("my_profile")).data || [])[0] || {};
+  const priv = Object.assign({ member_since: true, location: false, age: false }, mp.privacy || {});
+  const nf = Object.assign({ message: true, reply: true }, mp.notif_prefs || {});
+  const yr = new Date().getFullYear();
+  const row = (id, title, desc, on_) => `<div class="sw2"><div><b>${esc(title)}</b><small>${esc(desc)}</small></div><label class="tg"><input type="checkbox" id="${id}" ${on_ ? "checked" : ""}><i></i></label></div>`;
+  el(`${BAR()}${HOME}${quickRow(p.slug, "privacy")}<div class="hero" style="padding:8px 0 4px"><h1 class="brand" style="font-size:clamp(28px,8vw,38px)">الخصوصية والإشعارات</h1></div>
+  <div class="glass"><h2>ما يراه الآخرون عنك الآن</h2><div id="sum"></div></div>
+    <div class="glass"><h2>ما الذي يظهر في صفحتك</h2>
+    ${row("pv_ms", "عضو منذ", "يظهر تاريخ انضمامك إلى الموقع في صفحتك.", priv.member_since)}
+    ${row("pv_loc", "الإقامة", "تظهر مدينتك وبلدك في صفحتك.", priv.location)}
+    ${row("pv_age", "العمر", "يظهر عمرك فقط، وليس سنة ميلادك.", priv.age)}</div>
+  <div class="glass" id="notif"><h2>الإشعارات</h2>
+    ${row("nf_msg", "رسالة جديدة", "يصلك إشعار عند وصول رسالة.", nf.message)}
+    ${row("nf_rep", "رد على رسالتك", "يصلك إشعار عندما يردّ صاحب الصفحة على رسالة أرسلتها وأنت مسجّل.", nf.reply)}
+    </div>
+  <button id="psave">حفظ التغييرات</button><div class="note" id="pn"></div>
+  <div class="glass"><h2>المرسلون المحظورون</h2><p class="tag">لا نكشف هوية أي مرسل. يمكنك إلغاء الحظر في أي وقت.</p><div id="bl"></div></div>`);
+  await wireBar(user);
+  const drawSum = () => {
+    const box = $("sum"); box.innerHTML = "";
+    const loc = String(mp.location || "").trim(), yv = mp.birth_year ? String(mp.birth_year) : "";
+    const items = [["الاسم والصورة الرمزية", "ظاهر", true], ["النبذة", p.bio ? "ظاهرة" : "غير مضافة", !!p.bio],
+      ["عضو منذ", $("pv_ms").checked ? "ظاهر" : "مخفي", $("pv_ms").checked], ["الإقامة", !loc ? "غير مضافة" : $("pv_loc").checked ? "ظاهرة" : "مخفية", !!loc && $("pv_loc").checked],
+      ["العمر", !yv ? "غير مضاف" : $("pv_age").checked ? "ظاهر" : "مخفي", !!yv && $("pv_age").checked], ["الرسائل المنشورة وردودها", "ظاهرة", true]];
+    items.forEach(([l, t, v]) => { const d = mk("div","stat"); d.append(mk("span", null, l), mk("b", v ? "vis" : "hid", t)); box.appendChild(d); });
+  };
+  ["pv_ms","pv_loc","pv_age"].forEach(id => { $(id).addEventListener("input", drawSum); $(id).addEventListener("change", drawSum); });
+  drawSum();
+  const drawBlocks = async () => {
+    const box = $("bl"); const r = await db.rpc("my_blocks"); box.innerHTML = "";
+    const list = r.data || [];
+    if(!list.length){ box.textContent = "لا يوجد مرسلون محظورون."; return; }
+    list.forEach(b => { const d = mk("div","stat"); d.append(mk("span", null, "مرسل محظور • " + fmt(b.created_at))); const x = mk("button","sbtn ghost","إلغاء الحظر"); x.onclick = async()=>{ x.disabled = true; await db.rpc("unblock", { bid: b.id }); drawBlocks(); }; d.appendChild(x); box.appendChild(d); });
+  };
+  drawBlocks();
+  $("psave").onclick = async()=>{
+    const r = await db.from("profiles").update({
+      privacy: { member_since: $("pv_ms").checked, location: $("pv_loc").checked, age: $("pv_age").checked },
+      notif_prefs: { message: $("nf_msg").checked, reply: $("nf_rep").checked } }).eq("id", user.id);
+    if(r.error){ const m = r.error.message || ""; return say("pn", m.includes("BADWORD") ? "النص يحتوي على كلمات غير مسموحة" : m.includes("BADYEAR") ? "سنة الميلاد غير مقبولة" : "تعذّر الحفظ"); }
+    say("pn","تم الحفظ", true);
+  };
+  if(location.hash === "#notif") $("notif").scrollIntoView({ block:"start" });
+}
+async function sendPage(key){
+  const p = await db.from("profiles").select("id,username,slug,banned,avatar").eq("slug", key).maybeSingle();
+  if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
+  const s = await getSession(), mx = MAXLEN();
+  const KINDS = [["نصيحة","book"],["مصارحة","eye"],["اعتذار","leaf"],["تذكير بالخير","sun"]];
+  let kind = "";
+  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><a class="pl" id="pl" title="عرض الصفحة الشخصية"><div class="avatar" id="av"></div><div class="who" id="who"></div></a><p class="tag">قل ما في قلبك بلطف وصدق، ولن يعرف أحد من أنت إلا إذا اخترت ذلك. والكلمة الطيبة صدقة</p></div>
+  <div class="glass sm send" id="box">
+    <div class="lbl">نوع الرسالة (اختياري)</div><div class="chips kchips" id="kinds"></div>
+    <textarea id="body" rows="6" maxlength="${mx}" placeholder="اكتب رسالتك هنا"></textarea>
+    ${s ? `<label class="chk"><input type="checkbox" id="show"> أرسلها باسمي</label>` : ""}
+    <button id="send" class="bigbtn">${ic("send")} إرسال</button><div class="note" id="note"></div></div>`);
+  if(s) wireBar(s.user);
+  setAv($("av"), p.data); $("who").textContent = p.data.username;
+  $("pl").onclick = () => go("?p=" + p.data.slug);
+  KINDS.forEach(([label, icon]) => {
+    const c = mk("div","chip"); c.innerHTML = ic(icon) + " " + esc(label);
+    c.onclick = () => { kind = kind === label ? "" : label; [...$("kinds").children].forEach(x => x.classList.toggle("on", x === c && kind === label)); };
+    $("kinds").appendChild(c);
+  });
+  $("send").onclick = async()=>{
+    const t = $("body").value.trim();
+    if(!t) return say("note","اكتب رسالتك أولًا");
+    $("send").disabled = true;
+    const r = await db.from("messages").insert({ to_user: p.data.id, body: t, kind: kind || null, sender_name: (s && $("show") && $("show").checked) ? "show" : null });
+    $("send").disabled = false;
+    if(r.error){ const m = r.error.message || ""; return say("note", m.includes("BANNED") ? "هذا المستخدم غير متاح" : m.includes("TOOFAST") ? "وصلت رسائل كثيرة الآن، حاول بعد قليل" : m.includes("BADWORD") ? "رسالتك تحتوي على كلمات غير مسموحة" : m.includes("NOVISITOR") ? "الإرسال متاح للمسجّلين فقط حاليًا" : m.includes("TOOLONG") ? "الرسالة أطول من المسموح" : m.includes("BLOCKED") ? "لا يمكن إرسال الرسالة إلى هذا الحساب حاليًا" : "حدث خطأ، حاول مرة أخرى"); }
+    const cta = s ? "" : (on("allow_signup") ? `<div class="cta"><b>تريد أن يرسل لك الناس رسائل مثلها؟</b><ul><li>تحصل على رابطك الخاص لتنشره.</li><li>تعرف إن كان المستلم قرأ رسائلك التي ترسلها وأنت مسجّل.</li><li>أنت من يقرر ما يُنشر من رسائلك.</li></ul><button id="cta">أنشئ حسابك في دقيقة</button></div>` : "");
+    $("box").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>وصلت رسالتك</b></div>${cta}<button class="ghost" id="again">إرسال رسالة أخرى</button>`;
+    if($("cta")) $("cta").onclick = () => go("?signup");
+    $("again").onclick = () => sendPage(key);
+  };
+}
+
+// ===== لوحة الإدارة =====
+const ADM = { accs: null };
+const accounts = async force => { if(!ADM.accs || force){ const r = await db.rpc("admin_profiles"); if(r.error) throw r.error; ADM.accs = r.data || []; } return ADM.accs; };
+const nameMap = async () => { const m = {}; (await accounts()).forEach(a => m[a.id] = a.username); return m; };
+const act = async (b, fn) => { b.disabled = true; try{ await fn(); }catch(e){ toast("حدث خطأ، حاول مرة أخرى"); } b.disabled = false; };
+async function adminTab(btn, fn){
+  [...$("tabs").children].forEach(b => b.classList.toggle("on", b === btn));
+  const box = $("ad"); box.innerHTML = SKEL;
+  try{ await fn(); }catch(e){ box.innerHTML = ""; const r = mk("button","sbtn","إعادة المحاولة"); r.onclick = () => adminTab(btn, fn); box.append(mk("p","note","تعذّر تحميل هذا القسم."), r); }
+}
+const csv = (rows, name) => {
+  const q = v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const txt = "\ufeff" + rows.map(r => r.map(q).join(",")).join("\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([txt], { type:"text/csv;charset=utf-8" })); a.download = name; a.click();
+};
+async function adminPage(){
+  document.body.classList.add("sel-ok");
+  if((await db.rpc("is_admin")).data !== true){ el(`${HOME}<div class="glass"><p class="sub">لا تملك صلاحية الدخول إلى هذه الصفحة</p></div>`); return; }
+  el(`${HOME}<div class="hero" style="padding:8px 0 0"><h1 class="brand" style="font-size:40px">لوحة الإدارة</h1></div><div class="tabs" id="tabs"></div><div class="glass" id="ad">${SKEL}</div>`);
+  [["الإحصائيات",aStats],["الحسابات",aAcc],["الرسائل",aMsg],["البلاغات",aRep],["طلبات الحذف",aDel],["الاقتراحات",aSug],["الإعلان",aAnn],["إشعار للجميع",aCast],["إعدادات الموقع",aSet],["المحظورون",aBlocks],["الكلمات الممنوعة",aWords],["المشرفون",aAdm],["أدوات",aTools]].forEach(([t,f]) => { const b = mk("button","sbtn ghost",t); b.onclick = () => adminTab(b, f); $("tabs").appendChild(b); });
+  adminTab($("tabs").firstChild, aStats);
+}
+async function aStats(){
+  const d0 = new Date(); d0.setHours(0,0,0,0); const iso = d0.toISOString(), td = q => q.gte("created_at", iso);
+  const r = await Promise.allSettled([cnt("profiles"),cnt("profiles",td),cnt("profiles",q=>q.eq("banned",true)),cnt("messages"),cnt("messages",td),cnt("suggestions"),cnt("reports"),cnt("deletion_requests",q=>q.eq("status","pending"),"user_id"),cnt("visits"),cnt("visits",td),cnt("visits",q=>td(q).eq("device","جوال")),cnt("visits",q=>td(q).eq("device","حاسوب"))]);
+  const L = ["عدد الحسابات","حسابات جديدة اليوم","الحسابات الموقوفة","عدد الرسائل","رسائل اليوم","عدد الاقتراحات","عدد البلاغات","طلبات حذف معلّقة","إجمالي الزيارات","زيارات اليوم","زيارات اليوم من الجوال","زيارات اليوم من الحاسوب"];
+  const box = $("ad"); box.innerHTML = "";
+  L.forEach((l,i) => { const x = mk("div","stat"); x.append(mk("span", null, l), mk("b", null, r[i].status === "fulfilled" ? r[i].value.toLocaleString("en") : "—")); box.appendChild(x); });
+  const d7 = new Date(); d7.setDate(d7.getDate() - 6); d7.setHours(0,0,0,0);
+  const [mv, vv] = await Promise.all([
+    db.from("messages").select("created_at").gte("created_at", d7.toISOString()).order("created_at"),
+    db.from("visits").select("created_at").gte("created_at", d7.toISOString()).order("created_at")
+  ]);
+  if(!mv.error && !vv.error){
+    const days = [...Array(7)].map((_, i) => { const d = new Date(d7); d.setDate(d7.getDate() + i); return d; });
+    const bin = rows => days.map(d => {
+      const a = new Date(d); a.setHours(0,0,0,0); const b = new Date(d); b.setHours(23,59,59,999);
+      return rows.filter(x => { const t = new Date(x.created_at); return t >= a && t <= b; }).length;
+    });
+    const mm = bin(mv.data || []), vi = bin(vv.data || []), mx = Math.max(1, ...mm, ...vi);
+    const bar = (arr, cls) => `<div class="chart ${cls}">${arr.map((v, i) => `<div class="cbar" title="${days[i].toLocaleDateString("ar-u-nu-latn", { weekday:"long" })}: ${v}"><i style="height:${Math.round(v / mx * 100)}%"></i><span>${["أحد","اثنين","ثلاثاء","أربعاء","خميس","جمعة","سبت"][days[i].getDay()]}</span></div>`).join("")}</div>`;
+    box.insertAdjacentHTML("beforeend", `<div class="glass" style="margin-top:14px"><h2>آخر 7 أيام</h2><small class="tag">الرسائل الواردة</small>${bar(mm, "cmsg")}<small class="tag">الزيارات</small>${bar(vi, "cvis")}</div>`);
+  }
+}
+async function aAcc(){
+  const all = await accounts(), box = $("ad"); box.innerHTML = "";
+  const q = mk("input"); q.placeholder = "ابحث بالاسم أو الرابط أو البريد"; box.appendChild(q);
+  let filter = "all";
+  const fbar = mk("div","chips"); [["all","الكل"],["active","النشطة"],["banned","الموقوفة"]].forEach(([k, t]) => { const c = mk("div","chip" + (k === "all" ? " on" : ""), t); c.onclick = () => { filter = k; [...fbar.children].forEach(x => x.classList.toggle("on", x === c)); shown = 40; draw(); }; fbar.appendChild(c); });
+  box.appendChild(fbar);
+  const list = mk("div"); box.appendChild(list);
+  let shown = 40, tm;
+  const refresh = async () => { await accounts(true); aAcc(); };
+  const accRow = a => {
+    const d = mk("div","msg");
+    d.appendChild(mk("p", null, a.username + " — " + (a.gender || "غير محدد") + (a.banned ? " — موقوف" : "")));
+    d.appendChild(mk("small", null, "الرابط: " + a.slug + " • " + new Date(a.created_at).toLocaleDateString("ar-u-nu-latn")));
+    if(a.bio || a.prompt) d.appendChild(mk("small","from","النبذة: " + (a.bio || "—") + " | السؤال: " + (a.prompt || "—")));
+    const row = mk("div");
+    const dt = mk("button","sbtn","التفاصيل"); dt.onclick = () => adminTab($("tabs").children[1], () => aDetail(a));
+    const bn = mk("button","sbtn ghost", a.banned ? "إلغاء الإيقاف" : "إيقاف الحساب");
+    bn.onclick = () => act(bn, async()=>{ const r = await db.from("profiles").update({ banned: !a.banned }).eq("id", a.id); if(r.error) throw r.error; await refresh(); });
+    const rn = mk("button","sbtn ghost","تغيير الاسم");
+    rn.onclick = () => act(rn, async()=>{ const v = prompt("الاسم الجديد:", a.username); if(!v) return; const u = normName(v); if(!nameOk(u)) return toast(NAME_MSG); const r = await db.from("profiles").update({ username: u }).eq("id", a.id); if(r.error) return toast("تعذّر التغيير (قد يكون الاسم محجوزًا)"); await refresh(); });
+    const rs = mk("button","sbtn ghost","تغيير الرابط");
+    rs.onclick = () => act(rs, async()=>{ const v = prompt("الرابط الجديد:", a.slug); if(!v) return; const u = v.trim().toLowerCase(); if(!slugOk(u)) return toast(SLUG_MSG); const r = await db.from("profiles").update({ slug: u }).eq("id", a.id); if(r.error) return toast("تعذّر التغيير (قد يكون الرابط محجوزًا)"); await refresh(); });
+    const dl = mk("button","sbtn red","حذف نهائي");
+    dl.onclick = () => act(dl, async()=>{ if(!confirm("حذف الحساب نهائيًا مع كل رسائله؟")) return; const r = await db.rpc("admin_delete_account", { uid: a.id }); if(r.error) return toast("تعذّر الحذف"); await refresh(); });
+    row.append(dt, bn, rn, rs);
+    if(a.bio || a.prompt){ const cl = mk("button","sbtn ghost","مسح النبذة والسؤال"); cl.onclick = () => act(cl, async()=>{ await db.from("profiles").update({ bio: null, prompt: null }).eq("id", a.id); await refresh(); }); row.append(cl); }
+    row.append(dl); d.appendChild(row); return d;
+  };
+  const draw = () => {
+    list.innerHTML = "";
+    const v = q.value.trim().toLowerCase();
+    const f = all.filter(a => (filter === "all" || (filter === "banned") === !!a.banned) && [a.username, a.slug, a.email, a.bio].some(x => (x || "").toLowerCase().includes(v)));
+    if(!f.length){ list.textContent = "لا توجد نتائج"; return; }
+    f.slice(0, shown).forEach(a => list.appendChild(accRow(a)));
+    if(f.length > shown){ const m = mk("button","ghost","عرض المزيد (" + (f.length - shown).toLocaleString("en") + ")"); m.onclick = () => { shown += 40; draw(); }; list.appendChild(m); }
+  };
+  q.oninput = () => { clearTimeout(tm); tm = setTimeout(() => { shown = 40; draw(); }, 180); };
+  draw();
+}
+async function aDetail(a){
+  const box = $("ad"); box.innerHTML = SKEL;
+  const [msgs, pubs, repIn, repOut, sugs, dr] = await Promise.all([
+    cnt("messages", x => x.eq("to_user", a.id)), cnt("messages", x => x.eq("to_user", a.id).eq("is_public", true)),
+    cnt("reports", x => x.eq("reported_id", a.id)), cnt("reports", x => x.eq("reporter_id", a.id)),
+    cnt("suggestions", x => x.eq("user_id", a.id)),
+    db.from("deletion_requests").select("status").eq("user_id", a.id).maybeSingle()
+  ]);
+  box.innerHTML = "";
+  const back = mk("button","sbtn ghost","رجوع للحسابات"); back.onclick = () => adminTab($("tabs").children[1], aAcc); box.appendChild(back);
+  [["الاسم", a.username],["الرابط", a.slug],["البريد", a.email || "—"],["الجنس", a.gender || "غير محدد"],["الحالة", a.banned ? "موقوف" : "نشط"],
+   ["تاريخ التسجيل", fmt(a.created_at)],["آخر دخول", a.last_sign_in ? fmt(a.last_sign_in) : "—"],["النبذة", a.bio || "—"],["سؤال الصفحة", a.prompt || "—"],
+   ["الرسائل الواردة", msgs],["الرسائل المنشورة", pubs],["بلاغات ضده", repIn],["بلاغات قدّمها", repOut],["اقتراحاته", sugs],
+   ["طلب حذف", dr.data ? (dr.data.status === "pending" ? "معلّق" : "مرفوض") : "لا يوجد"]
+  ].forEach(([l, v]) => { const d = mk("div","stat"); d.append(mk("span", null, l), mk("b", null, String(v))); box.appendChild(d); });
+  const row = mk("div");
+  const op = mk("button","sbtn","فتح صفحته العامة"); op.onclick = () => { const w = window.open(location.pathname + "?u=" + a.slug, "_blank", "noopener"); };
+  const bn = mk("button","sbtn ghost", a.banned ? "إلغاء الإيقاف" : "إيقاف الحساب");
+  bn.onclick = () => act(bn, async()=>{ const r = await db.from("profiles").update({ banned: !a.banned }).eq("id", a.id); if(r.error) throw r.error; a.banned = !a.banned; await aDetail(a); });
+  row.append(op, bn); box.appendChild(row);
+}
+async function aMsg(){
+  const names = await nameMap();
+  const { data } = await db.rpc("admin_messages");
+  const box = $("ad"); box.innerHTML = "";
+  (data || []).forEach(m => {
+    const d = mk("div","msg"); d.append(mk("small","from","إلى: " + (names[m.to_user] || "؟") + " — المرسل: " + (m.sender_id ? (names[m.sender_id] || "؟") : "زائر") + (m.sender_name ? " (أظهر اسمه)" : "")), mk("p", null, m.body));
+    const x = mk("button","sbtn red","حذف"); x.onclick = async()=>{ await db.from("messages").delete().eq("id", m.id); aMsg(); };
+    if(m.is_public){ const f = mk("button","sbtn ghost", m.featured ? "إزالة من الرسائل المختارة" : "إضافة للرسائل المختارة"); f.onclick = async()=>{ await db.from("messages").update({ featured: !m.featured }).eq("id", m.id); aMsg(); }; d.appendChild(f); }
+    d.appendChild(x); box.appendChild(d);
+  });
+  if(!(data || []).length) box.textContent = "لا توجد رسائل";
+}
+async function aRep(){
+  const names = await nameMap();
+  const { data } = await db.from("reports").select("*").order("created_at",{ascending:false}).limit(100);
+  const box = $("ad"); box.innerHTML = "";
+  (data || []).forEach(r => {
+    const d = mk("div","msg"); d.append(mk("p", null, "المبلَّغ عنه: " + (names[r.reported_id] || "؟") + " — السبب: " + r.reason), mk("small", null, "المبلِّغ: " + (names[r.reporter_id] || "؟") + " • " + fmt(r.created_at)));
+    if(r.details) d.appendChild(mk("p","rep","التفاصيل: " + r.details));
+    const row = mk("div");
+    const bn = mk("button","sbtn ghost","إيقاف المبلَّغ عنه"); bn.onclick = async()=>{ await db.from("profiles").update({ banned:true }).eq("id", r.reported_id); alert("تم الإيقاف"); };
+    const x = mk("button","sbtn red","حذف البلاغ"); x.onclick = async()=>{ await db.from("reports").delete().eq("id", r.id); aRep(); };
+    row.append(bn, x); d.appendChild(row); box.appendChild(d);
+  });
+  if(!(data || []).length) box.textContent = "لا توجد بلاغات";
+}
+async function aDel(){
+  const names = await nameMap();
+  const { data } = await db.from("deletion_requests").select("*").eq("status","pending").order("created_at",{ascending:false});
+  const box = $("ad"); box.innerHTML = "";
+  (data || []).forEach(r => {
+    const d = mk("div","msg"); d.append(mk("p", null, (names[r.user_id] || "؟") + " — السبب: " + r.reason), mk("small", null, fmt(r.created_at)));
+    const row = mk("div");
+    const ok = mk("button","sbtn red","موافقة وحذف الحساب"); ok.onclick = async()=>{ if(!confirm("حذف الحساب نهائيًا؟")) return; const x = await db.rpc("admin_delete_account", { uid: r.user_id }); if(x.error) alert("تعذّر الحذف"); aDel(); };
+    const no = mk("button","sbtn ghost","رفض"); no.onclick = async()=>{ await db.from("deletion_requests").update({ status:"rejected" }).eq("user_id", r.user_id); aDel(); };
+    row.append(ok, no); d.appendChild(row); box.appendChild(d);
+  });
+  if(!(data || []).length) box.textContent = "لا توجد طلبات حذف";
+}
+async function aSug(){
+  const names = await nameMap();
+  const { data } = await db.from("suggestions").select("*").order("created_at",{ascending:false}).limit(100);
+  const box = $("ad"); box.innerHTML = "";
+  (data || []).forEach(m => {
+    const d = mk("div","msg"); d.append(mk("small","from","من: " + (m.user_id ? (names[m.user_id] || "؟") : "زائر")), mk("p", null, m.body));
+    const x = mk("button","sbtn red","حذف"); x.onclick = async()=>{ await db.from("suggestions").delete().eq("id", m.id); aSug(); };
+    d.appendChild(x); box.appendChild(d);
+  });
+  if(!(data || []).length) box.textContent = "لا توجد اقتراحات";
+}
+async function aAnn(){
+  const cur = (await db.from("announcements").select("*").eq("active", true).order("created_at",{ascending:false}).limit(1)).data;
+  const box = $("ad"); box.innerHTML = "";
+  if(cur && cur[0]){
+    const c = cur[0]; const d = mk("div","msg"); d.append(mk("small","from","الإعلان الحالي" + (c.show_all ? " (في كل الصفحات)" : " (الرئيسية فقط)") + (c.expires_at ? " — ينتهي: " + fmt(c.expires_at) : "")), mk("p", null, (c.title ? c.title + " — " : "") + c.body));
+    const x = mk("button","sbtn red","إخفاء الإعلان"); x.onclick = async()=>{ await db.from("announcements").update({ active:false }).eq("active", true); aAnn(); };
+    d.appendChild(x); box.appendChild(d);
+  }
+  const t = mk("input"); t.placeholder = "عنوان الإعلان (اختياري)"; t.maxLength = 80;
+  const b = mk("textarea"); b.rows = 3; b.maxLength = 600; b.placeholder = "نص الإعلان";
+  const lb = mk("label","chk"); const ck = mk("input"); ck.type = "checkbox"; lb.append(ck, " إظهاره في كل صفحات الموقع (وإلا فالصفحة الرئيسية فقط)");
+  const ex = mk("select"); [["","بدون تاريخ انتهاء"],["1","ينتهي بعد يوم"],["7","ينتهي بعد أسبوع"],["30","ينتهي بعد شهر"]].forEach(([v,l]) => { const o = mk("option", null, l); o.value = v; ex.appendChild(o); });
+  const pb = mk("button", null, "نشر الإعلان"), nt = mk("div","note");
+  pb.onclick = async()=>{
+    if(!b.value.trim()){ nt.textContent = "اكتب نص الإعلان"; return; }
+    await db.from("announcements").update({ active:false }).eq("active", true);
+    const exp = ex.value ? new Date(Date.now() + Number(ex.value) * 864e5).toISOString() : null;
+    const r = await db.from("announcements").insert({ title: t.value.trim() || null, body: b.value.trim(), show_all: ck.checked, expires_at: exp });
+    if(r.error){ nt.textContent = "تعذّر النشر"; return; } aAnn();
+  };
+  box.append(t, b, lb, ex, pb, nt);
+}
+async function aCast(){
+  const box = $("ad"); box.innerHTML = "";
+  box.appendChild(mk("p","tag","يصل هذا الإشعار لكل أصحاب الحسابات، ويظهر في أيقونة الإشعارات."));
+  const b = mk("textarea"); b.rows = 3; b.maxLength = 300; b.placeholder = "نص الإشعار (300 حرف كحد أقصى)";
+  const s = mk("button", null, "إرسال للجميع"), nt = mk("div","note");
+  s.onclick = async()=>{ if(!b.value.trim()) { nt.textContent = "اكتب نص الإشعار"; return; } if(!confirm("إرسال الإشعار لكل المستخدمين؟")) return; const r = await db.rpc("admin_broadcast", { txt: b.value.trim() }); nt.textContent = r.error ? "تعذّر الإرسال" : "تم الإرسال"; nt.classList.toggle("good", !r.error); if(!r.error) b.value = ""; };
+  box.append(b, s, nt);
+}
+const FIELDS = [
+  ["site_name","اسم الموقع","text"],["hero_lead","العنوان الكبير في الصفحة الرئيسية","text"],["hero_tag","الوصف تحت العنوان","textarea"],["motd","رسالة اليوم (تظهر في الصفحة الرئيسية ولوحة المستخدم)","textarea"],
+  ["footer_dev","اسم المطوّر في أسفل الصفحة","text"],["accent","اللون الرئيسي","color"],["bg","لون الخلفية","color"],
+  ["rate_limit","أقصى عدد رسائل في الدقيقة لكل مستلم","number"],["max_msg_len","أقصى طول للرسالة (حتى 1000)","number"],
+  ["maintenance_text","رسالة وضع الصيانة","textarea"],["custom_css","تنسيق CSS مخصص (للمتقدمين)","textarea"]
+];
+const TOGGLES = [["allow_signup","السماح بإنشاء حسابات جديدة"],["allow_visitor_msgs","السماح بالرسائل من الزوار بدون حساب"],["show_suggestions","إظهار صندوق الاقتراحات"],["show_reports","إظهار زر الإبلاغ"],["maintenance","تفعيل وضع الصيانة (يغلق الموقع أمام الزوار)"]];
+async function aSet(){
+  await loadSettings();
+  const box = $("ad"); box.innerHTML = "";
+  box.appendChild(mk("p","tag","كل تغيير تحفظه هنا يقرأه الموقع مباشرة."));
+  const ins = {};
+  FIELDS.forEach(([k, label, type]) => {
+    box.appendChild(mk("div","lbl",label));
+    let i;
+    if(type === "textarea"){ i = mk("textarea"); i.rows = 3; i.value = SET[k] || ""; } else { i = mk("input"); i.type = type; i.value = SET[k] || (type === "color" ? (k === "accent" ? "#3ddbb4" : "#0a1a1f") : ""); }
+    if(type === "text") i.maxLength = 120;
+    ins[k] = i; box.appendChild(i);
+  });
+  const tg = {};
+  TOGGLES.forEach(([k, label]) => { const lb = mk("label","chk"); const c = mk("input"); c.type = "checkbox"; c.checked = k === "maintenance" ? SET[k] === "1" : SET[k] !== "0"; tg[k] = c; lb.append(c, " " + label); box.appendChild(lb); });
+  const sv = mk("button", null, "حفظ الإعدادات"), nt = mk("div","note");
+  sv.onclick = async()=>{
+    const rl = Number(ins.rate_limit.value), ml = Number(ins.max_msg_len.value);
+    if(ins.rate_limit.value && !(rl >= 1 && rl <= 100)){ nt.textContent = "حد الرسائل: رقم من 1 إلى 100"; return; }
+    if(ins.max_msg_len.value && !(ml >= 50 && ml <= 1000)){ nt.textContent = "طول الرسالة: رقم من 50 إلى 1000"; return; }
+    const rows = [];
+    FIELDS.forEach(([k]) => { const v = ins[k].value.trim(); if(v !== "" || SET[k]) rows.push({ key: k, value: v }); });
+    TOGGLES.forEach(([k]) => rows.push({ key: k, value: tg[k].checked ? "1" : "0" }));
+    const r = await db.from("site_settings").upsert(rows, { onConflict: "key" });
+    nt.textContent = r.error ? "تعذّر الحفظ" : "تم الحفظ"; nt.classList.toggle("good", !r.error);
+    if(!r.error) loadSettings();
+  };
+  box.append(sv, nt);
+}
+async function aBlocks(){
+  const r = await db.rpc("admin_blocks"); if(r.error) throw r.error;
+  const box = $("ad"); box.innerHTML = "";
+  (r.data || []).forEach(b => { const d = mk("div","stat"); d.append(mk("span", null, b.owner + " حظر " + b.blocked), mk("small", null, fmt(b.created_at))); box.appendChild(d); });
+  if(!(r.data || []).length) box.textContent = "لا توجد حالات حظر.";
+}
+async function aWords(){
+  const { data } = await db.from("banned_words").select("word").order("word");
+  const box = $("ad"); box.innerHTML = "";
+  const inp = mk("input"); inp.placeholder = "كلمة ممنوعة جديدة";
+  const add = mk("button", null, "إضافة");
+  add.onclick = async()=>{ const w = inp.value.trim().toLowerCase(); if(!w) return; await db.from("banned_words").insert({ word: w }); aWords(); };
+  box.append(inp, add);
+  (data || []).forEach(w => { const d = mk("div","stat"); d.appendChild(mk("span", null, w.word)); const x = mk("button","sbtn red","حذف"); x.onclick = async()=>{ await db.from("banned_words").delete().eq("word", w.word); aWords(); }; d.appendChild(x); box.appendChild(d); });
+}
+async function aAdm(){
+  const { data } = await db.rpc("admin_list_admins");
+  const box = $("ad"); box.innerHTML = "";
+  box.appendChild(mk("p","tag","المشرف يملك كل صلاحيات لوحة الإدارة. أضف فقط من تثق به، وله حساب مسجّل في Supabase."));
+  (data || []).forEach(a => { const d = mk("div","stat"); d.appendChild(mk("span", null, a.email)); const x = mk("button","sbtn red","إزالة"); x.onclick = async()=>{ if(!confirm("إزالة هذا المشرف؟")) return; const r = await db.rpc("admin_remove_admin", { uid: a.user_id }); if(r.error) alert("تعذّرت الإزالة (لا يمكن إزالة آخر مشرف)"); aAdm(); }; d.appendChild(x); box.appendChild(d); });
+  const inp = mk("input"); inp.type = "email"; inp.dir = "ltr"; inp.placeholder = "بريد المشرف الجديد";
+  const add = mk("button", null, "إضافة مشرف"), nt = mk("div","note");
+  add.onclick = async()=>{ if(!inp.value.trim()) return; const r = await db.rpc("admin_add_admin", { mail: inp.value.trim() }); if(r.error){ nt.textContent = (r.error.message || "").includes("NOUSER") ? "لا يوجد حساب بهذا البريد" : "تعذّرت الإضافة"; return; } aAdm(); };
+  box.append(inp, add, nt);
+}
+async function aTools(){
+  const box = $("ad"); box.innerHTML = "";
+  const nt = mk("div","note");
+  const b1 = mk("button","ghost","حذف الزيارات الأقدم من 30 يومًا");
+  b1.onclick = async()=>{ const r = await db.rpc("admin_cleanup_visits", { days: 30 }); nt.textContent = r.error ? "تعذّر التنظيف" : "تم التنظيف"; nt.classList.toggle("good", !r.error); };
+  const b2 = mk("button","ghost","تصدير الحسابات (CSV)");
+  b2.onclick = async()=>{ const a = await accounts(); csv([["الاسم","الرابط","الجنس","موقوف","تاريخ التسجيل"], ...a.map(x => [x.username, x.slug, x.gender, x.banned ? "نعم" : "لا", x.created_at])], "accounts.csv"); };
+  const b3 = mk("button","ghost","تصدير آخر 100 رسالة (CSV)");
+  b3.onclick = async()=>{ const names = await nameMap(); const m = (await db.rpc("admin_messages")).data || []; csv([["إلى","المرسل","الرسالة","التاريخ"], ...m.map(x => [names[x.to_user] || "", x.sender_id ? (names[x.sender_id] || "") : "زائر", x.body, x.created_at])], "messages.csv"); };
+  box.append(b1, b2, b3, nt);
+}
+start();
+</script>
+</body>
+</html>
