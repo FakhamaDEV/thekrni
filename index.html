@@ -900,7 +900,7 @@ async function profilePage(s){
   const key = (params.get("p") || "").trim().toLowerCase(), guest = params.has("v");
   const r = await db.rpc("profile_public", { pslug: key });
   const u = r.data && r.data[0];
-  if(!u){ el(`${BAR()}${HOME}<div class="glass sm center" style="margin-top:22px"><p class="sub">هذا المستخدم غير موجود أو غير متاح</p></div>`); wireBar(s.user); return; }
+  if(!u){ el(`${BAR()}${HOME}<div class="glass sm center" style="margin-top:22px"><p class="sub">${r.error ? "تعذّر تحميل الصفحة، حاول مرة أخرى" : "هذا المستخدم غير موجود أو غير متاح"}</p></div>`); wireBar(s.user); return; }
   const me = s.user.id === u.id, full = me && !guest;
   let likes = 0;
   if(full) likes = Number((await db.rpc("like_count", { uid: u.id })).data || 0);
@@ -989,19 +989,32 @@ async function privacyPage(user){
   if(location.hash === "#notif") $("notif").scrollIntoView({ block:"start" });
 }
 async function sendPage(key){
-  const p = await db.from("profiles").select("id,username,slug,banned").eq("slug", key).maybeSingle();
+  const p = await db.from("profiles").select("id,username,slug,banned,avatar").eq("slug", key).maybeSingle();
   if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
   const s = await getSession(), mx = MAXLEN();
   const KINDS = [["نصيحة","book"],["مصارحة","eye"],["اعتذار","leaf"],["تذكير بالخير","sun"],["كلام من القلب","heart"]];
   let kind = "";
-  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><div class="who" id="who"></div><p class="tag">قل ما في قلبك بلطف، ولن يعرف أحد من أنت إلا إذا اخترت ذلك</p></div>
+  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><a class="pl" id="pl" title="عرض الصفحة الشخصية"><div class="avatar" id="av"></div><div class="who" id="who"></div></a>${s && s.user.id !== p.data.id ? `<button class="like" id="lk" aria-label="إعجاب" title="إعجاب">${ic("thumb")}</button>` : ""}<p class="tag">قل ما في قلبك بلطف، ولن يعرف أحد من أنت إلا إذا اخترت ذلك</p></div>
   <div class="glass sm send" id="box">
     <div class="lbl">نوع الرسالة (اختياري)</div><div class="chips kchips" id="kinds"></div>
     <textarea id="body" rows="6" maxlength="${mx}" placeholder="اكتب رسالتك هنا"></textarea>
     ${s ? `<label class="chk"><input type="checkbox" id="show"> أرسلها باسمي</label>` : ""}
     <button id="send" class="bigbtn">${ic("send")} إرسال</button><div class="note" id="note"></div></div>`);
   if(s) wireBar(s.user);
-  $("who").textContent = p.data.username;
+  setAv($("av"), p.data); $("who").textContent = p.data.username;
+  $("pl").onclick = () => go("?p=" + p.data.slug);
+  if(s && $("lk")){
+    let liked = false; const lkBtn = $("lk");
+    const lkSet = () => lkBtn.classList.toggle("on", liked);
+    db.from("profile_likes").select("liked_id").eq("liker_id", s.user.id).eq("liked_id", p.data.id).maybeSingle().then(x => { liked = !!x.data; lkSet(); });
+    lkBtn.onclick = async()=>{
+      lkBtn.disabled = true;
+      const x = liked ? await db.from("profile_likes").delete().eq("liker_id", s.user.id).eq("liked_id", p.data.id) : await db.from("profile_likes").insert({ liker_id: s.user.id, liked_id: p.data.id });
+      lkBtn.disabled = false;
+      if(x.error) return toast("تعذّر تنفيذ العملية، حاول لاحقًا");
+      liked = !liked; lkSet();
+    };
+  }
   KINDS.forEach(([label, icon]) => {
     const c = mk("div","chip"); c.innerHTML = ic(icon) + " " + esc(label);
     c.onclick = () => { kind = kind === label ? "" : label; [...$("kinds").children].forEach(x => x.classList.toggle("on", x === c && kind === label)); };
