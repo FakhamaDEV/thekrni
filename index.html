@@ -104,8 +104,18 @@ button.red{background:#c0392b;color:#fff}
 .stat{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px dashed var(--line)}
 .toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--gold);color:var(--ink);padding:12px 22px;border-radius:30px;font-weight:700;z-index:50}
 .hc{display:flex;justify-content:center;margin:8px 0;min-height:78px}
-footer{text-align:center;color:var(--mut);font-size:14px;margin-top:28px;padding-top:14px;border-top:1px solid var(--line)}
+footer{text-align:center;color:var(--mut);font-size:14px;margin-top:36px;padding:26px 14px 10px;border-top:1px solid var(--line);position:relative}
+footer::before{content:"";position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:64px;height:2px;background:var(--gold);border-radius:2px}
 footer b{color:var(--gold)}
+.fnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;margin:0 0 20px}
+.fnav a{color:var(--txt);font-size:14px;font-weight:700;padding:7px 16px;border:1px solid var(--line);border-radius:24px;background:var(--glass);transition:color .15s, border-color .15s}
+.fnav a:hover{color:var(--gold);border-color:var(--gold)}
+.fcopy{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:4px}
+.fcopy .yr{font-size:13px;letter-spacing:.4px;color:var(--mut);display:flex;align-items:center;gap:8px}
+.fcopy .yr::before,.fcopy .yr .sep::after{content:"";display:inline-block;width:22px;height:1px;background:var(--line)}
+.fdev{align-self:flex-end;margin-top:6px;font-size:12px;color:var(--mut);display:flex;align-items:center;gap:6px;opacity:.85}
+.fdev:hover{opacity:1}
+.dev{color:var(--gold);font-weight:600}.dev:hover{text-decoration:underline}
 @media(min-width:700px){.wrap{padding:24px 24px 40px}.feats{grid-template-columns:repeat(3,1fr)}.glass{padding:24px}}
 .ico{width:1.15em;height:1.15em;vertical-align:-.2em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
@@ -155,8 +165,7 @@ a{color:inherit;text-decoration:none}
 .icard .fi{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(var(--g),0.1);color:var(--gold)}
 .icard b{font-size:16px}.icard small{color:var(--mut);line-height:1.7}
 .fnav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin:0 0 16px}
-.fnav a{color:var(--mut);font-size:14px}.fnav a:hover{color:var(--gold)}
-.tipc{display:flex;gap:14px;align-items:flex-start}.tipc b{display:block;color:var(--gold);margin-bottom:2px}.tipc p{margin:0;line-height:1.9}
+.fnav a{color:var(--mut);font-size:14px}.fnav a:hover{color:var(--gold)}.tipc{display:flex;gap:14px;align-items:flex-start}.tipc b{display:block;color:var(--gold);margin-bottom:2px}.tipc p{margin:0;line-height:1.9}
 @media(min-width:700px){.icards{grid-template-columns:repeat(4,1fr)}}
 .zk{margin:6px 0 14px}.zk span{display:block;font-family:Amiri,serif;font-size:24px;color:var(--gold);line-height:1.8}.zk small{color:var(--mut);font-size:13px}
 .mini{font-size:13px;color:var(--mut);margin:8px 0 0}
@@ -165,7 +174,9 @@ a{color:inherit;text-decoration:none}
 .demo .dh i{font-style:normal;background:var(--gold);color:var(--ink);border-radius:12px;padding:1px 10px;font-size:12px}
 .demo .dm{background:rgba(var(--w),0.06);border-right:4px solid var(--gold);border-radius:14px;padding:12px;margin:8px 0}
 .dl{height:10px;border-radius:6px;background:rgba(var(--w),0.2);margin:7px 0}.w80{width:80%}.w60{width:60%}.w70{width:70%}.w40{width:40%}
-.dt{margin-top:8px;color:var(--gold);font-size:13px;display:flex;gap:6px;align-items:center}
+.demo .dm.real p{margin:0;line-height:1.9;color:var(--txt);font-size:15px}
+.dacts{display:flex;gap:14px;margin-top:10px;color:var(--gold);font-size:13px}
+.dacts span{display:inline-flex;gap:6px;align-items:center}
 .band{margin-top:22px;text-align:center;border-radius:22px;padding:22px 16px;background:linear-gradient(135deg,rgba(var(--g),0.15),rgba(var(--g),0.05));border:1px solid var(--gold)}
 .band h2{margin:0 0 6px;color:var(--txt);font-size:22px}.band p{margin:0 0 12px;color:var(--mut)}
 .bn{display:flex;gap:10px;align-items:flex-start;padding:7px 0;line-height:1.8}.bn .ico{color:var(--gold);flex:none;margin-top:4px}
@@ -328,7 +339,7 @@ const darken = h => { const n = parseInt(h.slice(1), 16); const f = v => Math.ma
 
 const LS = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
 function setFooter(){
-  $("ft").innerHTML = ZK + `<nav class="fnav"><a href="?about">عن الموقع</a><a href="?guide">الإرشادات</a><a href="?suggest">اقترح فكرة</a></nav>© 2026 <b>${esc(N())}</b> · تطوير <a class="dev" href="${FB}" target="_blank" rel="noopener noreferrer">${esc(T("footer_dev","FakhamaDev"))}</a>`;
+  $("ft").innerHTML = ZK + `<nav class="fnav"><a href="?about">عن الموقع</a><a href="?guide">الإرشادات</a><a href="?suggest">اقترح فكرة</a></nav><div class="fcopy"><div class="yr">© 2026 <b>${esc(N())}</b><span class="sep"></span>جميع الحقوق محفوظة</div></div><div class="fdev"><span>تطوير</span><a class="dev" href="${FB}" target="_blank" rel="noopener noreferrer">${esc(T("footer_dev","FakhamaDev"))}</a></div>`;
 }
 function applySettings(){
   const root = document.documentElement.style;
@@ -508,7 +519,7 @@ async function loadFeat(){
 const SKEL = '<div class="skel"></div><div class="skel"></div>';
 const TOPOUT = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr"><button class="ghost sbtn" id="nl" style="margin:0">دخول</button>${on("allow_signup") ? `<button class="sbtn" id="ns" style="margin:0">حساب جديد</button>` : ""}</div></div>`;
 const wireOut = () => { $("tbh").onclick = () => go(""); $("nl").onclick = () => go("?login"); if($("ns")) $("ns").onclick = () => go("?signup"); };
-const quickRow = (slug, active) => `<div class="qrow"><a class="qb${active === "inbox" ? " on" : ""}" href="?login">صندوق رسائلي</a><a class="qb${active === "edit" ? " on" : ""}" href="?profile">تعديل حسابي</a><a class="qb${active === "privacy" ? " on" : ""}" href="?privacy">الخصوصية والإشعارات</a><a class="qb${active === "page" ? " on" : ""}" href="?p=${esc(slug)}">صفحتي</a></div>`;
+const quickRow = (slug, active) => `<div class="qrow"><a class="qb${active === "inbox" ? " on" : ""}" href="?login">صندوق رسائلي</a><a class="qb${active === "edit" ? " on" : ""}" href="?profile">حسابي</a><a class="qb${active === "privacy" ? " on" : ""}" href="?privacy">الخصوصية والإشعارات</a><a class="qb${active === "page" ? " on" : ""}" href="?p=${esc(slug)}">صفحتي</a></div>`;
 const checklistHtml = p => {
   const items = [["أضف نبذة عنك", !!p.bio, "?profile"], ["اختر صورتك الرمزية", !!p.avatar, "?profile"], ["شارك رابطك مع أصدقائك", !!LS.get("shared"), "#lnk"]];
   const done = items.filter(i => i[1]).length;
@@ -552,19 +563,19 @@ function aboutPage(s){
 }
 function suggestPage(s){
   if(!on("show_suggestions")) return infoPage(s, "اقتراحات", "هذه الصفحة غير متاحة حاليًا.", "");
-  infoPage(s, "ساعدنا نطوّر الموقع", "اكتب أي فكرة أو ملاحظة، وسنقرأها بعناية. لا تحتاج حسابًا.",
-    `<div class="glass sm" id="sbox"><div class="lbl">نوع اقتراحك</div><div class="chips" id="sk"></div><textarea id="sg" rows="5" maxlength="480" placeholder="اكتب فكرتك هنا..."></textarea><div class="cnt" id="sc">0 / 480</div><button id="sgb">أرسل الاقتراح</button><div class="note" id="sgn"></div></div><div class="glass sm"><h2>التواصل مع المطور</h2><p class="tag">للتواصل المباشر أو الاستفسار، تفضّل بزيارة حساب المطور.</p><a class="shb" href="${FB}" target="_blank" rel="noopener noreferrer">${ic("fb")} حساب المطور على فيسبوك</a></div>`);
-  let kind = "فكرة"; const PH = { "فكرة":"اكتب فكرتك هنا...", "مشكلة":"اكتب مشكلتك هنا...", "تحسين":"اكتب اقتراح التحسين هنا..." };
+  infoPage(s, "شاركنا فكرتك", "رأيك يصنع هذا الموقع. اختر نوع ملاحظتك، اكتبها ببساطة، وسنقرأها بعناية — بدون حساب وبدون تعقيد.",
+    `<div class="glass sm" id="sbox"><div class="lbl">ما نوع ملاحظتك؟</div><div class="chips" id="sk"></div><textarea id="sg" rows="5" maxlength="480" placeholder="اكتب فكرتك هنا..."></textarea><div class="cnt" id="sc">0 / 480</div><button id="sgb">أرسل الاقتراح</button><div class="note" id="sgn"></div></div><div class="glass sm"><h2>تواصل معنا</h2><p class="tag">عندك سؤال أو استفسار لم يجد جوابه هنا؟ تفضّل بزيارة صفحتنا، يسعدنا ردّك.</p><a class="shb" href="${FB}" target="_blank" rel="noopener noreferrer">${ic("fb")} صفحتنا على فيسبوك</a></div>`);
+  let kind = "فكرة"; const PH = { "فكرة":"اكتب فكرتك هنا...", "مشكلة":"اكتب ما واجهك بالضبط...", "تحسين":"اكتب ما تتمناه في الموقع..." };
   ["فكرة","مشكلة","تحسين"].forEach(k => { const c = mk("div", "chip" + (k === kind ? " on" : ""), k); c.onclick = () => { kind = k; $("sg").placeholder = PH[k]; [...$("sk").children].forEach(x => x.classList.toggle("on", x === c)); }; $("sk").appendChild(c); });
   $("sg").oninput = () => { $("sc").textContent = $("sg").value.length.toLocaleString("en") + " / 480"; };
   $("sgb").onclick = async()=>{
     const v = $("sg").value.trim();
-    if(!v) return say("sgn","اكتب اقتراحك أولًا");
+    if(!v) return say("sgn","اكتب ملاحظتك أولًا ليصلنا صوتك");
     $("sgb").disabled = true;
     const r = await db.from("suggestions").insert({ user_id: s ? s.user.id : null, body: "[" + kind + "] " + v });
     $("sgb").disabled = false;
-    if(r.error) return say("sgn", (r.error.message || "").includes("TOOFAST") ? "وصلتنا اقتراحات كثيرة الآن، حاول بعد قليل" : "تعذّر الإرسال، حاول مرة أخرى");
-    $("sbox").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>شكرًا لك!</b><small class="tag">وصل اقتراحك إلى فريق الموقع.</small></div>`;
+    if(r.error) return say("sgn", (r.error.message || "").includes("TOOFAST") ? "وصلتنا ملاحظات كثيرة الآن، امنحنا دقائق وحاول مجددًا" : "تعذّر الإرسال، حاول مرة أخرى");
+    $("sbox").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>شكرًا لك!</b><small class="tag">وصلت ملاحظتك بأمان، وسنقرأها بعناية.</small></div>`;
   };
 }
 async function featuredPage(s){
@@ -574,7 +585,7 @@ async function featuredPage(s){
   const box = $("fl2"); (r.data || []).forEach(m => box.appendChild(featItem(m)));
   if(!(r.data || []).length) box.textContent = "لا توجد رسائل مختارة بعد.";
 }
-const demoCard = () => `<div class="demo" aria-hidden="true"><div class="dh"><span>${ic("chat")} صندوق رسائلك</span><i>جديدة</i></div><div class="dm"><div class="dl w80"></div><div class="dl w60"></div><div class="dt">${ic("lock")} مجهول</div></div><div class="dm"><div class="dl w70"></div><div class="dl w40"></div></div></div>`;
+const demoCard = () => `<div class="demo" aria-hidden="true"><div class="dh"><span>${ic("chat")} هكذا تصلك الرسائل</span><i>مجهولة</i></div><div class="dm real"><p>أخي الكريم، أردت فقط أن أشكرك على ما تقدمه من خير دون أن تنظر لمن يراه. بارك الله فيك وجعلها في ميزان حسناتك.</p></div><div class="dacts"><span>${ic("reply")} ردّ المالك</span></div></div>`;
 function landing(s){
   const signup = on("allow_signup");
   el(`${s ? BAR() : TOPOUT()}${annHtml(true)}${s ? `<div class="glass ub"><div class="av2" id="av2"></div><b id="unm">&nbsp;</b><button class="sbtn" id="ub1" style="margin:0">صندوق رسائلي</button></div>` : ""}
@@ -690,7 +701,7 @@ async function dashboard(user){
   el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك الخاص. انشره ليرسل لك الناس كلماتهم الصادقة: نصيحة، دعاء أو تذكير بالخير، دون أن يظهر اسمهم</p></div>
   ${quickRow(p.slug, "inbox")}${checklistHtml(p)}<div class="glass"><div class="link sel" id="lnk"></div>
     <div class="shr"><button class="shb" id="copy">نسخ الرابط</button></div><div class="shr"><button class="shb ghost" id="share">مشاركة</button><button class="shb ghost" id="qrb">رمز QR</button></div><div class="qrbox" id="qrbox"></div>${isAdmin ? `<button class="ghost" id="adm">لوحة الإدارة</button>` : ""}</div>
-  <div class="glass"><h2>الرسائل الواردة</h2><div class="stats" id="stt"></div><div class="badges" id="bdg"></div></div>
+  <div class="glass"><h2>إحصائياتي</h2><div class="stats" id="stt"></div><div class="badges" id="bdg"></div></div>
   <div class="glass" id="fbox" hidden><h2>${ic("star")} الرسائل المميزة</h2><div id="flist"></div></div>
   <div class="glass"><div class="top"><h2>الرسائل الواردة</h2><span class="num" id="cnt">0</span></div>
     <p class="tag">اضغط «نشر في صفحتي» لتظهر الرسالة وردّك للجميع، دون اسم المرسل.</p><div id="list">${SKEL}</div></div>
@@ -774,7 +785,8 @@ async function loadSent(){
 }
 
 async function notifPage(user){
-  el(`${BAR()}${HOME}<div class="glass"><div class="top"><h2>الإشعارات</h2><a class="hl" href="?privacy#notif">الإعدادات</a></div><div id="nl2">${SKEL}</div></div>`);
+  const pr = await ensureProfile(user).catch(() => null);
+  el(`${BAR()}${HOME}${pr ? quickRow(pr.slug, "") : ""}<div class="glass"><div class="top"><h2>الإشعارات</h2><a class="hl" href="?privacy#notif">الإعدادات</a></div><div id="nl2">${SKEL}</div></div>`);
   await wireBar(user);
   const { data } = await db.from("notifications").select("id,kind,ref,link,body,read,created_at").eq("user_id", user.id).order("created_at",{ascending:false}).limit(50);
   const box = $("nl2"); box.innerHTML = "";
@@ -798,14 +810,13 @@ async function editPage(user){
   const lock = t => { if(!t) return ""; const nx = new Date(t); nx.setMonth(nx.getMonth() + 2); return nx > new Date() ? "يمكنك التغيير بعد: " + nx.toLocaleDateString("ar-u-nu-latn") : ""; };
   const l1 = lock(p.username_changed_at), l2 = lock(p.slug_changed_at);
   const dr = (await db.from("deletion_requests").select("status").eq("user_id", user.id).maybeSingle()).data;
-  el(`${BAR()}${HOME}<div class="hero" style="padding:8px 0 0"><h1 class="brand" style="font-size:40px">حسابي</h1></div>${quickRow(p.slug, "edit")}
-  <div class="glass sm"><h2>اسم المستخدم</h2><p class="tag">الحالي: ${esc(p.username)} — يمكن تغييره مرة كل شهرين.</p>
+  el(`${BAR()}${HOME}<div class="hero" style="padding:8px 0 0"><h1 class="brand" style="font-size:40px">حسابي</h1></div>${quickRow(p.slug, "edit")}  <div class="glass sm"><h2>اسم المستخدم</h2><p class="tag">الحالي: ${esc(p.username)} — يمكن تغييره مرة كل شهرين.</p>
     <input id="nu" maxlength="25" placeholder="الاسم الجديد" ${l1 ? "disabled" : ""}>
     <button id="sn" ${l1 ? "disabled" : ""}>حفظ الاسم</button><div class="note" id="n1">${l1}</div></div>
   <div class="glass sm"><h2>رابطك الخاص</h2><p class="tag" dir="ltr" style="text-align:right">${esc(linkOf(p.slug))}</p><p class="tag">يمكن تغييره مرة كل شهرين، وسيتوقف الرابط القديم.</p>
     <input id="ns2" dir="ltr" maxlength="25" placeholder="رابط جديد" ${l2 ? "disabled" : ""}>
     <button id="sl" ${l2 ? "disabled" : ""}>حفظ الرابط</button><div class="note" id="n4">${l2}</div></div>
-  <div class="glass sm"><h2>صورتي الرمزية</h2><p class="tag">نبذتك وعمرك ومكان إقامتك تعدّلها من صفحتك الشخصية.</p>
+  <div class="glass sm"><h2>صورتي الرمزية</h2><p class="tag">هذا شكلك أمام المرسلين. نبذتك وسؤالك وعمرلك وإقامتك تعدّلها من «صفحتي» بالتبويب أعلاه.</p>
     <div class="lbl">الصورة الرمزية</div><div class="pick" id="pk"></div><div class="sw" id="sw"></div>
     <button id="spf">حفظ الصورة</button><div class="note" id="n6"></div></div>
   <div class="glass sm"><h2>الجنس</h2><div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>
@@ -1020,7 +1031,7 @@ async function sendPage(key){
   const s = await getSession(), mx = MAXLEN();
   const KINDS = [["نصيحة","book"],["مصارحة","eye"],["اعتذار","leaf"],["تذكير بالخير","sun"]];
   let kind = "";
-  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><a class="pl" id="pl" title="عرض الصفحة الشخصية"><div class="avatar" id="av"></div><div class="who" id="who"></div></a><p class="tag">قل ما في قلبك بلطف وصدق، ولن يعرف أحد من أنت إلا إذا اخترت ذلك. والكلمة الطيبة صدقة</p></div>
+  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><a class="pl" id="pl" title="عرض الصفحة الشخصية"><div class="avatar" id="av"></div><div class="who" id="who"></div></a><p class="tag">هنا للكلمة الطيبة مكان، وللنصيحة أثر، وللصدق مساحة. اكتب ما تود قوله</p></div>
   <div class="glass sm send" id="box">
     <div class="lbl">نوع الرسالة (اختياري)</div><div class="chips kchips" id="kinds"></div>
     <textarea id="body" rows="6" maxlength="${mx}" placeholder="اكتب رسالتك هنا"></textarea>
