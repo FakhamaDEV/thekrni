@@ -2,28 +2,24 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<script>try{if(localStorage.getItem("theme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#0a1a1f">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#04201a">
 <title>ذكّرني</title>
 <meta name="description" content="أنشئ رابطك الخاص واستقبل رسائل مجهولة">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233ddbb4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-8l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z'/%3E%3Cpath d='M8 10h8M8 13h5'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e3b94a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-8l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z'/%3E%3Cpath d='M8 10h8M8 13h5'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=El+Messiri:wght@500;600;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
 <style>
-[data-theme="light"]{--bg:#eef3ea;--bg2:#dfeade;--gold:#0b6b52;--gold2:#095642;--txt:#15241d;--mut:#4c6357;--glass:rgba(11,107,82,.05);--line:rgba(11,107,82,.3);--w:0,0,0;--g:11,107,82;--k:255,255,255;--ink:#ffffff;--rep:#0a4f3d;--hi:#07402f;--err:#b03a2e;--ph:#7d8c84;--field:#ffffff;color-scheme:light}
-[data-theme="light"] body{background:radial-gradient(circle at 80% -10%,rgba(61,219,180,.18),transparent 45%),linear-gradient(160deg,var(--bg),var(--bg2))}
-[data-theme="light"] body::before{opacity:.35;filter:invert(1) hue-rotate(160deg)}
 
-:root{--w:255,255,255;--g:61,219,180;--k:0,0,0;--ink:#071410;--rep:#c5f2df;--hi:#c9fff0;--err:#ff8f80;--ph:#7fa295;--field:rgba(0,0,0,.25);--bg:#0a1a1f;--bg2:#0f2a2b;--gold:#3ddbb4;--gold2:#1fa883;--txt:#eaf3ee;--mut:#93b3a7;--glass:rgba(255,255,255,.055);--line:rgba(61,219,180,.26);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--w:255,255,255;--g:227,185,74;--k:0,0,0;--ink:#04201a;--rep:#f6e7b0;--hi:#fff3c4;--err:#ff9b8f;--ph:#8aa397;--field:rgba(0,0,0,.2);--bg:var(--ink);--bg2:#0a3a2c;--gold:#e3b94a;--gold2:#b88a1e;--txt:#f4efe0;--mut:#9fb8ac;--glass:rgba(255,255,255,.06);--line:rgba(227,185,74,.28);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
 body{margin:0;font-family:Cairo,Tahoma,sans-serif;color:var(--txt);min-height:100vh;min-height:100dvh;
-background:radial-gradient(circle at 80% -10%,#3ddbb433,transparent 45%),linear-gradient(160deg,var(--bg),var(--bg2))}
+background:radial-gradient(circle at 80% -10%,#1b8a6455,transparent 45%),linear-gradient(160deg,var(--bg),var(--bg2))}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
-background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%233ddbb4' stroke-opacity='0.05'%3E%3Cpath d='M60 8l14 38 38 14-38 14-14 38-14-38-38-14 38-14z'/%3E%3Ccircle cx='60' cy='60' r='22'/%3E%3Cpath d='M0 60h20M100 60h20M60 0v20M60 100v20'/%3E%3C/g%3E%3C/svg%3e")}
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23e3b94a' stroke-opacity='0.07'%3E%3Cpath d='M60 8l14 38 38 14-38 14-14 38-14-38-38-14 38-14z'/%3E%3Ccircle cx='60' cy='60' r='22'/%3E%3Cpath d='M0 60h20M100 60h20M60 0v20M60 100v20'/%3E%3C/g%3E%3C/svg%3e")}
 .wrap{position:relative;z-index:1}
 .wrap{width:100%;max-width:760px;margin:0 auto;padding:14px 16px 30px}
 .sm{max-width:480px;margin-inline:auto}
@@ -32,7 +28,7 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 .tbr{display:flex;gap:6px;align-items:center}
 .ic{width:auto;min-width:58px;margin:0;padding:6px 8px;background:rgba(var(--w),0.05);border:1px solid var(--line);box-shadow:none;color:var(--txt);font-size:20px;border-radius:14px;position:relative;line-height:1.2}
 .ic small{display:block;font-size:11px;font-weight:400;color:var(--mut)}
-.bd{position:absolute;top:-6px;left:-4px;background:#e0533d;color:#fff;border-radius:12px;font-size:11px;font-style:normal;padding:1px 6px;font-weight:700}
+.bd{position:absolute;top:-6px;left:-4px;background:#c0392b;color:#fff;border-radius:12px;font-size:11px;font-style:normal;padding:1px 6px;font-weight:700}
 .hero{text-align:center;padding:30px 8px 20px}
 .moon{font-size:50px}
 h1.brand{font-family:'El Messiri',Amiri,serif;font-size:clamp(50px,14vw,72px);margin:4px 0 0;line-height:1.2;background:linear-gradient(180deg,var(--hi),var(--gold) 55%,var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -40,7 +36,8 @@ h1.brand{font-family:'El Messiri',Amiri,serif;font-size:clamp(50px,14vw,72px);ma
 .lead{font-family:'El Messiri',Amiri,serif;font-size:clamp(24px,6.6vw,34px);line-height:1.9;margin:10px 0 6px;color:var(--hi)}
 .lead em{font-style:normal;color:var(--gold)}
 .tag{color:var(--mut);font-size:15px;line-height:1.9}
-.glass{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(0,0,0,.14), inset 0 1px 0 rgba(var(--g),.07)}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(var(--g),.07)}
+.glass h2{color:var(--gold);margin-bottom:12px}
 .glass h2{margin:0 0 10px;font-size:19px;color:var(--gold)}
 .steps{display:grid;gap:12px}
 .step{display:flex;gap:14px;align-items:center}
@@ -54,20 +51,20 @@ h1.brand{font-family:'El Messiri',Amiri,serif;font-size:clamp(50px,14vw,72px);ma
 .respect{text-align:center;border-color:var(--gold)}
 .respect h2{font-family:Amiri,serif;font-size:clamp(22px,6vw,28px);margin-bottom:12px}
 .respect p{line-height:2.1;margin:10px 0;font-size:16.5px}
-.ann{border:2px solid var(--gold);background:rgba(var(--g),0.1);margin:12px 0 0;border-radius:18px;padding:14px 16px;text-align:center}
+.ann{border:2px solid var(--gold);background:rgba(var(--g),0.1);margin:12px 0 0;border-radius:14px;padding:14px 16px;text-align:center}
 .ann b{display:block;color:var(--gold);font-size:19px;margin-bottom:4px}
 .ann p{margin:0;line-height:1.9;white-space:pre-wrap}
 .tips{margin:0;padding:0;list-style:none}
 .tips li{padding:9px 0;border-bottom:1px dashed var(--line);line-height:1.9}
 .tips li:last-child{border:0}
 .tips b{color:var(--gold)}
-input,textarea,select{width:100%;padding:13px;margin:6px 0;border:1px solid var(--line);border-radius:14px;font-size:16px;font-family:inherit;background:rgba(var(--k),.2);color:var(--txt);outline:none}
+input,textarea,select{width:100%;padding:13px;margin:6px 0;border:1px solid var(--line);border-radius:12px;font-size:16px;font-family:inherit;background:rgba(var(--k),.2);color:var(--txt);outline:none}
 select option{color:#000}
 input[type=color]{padding:2px;height:44px}
 input::placeholder,textarea::placeholder{color:var(--ph)}
 input:focus,textarea:focus{border-color:var(--gold)}
 textarea{resize:vertical}
-button{width:100%;padding:14px;margin:6px 0;border:0;border-radius:14px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--ink);background:linear-gradient(135deg,var(--gold),var(--gold2))}
+button{width:100%;padding:14px;margin:6px 0;border:0;border-radius:12px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--ink);background:linear-gradient(135deg,var(--gold),var(--gold2))}
 button:active{transform:scale(.98)}
 button.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}
 button:disabled{opacity:.55}
@@ -85,7 +82,7 @@ button.red{background:#c0392b;color:#fff}
 .chart{display:flex;align-items:flex-end;gap:6px;height:90px;margin:6px 0 14px}
 .chart .cbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
 .chart .cbar i{display:block;width:100%;max-width:34px;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--gold),var(--gold2));min-height:2px}
-.chart .cbar span{font-size:11px;color:var(--mut)}
+.chart .cbar span{font-size:12px;color:var(--txt);font-weight:700}
 .chart.cvis .cbar i{background:rgba(var(--g),.45)}
 .cnt{text-align:left;color:var(--mut);font-size:13px;direction:ltr}
 .note{text-align:center;color:var(--err);min-height:22px;margin-top:6px}
@@ -93,7 +90,7 @@ button.red{background:#c0392b;color:#fff}
 .warn{background:rgba(var(--g),0.08);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.8;color:var(--rep);margin:6px 0}
 .ok{text-align:center;padding:12px 4px}.ok .big{font-size:48px}.ok b{display:block;font-size:20px;color:var(--gold);margin:6px 0}
 .link{direction:ltr;word-break:break-all;background:rgba(var(--k),.25);padding:12px;border-radius:12px;font-size:14px;color:var(--gold);border:1px dashed var(--line)}
-.msg{background:rgba(var(--w),0.04);border-right:4px solid var(--gold);border-radius:14px;padding:13px;margin:10px 0}
+.msg{background:rgba(var(--w),0.04);border-right:4px solid var(--gold);border-radius:12px;padding:13px;margin:10px 0}
 .msg p{margin:8px 0;line-height:1.9;white-space:pre-wrap;word-break:break-word}
 .msg small{color:var(--mut)}
 .msg .from{display:block;color:var(--gold);margin-bottom:4px}
@@ -115,7 +112,7 @@ body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,textarea,.sel,body.sel-ok,body.sel-ok *{-webkit-user-select:text;user-select:text}
 button{background:var(--gold);box-shadow:none}
 h1.brand{background:none;-webkit-text-fill-color:currentColor;color:var(--gold)}
-.logo{width:56px;height:56px;margin:0 auto;display:flex;align-items:center;justify-content:center;border-radius:18px;background:linear-gradient(135deg,rgba(var(--g),.2),rgba(var(--g),.06));color:var(--gold);border:1px solid rgba(var(--g),.35);box-shadow:0 0 24px rgba(var(--g),.15)}
+.logo{width:56px;height:56px;margin:0 auto;display:flex;align-items:center;justify-content:center;border-radius:14px;background:linear-gradient(135deg,rgba(var(--g),.2),rgba(var(--g),.06));color:var(--gold);border:1px solid rgba(var(--g),.35);box-shadow:0 0 24px rgba(var(--g),.15)}
 .logo .ico{width:30px;height:30px}
 .hl{color:var(--gold);font-weight:700}
 .feats .fi{width:44px;height:44px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:rgba(var(--g),0.1);color:var(--gold)}
@@ -134,7 +131,7 @@ h1.brand{background:none;-webkit-text-fill-color:currentColor;color:var(--gold)}
 .pick .ico{width:24px;height:24px}
 .sw{display:flex;gap:8px;margin:8px 0}.sw div{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent}.sw div.on{border-color:#fff}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}.stats b{display:block;font-size:22px;color:var(--gold)}.stats small{color:var(--mut)}
-.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.bdg{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);font-size:14px;opacity:.4}.bdg.on{opacity:1;background:rgba(var(--g),0.1);color:var(--gold)}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.bdg{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);font-size:14px;opacity:.72;color:var(--txt)}.bdg.on{opacity:1;background:rgba(var(--g),0.1);color:var(--gold);font-weight:700}
 .motd{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-top:12px;background:rgba(var(--w),0.03);line-height:1.9}.motd .ico{color:var(--gold);flex:none;margin-top:5px}
 .th{display:inline-flex;align-items:center;gap:6px;width:auto;padding:5px 14px;font-size:14px;margin:6px 0 0;background:transparent;color:var(--gold);border:1px solid var(--line)}.th.on{background:var(--gold);color:var(--ink)}
 .prompt{background:rgba(var(--g),0.08);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:0 0 8px;line-height:1.8}
@@ -153,7 +150,7 @@ a{color:inherit;text-decoration:none}
 .hero .sm button{height:50px}
 .sec{margin-top:26px}.sec>h2{font-size:22px;margin:0 0 4px;color:var(--txt)}.sec>p{margin:0 0 12px;color:var(--mut)}
 .icards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.icard{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:18px;border:1px solid var(--line);background:rgba(var(--w),0.03);transition:.2s}
+.icard{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:14px;border:1px solid var(--line);background:rgba(var(--w),0.03);transition:.2s}
 .icard:hover{border-color:var(--gold);transform:translateY(-2px)}
 .icard .fi{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(var(--g),0.1);color:var(--gold)}
 .icard b{font-size:16px}.icard small{color:var(--mut);line-height:1.7}
@@ -166,8 +163,8 @@ a{color:inherit;text-decoration:none}
 .demo{max-width:420px;margin:18px auto 0;border:1px solid var(--line);border-radius:22px;padding:16px;background:linear-gradient(160deg,rgba(var(--w),0.06),rgba(var(--w),0.02));text-align:right}
 .demo .dh{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:10px}
 .demo .dh i{font-style:normal;background:var(--gold);color:var(--ink);border-radius:12px;padding:1px 10px;font-size:12px}
-.demo .dm{background:rgba(var(--w),0.04);border-right:4px solid var(--gold);border-radius:14px;padding:12px;margin:8px 0}
-.dl{height:10px;border-radius:6px;background:rgba(var(--w),0.12);margin:7px 0}.w80{width:80%}.w60{width:60%}.w70{width:70%}.w40{width:40%}
+.demo .dm{background:rgba(var(--w),0.06);border-right:4px solid var(--gold);border-radius:14px;padding:12px;margin:8px 0}
+.dl{height:10px;border-radius:6px;background:rgba(var(--w),0.2);margin:7px 0}.w80{width:80%}.w60{width:60%}.w70{width:70%}.w40{width:40%}
 .dt{margin-top:8px;color:var(--gold);font-size:13px;display:flex;gap:6px;align-items:center}
 .band{margin-top:22px;text-align:center;border-radius:22px;padding:22px 16px;background:linear-gradient(135deg,rgba(var(--g),0.15),rgba(var(--g),0.05));border:1px solid var(--gold)}
 .band h2{margin:0 0 6px;color:var(--txt);font-size:22px}.band p{margin:0 0 12px;color:var(--mut)}
@@ -175,7 +172,7 @@ a{color:inherit;text-decoration:none}
 .feat2{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;margin-top:24px}
 .f2{display:flex;gap:10px;align-items:flex-start}.f2 .fi{flex:none;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(var(--g),0.1);color:var(--gold)}
 .f2 b{display:block;margin-bottom:2px}.f2 small{color:var(--mut);line-height:1.7}
-.sugg{margin-top:22px;display:flex;align-items:center;gap:14px;border-radius:20px;padding:16px;border:1px dashed var(--gold);background:rgba(var(--g),0.06)}
+.sugg{margin-top:22px;display:flex;align-items:center;gap:14px;border-radius:14px;padding:16px;border:1px dashed var(--gold);background:rgba(var(--g),0.06)}
 .sugg .fi{flex:none;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--gold);color:var(--ink)}
 .sugg b{display:block}.sugg small{color:var(--mut)}.sugg button{width:auto;margin:0;padding:10px 16px;flex:none}
 .lrow{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid rgba(var(--w),0.07)}
@@ -229,9 +226,7 @@ input,textarea,select{background:var(--field);color:var(--txt)}
 .kbd .ico{width:16px;height:16px}
 .kchips .chip{flex:none}
 
-[data-theme="light"] button{box-shadow:0 4px 14px rgba(138,95,0,.25)}
-[data-theme="light"] .glass{box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.glass h2{margin-bottom:12px}
+
 .glass .lbl{margin-top:14px}
 #edp textarea,#edp input{margin:6px 0 4px}
 #edp{border-color:var(--gold)}
@@ -243,6 +238,10 @@ input,textarea,select{background:var(--field);color:var(--txt)}
 .envi{grid-row:1 / 4;width:46px;height:46px;border-radius:50%;background:#6cb6ff22;display:flex;align-items:center;justify-content:center;flex:none;color:#9fd3ff}
 .envi .ico{width:22px;height:22px}
 
+.brand,.lead{font-family:Amiri,"El Messiri",serif}
+.eyebrow{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--gold);font-size:13.5px;font-weight:700;letter-spacing:0;margin:0 0 16px}
+.eyebrow::before,.eyebrow::after{content:"";height:1px;width:44px;background:var(--line)}
+.lead{max-width:34ch;margin-right:auto;margin-left:auto}
 </style>
 <style id="custom"></style>
 </head>
@@ -366,21 +365,12 @@ async function ensureProfile(user){
 const annHtml = home => (!ANN || !(home || ANN.show_all)) ? "" : `<div class="ann">${ANN.title ? `<b>${esc(ANN.title)}</b>` : ""}<p>${esc(ANN.body)}</p></div>`;
 function toast(t, f){ const d = mk("div","toast",t); if(f) d.onclick = f; document.body.appendChild(d); setTimeout(() => d.remove(), 5000); }
 function setBadge(n){ window._nb = n; const b = $("bd"); if(!b) return; b.textContent = n.toLocaleString("en"); b.hidden = n <= 0; }
-const themeIcon = () => ic(document.documentElement.dataset.theme === "light" ? "moon" : "sun");
-function toggleTheme(){
-  const light = document.documentElement.dataset.theme === "light";
-  if(light) delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = "light";
-  try{ localStorage.setItem("theme", light ? "dark" : "light"); }catch(e){}
-  document.querySelectorAll(".thm").forEach(b => { b.innerHTML = themeIcon() + (b.dataset.l ? "<small>المظهر</small>" : ""); });
-}
 const BAR = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr">
-    <button class="ic thm" id="thm" data-l="1" title="المظهر">${themeIcon()}<small>المظهر</small></button>
     <button class="ic" id="icn">${ic("bell")}<small>الإشعارات</small><i class="bd" id="bd" hidden></i></button>
   <button class="ic" id="ica">${ic("user")}<small>حسابي</small></button>
   <button class="ic" id="ico">${ic("logout")}<small>خروج</small></button></div></div>`;
 async function wireBar(user){
   $("tbh").onclick = () => go("");
-  $("thm").onclick = toggleTheme;
   $("icn").onclick = () => notifPage(user);
   $("ica").onclick = () => go("?profile");
   $("ico").onclick = async()=>{ await db.auth.signOut(); go(""); };
@@ -401,7 +391,7 @@ function mountCaptcha(){
   const box = $("hc"); if(!box) return;
   let tries = 0;
   const t = setInterval(() => {
-    if(window.hcaptcha){ clearInterval(t); hcId = hcaptcha.render(box, { sitekey: HC_KEY, theme: document.documentElement.dataset.theme === "light" ? "light" : "dark" }); }
+    if(window.hcaptcha){ clearInterval(t); hcId = hcaptcha.render(box, { sitekey: HC_KEY, theme: "dark" }); }
     else if(++tries > 40){ clearInterval(t); say("note","تعذّر تحميل مربع التحقق، جرّب شبكة أخرى."); }
   }, 250);
 }
@@ -459,11 +449,11 @@ async function shareCard(m){
   try{ await document.fonts.load("700 28px Cairo"); }catch(e){}
   const W = 1080, H = 1080, F = "Cairo, Tahoma, sans-serif", c = document.createElement("canvas"); c.width = W; c.height = H;
   const x = c.getContext("2d");
-  const g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#0a1a1f"); g.addColorStop(1, "#0f2a2b"); x.fillStyle = g; x.fillRect(0, 0, W, H);
-  x.strokeStyle = "#3ddbb4"; x.lineWidth = 3; x.strokeRect(36, 36, W - 72, H - 72);
+  const g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#04201a"); g.addColorStop(1, "#0a3a2c"); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  x.strokeStyle = "#e3b94a"; x.lineWidth = 3; x.strokeRect(36, 36, W - 72, H - 72);
   x.direction = "rtl"; x.textAlign = "center";
   const wrap = (t, font, maxW) => { x.font = font; const out = []; String(t).split("\n").forEach(par => { let line = ""; par.split(" ").forEach(w => { const test = line ? line + " " + w : w; if(x.measureText(test).width > maxW && line){ out.push(line); line = w; } else line = test; }); out.push(line); }); return out; };
-  x.fillStyle = "#3ddbb4"; x.font = "700 56px " + F; x.fillText(N(), W / 2, 130);
+  x.fillStyle = "#e3b94a"; x.font = "700 56px " + F; x.fillText(N(), W / 2, 130);
   const top = 190, bottom = H - 190, maxW = W - 220;
   let size = 58, lh, rs, body, reply;
   for(; size >= 30; size -= 2){
@@ -478,12 +468,12 @@ async function shareCard(m){
   x.fillStyle = "#f4efe0"; x.font = "700 " + size + "px " + F;
   body.forEach(l => { x.fillText(l, W / 2, y); y += lh; });
   if(reply.length){
-    y += 20; x.fillStyle = "#3ddbb4"; x.font = "700 " + Math.round(size * .7) + "px " + F; x.fillText("الرد", W / 2, y); y += Math.round(size * 1.1);
+    y += 20; x.fillStyle = "#e3b94a"; x.font = "700 " + Math.round(size * .7) + "px " + F; x.fillText("الرد", W / 2, y); y += Math.round(size * 1.1);
     x.fillStyle = "#f6e7b0"; x.font = "400 " + rs + "px " + F; reply.forEach(l => { x.fillText(l, W / 2, y); y += rlh; });
   }
-  x.strokeStyle = "#3ddbb466"; x.lineWidth = 2; x.beginPath(); x.moveTo(W / 2 - 120, H - 170); x.lineTo(W / 2 + 120, H - 170); x.stroke();
+  x.strokeStyle = "#e3b94a66"; x.lineWidth = 2; x.beginPath(); x.moveTo(W / 2 - 120, H - 170); x.lineTo(W / 2 + 120, H - 170); x.stroke();
   x.fillStyle = "#9fb8ac"; x.font = "400 30px " + F; wrap(SHARE_TXT, x.font, W - 220).slice(0, 2).forEach((l, i) => x.fillText(l, W / 2, H - 125 + i * 40));
-  x.fillStyle = "#3ddbb4"; x.font = "700 30px " + F; x.direction = "ltr"; x.fillText(linkOf(window._me.slug).replace(/^https?:\/\//, ""), W / 2, H - 52);
+  x.fillStyle = "#e3b94a"; x.font = "700 30px " + F; x.direction = "ltr"; x.fillText(linkOf(window._me.slug).replace(/^https?:\/\//, ""), W / 2, H - 52);
   c.toBlob(async blob => {
     const f = new File([blob], "message.png", { type: "image/png" });
     if(navigator.canShare && navigator.canShare({ files: [f] })){ try{ await navigator.share({ files: [f], title: N() }); return; }catch(e){ if(e.name === "AbortError") return; } }
@@ -516,8 +506,8 @@ async function loadFeat(){
   const a = mk("button","ghost","عرض كل الرسائل المختارة"); a.onclick = () => go("?featured"); g.appendChild(a); box.appendChild(g);
 }
 const SKEL = '<div class="skel"></div><div class="skel"></div>';
-const TOPOUT = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr"><button class="ic thm" id="thm" title="المظهر">${themeIcon()}</button><button class="ghost sbtn" id="nl" style="margin:0">دخول</button>${on("allow_signup") ? `<button class="sbtn" id="ns" style="margin:0">حساب جديد</button>` : ""}</div></div>`;
-const wireOut = () => { $("tbh").onclick = () => go(""); if($("thm")) $("thm").onclick = toggleTheme; $("nl").onclick = () => go("?login"); if($("ns")) $("ns").onclick = () => go("?signup"); };
+const TOPOUT = () => `<div class="tb"><b class="tbrand" id="tbh">${esc(N())}</b><div class="tbr"><button class="ghost sbtn" id="nl" style="margin:0">دخول</button>${on("allow_signup") ? `<button class="sbtn" id="ns" style="margin:0">حساب جديد</button>` : ""}</div></div>`;
+const wireOut = () => { $("tbh").onclick = () => go(""); $("nl").onclick = () => go("?login"); if($("ns")) $("ns").onclick = () => go("?signup"); };
 const quickRow = (slug, active) => `<div class="qrow"><a class="qb${active === "inbox" ? " on" : ""}" href="?login">صندوق رسائلي</a><a class="qb${active === "edit" ? " on" : ""}" href="?profile">تعديل حسابي</a><a class="qb${active === "privacy" ? " on" : ""}" href="?privacy">الخصوصية والإشعارات</a><a class="qb${active === "page" ? " on" : ""}" href="?p=${esc(slug)}">صفحتي</a></div>`;
 const checklistHtml = p => {
   const items = [["أضف نبذة عنك", !!p.bio, "?profile"], ["اختر صورتك الرمزية", !!p.avatar, "?profile"], ["شارك رابطك مع أصدقائك", !!LS.get("shared"), "#lnk"]];
@@ -550,7 +540,7 @@ function guidePage(s, open){
 function aboutPage(s){
   const q = (title, ans, open) => `<details class="glass acc" ${open ? "open" : ""}><summary><span>${title}</span></summary><div class="accb"><p>${ans}</p></div></details>`;
   infoPage(s, "عن " + N(), "كل ما تريد معرفته في دقيقة.",
-    q("ما هو " + esc(N()) + "؟", "موقع يمنحك رابطًا خاصًا. تنشره في واتساب أو إنستغرام أو أي مكان، فيصلك ما يود الناس قوله لك في صندوق رسائل خاص بك.", true) +
+    q("كيف يعمل؟", "موقع يمنحك رابطًا خاصًا. تنشره في واتساب أو إنستغرام أو أي مكان، فيصلك ما يود الناس قوله لك في صندوق رسائل خاص بك.", true) +
     q("كيف أبدأ؟", "أنشئ حسابًا مجانًا في أقل من دقيقة، ثم انسخ رابطك وشاركه.") +
     q("هل أحتاج حسابًا لأرسل رسالة؟", "لا. أي شخص يفتح رابطك يكتب رسالته ويرسلها مباشرة.") +
     q("هل يعرف صاحب الرابط من أرسل له؟", "لا، إلا إذا اختار المرسل المسجّل بنفسه أن يُظهر اسمه.") +
@@ -588,14 +578,15 @@ const demoCard = () => `<div class="demo" aria-hidden="true"><div class="dh"><sp
 function landing(s){
   const signup = on("allow_signup");
   el(`${s ? BAR() : TOPOUT()}${annHtml(true)}${s ? `<div class="glass ub"><div class="av2" id="av2"></div><b id="unm">&nbsp;</b><button class="sbtn" id="ub1" style="margin:0">صندوق رسائلي</button></div>` : ""}
-  <div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand">${esc(N())}</h1>
-    <p class="lead">${SET.hero_lead ? esc(SET.hero_lead) : 'أخبرني برأيك <span class="hl">بسرّية</span>'}</p>
+  <div class="hero"><p class="eyebrow">مساحة للكلمة الطيبة</p><div class="logo">${ic("chat")}</div><h1 class="brand">${esc(N())}</h1>
+    <p class="lead">${SET.hero_lead ? esc(SET.hero_lead) : 'اكتب لي <span class="hl">بصدق</span>'}</p>
     <p class="tag">${esc(T("hero_tag","رابطك الخاص يجمع لك كلمات أصدقائك الصادقة: نصيحة، دعاء، مصارحة أو تذكير بالخير، دون أن يظهر اسمهم، وأنت وحدك تقرؤها."))}</p>
-    ${s ? "" : `<div class="sm">${signup ? `<button id="go">أنشئ رابطك الآن، مجانًا</button>` : ""}<button class="ghost" id="go2">لدي حساب</button><p class="mini">التسجيل يستغرق أقل من دقيقة</p></div>`}</div>
-  <div class="glass about"><h2>ما هو ${esc(N())}؟</h2>
-    <p>موقع يعطيك <b class="hl">رابطًا خاصًا</b> تنشره لأصدقائك، فيكتبون لك رسائل <b class="hl">دون أن يظهر اسمهم</b>، وأنت وحدك تقرؤها.</p>
-    <p>فكّر فيه كأنه <b>صندوق سرّي خاص بك</b> على الإنترنت: تعرف رأي من حولك بصدق، وتستقبل كلماتهم الطيبة ونصائحهم ودعواتهم.</p>
-    <a class="more" href="?about">اقرأ المزيد</a></div>
+    ${s ? "" : `<div class="sm">${signup ? `<button id="go">أنشئ رابطك الآن</button>` : ""}<button class="ghost" id="go2">لدي حساب</button><p class="mini">مجانًا وبأقل من دقيقة</p></div>
+    <p class="mini" id="livecnt" style="margin-top:6px"></p>`}</div>
+  <div class="glass about"><h2>صندوقك الخاص في كلمة</h2>
+    <p>رابط واحد ينشره الناس، فيصلك منهم كل كلمة <b class="hl">بلا اسم ظاهر</b>.</p>
+    <p>كأنه صندوقك السرّي: رأي صادق، كلمة طيبة، ونصيحة من يحبّ لك الخير.</p>
+    <a class="more" href="?about">اعرف أكثر</a></div>
   ${s ? "" : demoCard()}  ${motdHtml()}
   <div class="glass"><h2>كيف يعمل؟</h2><div class="steps">
     <div class="step"><div class="n">1</div><div><b>أنشئ حسابك</b><small>اختر اسمك، ويصبح لك رابط خاص</small></div></div>
@@ -613,13 +604,15 @@ function landing(s){
     <div class="f2"><div class="fi">${ic("bolt")}</div><div><b>خفيف وسهل الاستخدام</b><small>يفتح بسرعة، وخطواته واضحة</small></div></div></div>
   <div id="feat"></div>
   ${s || !signup ? "" : `<div class="band"><h2>جاهز لتبدأ؟</h2><p>أنشئ رابطك وشاركه مع أصدقائك، وانتظر أول رسالة.</p><button id="go3">أنشئ رابطك الآن</button></div>`}
-  ${on("show_suggestions") ? `<div class="sugg"><div class="fi">${ic("bolt")}</div><div style="flex:1"><b>عندك فكرة تطوّر الموقع؟</b><small>اقتراحك يصنع الفرق، ولا يحتاج حسابًا.</small></div><button id="sgo">شاركنا</button></div>` : ""}`);
+  ${on("show_suggestions") ? `<div class="sugg"><div class="fi">${ic("bolt")}</div><div style="flex:1"><b>عندك اقتراح يطوّر الموقع؟</b><small>اقتراحك يصنع الفرق، ولا يحتاج حسابًا.</small></div><button id="sgo">شاركنا</button></div>` : ""}`);
   loadFeat();
   if($("sgo")) $("sgo").onclick = () => go("?suggest");
   if(s){
     wireBar(s.user); $("ub1").onclick = () => go("?login");
     ensureProfile(s.user).then(p => { if(!p) return; if(p.banned) return bannedPage(); if($("unm")){ $("unm").textContent = p.username; setAv($("av2"), p); [$("av2"), $("unm")].forEach(e => { e.style.cursor = "pointer"; e.onclick = () => go("?p=" + p.slug); }); } });
-  } else { wireOut(); [$("go"), $("go3")].forEach(b => { if(b) b.onclick = () => go("?signup"); }); $("go2").onclick = () => go("?login"); }
+  } else { wireOut(); [$("go"), $("go3")].forEach(b => { if(b) b.onclick = () => go("?signup"); }); $("go2").onclick = () => go("?login");
+    if(db) db.rpc("public_today_count").then(({ data }) => { const c = $("livecnt"); if(c && typeof data === "number") c.textContent = data > 0 ? `${data.toLocaleString("en")} رسالة وصلت اليوم في ${N()}` : ""; }, () => {});
+  }
 }
 
 const NEED_LOGIN = "هذه الصفحة تتطلب تسجيل الدخول. سجّل الدخول أو أنشئ حسابًا للمتابعة.";
@@ -950,7 +943,7 @@ async function profilePage(s){
   if(!db){ el(`${TOPOUT()}${HOME}<div class="glass sm" style="text-align:center;margin-top:22px"><p class="tag">تعذّر الاتصال بالخادم الآن، حاول تحديث الصفحة.</p></div>`); wireOut(); return; }
   const r = await db.rpc("profile_public", { pslug: key });
   const u = r.data && r.data[0];
-  if(!u){ el(`${BAR()}${HOME}<div class="glass sm center" style="margin-top:22px"><p class="sub">${r.error ? "تعذّر تحميل الصفحة، حاول مرة أخرى" : "هذا المستخدم غير موجود أو غير متاح"}</p></div>`); wireBar(s.user); return; }
+  if(!u){ el(`${BAR()}${HOME}<div class="glass sm center" style="margin-top:22px"><p class="sub">${r.error ? "تعذّر تحميل الصفحة، حاول مرة أخرى" : "الرابط غير صحيح"}</p></div>`); wireBar(s.user); return; }
   const me = s.user.id === u.id, full = me && !guest;
   const stat = (n, l) => `<div><b>${Number(n || 0).toLocaleString("en")}</b><small>${l}</small></div>`;
   el(`${BAR()}${HOME}${guest ? `<div class="warn center">أنت تشاهد صفحتك كما يراها غيرك. <a class="hl" href="?p=${esc(u.slug)}">رجوع</a></div>` : ""}${full ? quickRow(u.slug, "page") : ""}
@@ -1023,7 +1016,7 @@ async function privacyPage(user){
 }
 async function sendPage(key){
   const p = await db.from("profiles").select("id,username,slug,banned,avatar").eq("slug", key).maybeSingle();
-  if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا المستخدم غير متاح" : "هذا المستخدم غير موجود"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
+  if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "الرابط غير صحيح" : "الرابط غير صحيح"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
   const s = await getSession(), mx = MAXLEN();
   const KINDS = [["نصيحة","book"],["مصارحة","eye"],["اعتذار","leaf"],["تذكير بالخير","sun"]];
   let kind = "";
@@ -1047,7 +1040,7 @@ async function sendPage(key){
     $("send").disabled = true;
     const r = await db.from("messages").insert({ to_user: p.data.id, body: t, kind: kind || null, sender_name: (s && $("show") && $("show").checked) ? "show" : null });
     $("send").disabled = false;
-    if(r.error){ const m = r.error.message || ""; return say("note", m.includes("BANNED") ? "هذا المستخدم غير متاح" : m.includes("TOOFAST") ? "وصلت رسائل كثيرة الآن، حاول بعد قليل" : m.includes("BADWORD") ? "رسالتك تحتوي على كلمات غير مسموحة" : m.includes("NOVISITOR") ? "الإرسال متاح للمسجّلين فقط حاليًا" : m.includes("TOOLONG") ? "الرسالة أطول من المسموح" : m.includes("BLOCKED") ? "لا يمكن إرسال الرسالة إلى هذا الحساب حاليًا" : "حدث خطأ، حاول مرة أخرى"); }
+    if(r.error){ const m = r.error.message || ""; return say("note", m.includes("BANNED") ? "الرابط غير صحيح" : m.includes("TOOFAST") ? "وصلت رسائل كثيرة الآن، حاول بعد قليل" : m.includes("BADWORD") ? "رسالتك تحتوي على كلمات غير مسموحة" : m.includes("NOVISITOR") ? "الإرسال متاح للمسجّلين فقط حاليًا" : m.includes("TOOLONG") ? "الرسالة أطول من المسموح" : m.includes("BLOCKED") ? "لا يمكن إرسال الرسالة إلى هذا الحساب حاليًا" : "حدث خطأ، حاول مرة أخرى"); }
     const cta = s ? "" : (on("allow_signup") ? `<div class="cta"><b>تريد أن يرسل لك الناس رسائل مثلها؟</b><ul><li>تحصل على رابطك الخاص لتنشره.</li><li>تعرف إن كان المستلم قرأ رسائلك التي ترسلها وأنت مسجّل.</li><li>أنت من يقرر ما يُنشر من رسائلك.</li></ul><button id="cta">أنشئ حسابك في دقيقة</button></div>` : "");
     $("box").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>وصلت رسالتك</b></div>${cta}<button class="ghost" id="again">إرسال رسالة أخرى</button>`;
     if($("cta")) $("cta").onclick = () => go("?signup");
@@ -1254,7 +1247,7 @@ async function aSet(){
   FIELDS.forEach(([k, label, type]) => {
     box.appendChild(mk("div","lbl",label));
     let i;
-    if(type === "textarea"){ i = mk("textarea"); i.rows = 3; i.value = SET[k] || ""; } else { i = mk("input"); i.type = type; i.value = SET[k] || (type === "color" ? (k === "accent" ? "#3ddbb4" : "#0a1a1f") : ""); }
+    if(type === "textarea"){ i = mk("textarea"); i.rows = 3; i.value = SET[k] || ""; } else { i = mk("input"); i.type = type; i.value = SET[k] || (type === "color" ? (k === "accent" ? "#e3b94a" : "#04201a") : ""); }
     if(type === "text") i.maxLength = 120;
     ins[k] = i; box.appendChild(i);
   });
