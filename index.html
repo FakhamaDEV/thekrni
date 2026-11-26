@@ -4,13 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://js.hcaptcha.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.supabase.in wss://*.supabase.in; frame-src https://js.hcaptcha.com; base-uri 'none'; form-action 'self'">
 <meta name="theme-color" content="#04201a">
 <title>ذكّرني</title>
 <meta name="description" content="أنشئ رابطك الخاص واستقبل رسائل مجهولة">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e3b94a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-8l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z'/%3E%3Cpath d='M8 10h8M8 13h5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://pkyqkzqkxfcytvtsygse.supabase.co">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=El+Messiri:wght@500;600;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="https://js.hcaptcha.com/1/api.js?render=explicit" async defer></script>
+<link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js">
 <style>
 
 :root{--w:255,255,255;--g:227,185,74;--k:0,0,0;--ink:#04201a;--rep:#f6e7b0;--hi:#fff3c4;--err:#ff9b8f;--ph:#8aa397;--field:rgba(0,0,0,.2);--bg:var(--ink);--bg2:#0a3a2c;--gold:#e3b94a;--gold2:#b88a1e;--txt:#f4efe0;--mut:#9fb8ac;--glass:rgba(255,255,255,.06);--line:rgba(227,185,74,.28);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -30,7 +35,6 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 .ic small{display:block;font-size:11px;font-weight:400;color:var(--mut)}
 .bd{position:absolute;top:-6px;left:-4px;background:#c0392b;color:#fff;border-radius:12px;font-size:11px;font-style:normal;padding:1px 6px;font-weight:700}
 .hero{text-align:center;padding:30px 8px 20px}
-.moon{font-size:50px}
 h1.brand{font-family:'El Messiri',Amiri,serif;font-size:clamp(50px,14vw,72px);margin:4px 0 0;line-height:1.2;background:linear-gradient(180deg,var(--hi),var(--gold) 55%,var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{font-size:clamp(17px,4.6vw,20px);line-height:2;margin:8px 0 2px}
 .lead{font-family:'El Messiri',Amiri,serif;font-size:clamp(24px,6.6vw,34px);line-height:1.9;margin:10px 0 6px;color:var(--hi)}
@@ -43,11 +47,6 @@ h1.brand{font-family:'El Messiri',Amiri,serif;font-size:clamp(50px,14vw,72px);ma
 .step{display:flex;gap:14px;align-items:center}
 .n{flex:none;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--ink);font-weight:700;font-size:19px;display:flex;align-items:center;justify-content:center}
 .step b{display:block}.step small{color:var(--mut)}
-.feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.feats .glass{margin:0;text-align:center;padding:14px 8px}
-.feats span{font-size:28px;display:block;margin-bottom:4px}
-.feats small{color:var(--mut);line-height:1.7}
-.zikr{text-align:center;color:var(--gold);font-family:Amiri,serif;font-size:24px;margin:16px 0 0}
 .respect{text-align:center;border-color:var(--gold)}
 .respect h2{font-family:Amiri,serif;font-size:clamp(22px,6vw,28px);margin-bottom:12px}
 .respect p{line-height:2.1;margin:10px 0;font-size:16.5px}
@@ -116,7 +115,7 @@ footer b{color:var(--gold)}
 .fdev{align-self:flex-end;margin-top:6px;font-size:12px;color:var(--mut);display:flex;align-items:center;gap:6px;opacity:.85}
 .fdev:hover{opacity:1}
 .dev{color:var(--gold);font-weight:600}.dev:hover{text-decoration:underline}
-@media(min-width:700px){.wrap{padding:24px 24px 40px}.feats{grid-template-columns:repeat(3,1fr)}.glass{padding:24px}}
+@media(min-width:700px){.wrap{padding:24px 24px 40px}.glass{padding:24px}}
 .ico{width:1.15em;height:1.15em;vertical-align:-.2em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,textarea,.sel,body.sel-ok,body.sel-ok *{-webkit-user-select:text;user-select:text}
@@ -125,8 +124,6 @@ h1.brand{background:none;-webkit-text-fill-color:currentColor;color:var(--gold)}
 .logo{width:56px;height:56px;margin:0 auto;display:flex;align-items:center;justify-content:center;border-radius:14px;background:linear-gradient(135deg,rgba(var(--g),.2),rgba(var(--g),.06));color:var(--gold);border:1px solid rgba(var(--g),.35);box-shadow:0 0 24px rgba(var(--g),.15)}
 .logo .ico{width:30px;height:30px}
 .hl{color:var(--gold);font-weight:700}
-.feats .fi{width:44px;height:44px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:rgba(var(--g),0.1);color:var(--gold)}
-.feats .fi .ico{width:24px;height:24px}
 .ic .ico{width:22px;height:22px}
 .ok .big .ico{width:54px;height:54px;color:var(--gold)}
 .cta{background:rgba(var(--g),0.08);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0;text-align:right}
@@ -153,27 +150,21 @@ a{color:inherit;text-decoration:none}
 #app>*{animation:fi .28s ease both}
 @keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#app>*,.flash{animation:none}}
+#feat,.feat2,.band,.sugg,footer{content-visibility:auto;contain-intrinsic-size:auto 280px}
 .skel{height:64px;border-radius:14px;margin:10px 0;background:linear-gradient(90deg,rgba(var(--w),0.04),rgba(var(--w),0.09),rgba(var(--w),0.04));background-size:200% 100%;animation:sk 1.3s infinite}
 .skel.big{height:240px}
 @keyframes sk{to{background-position:-200% 0}}
 .lead{font-family:'El Messiri',Amiri,serif;font-weight:700;font-size:clamp(28px,8vw,44px);line-height:1.5;margin:14px 0 8px;color:var(--txt)}
 .hero .sm button{height:50px}
 .sec{margin-top:26px}.sec>h2{font-size:22px;margin:0 0 4px;color:var(--txt)}.sec>p{margin:0 0 12px;color:var(--mut)}
-.icards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.icard{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:14px;border:1px solid var(--line);background:rgba(var(--w),0.03);transition:.2s}
-.icard:hover{border-color:var(--gold);transform:translateY(-2px)}
-.icard .fi{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(var(--g),0.1);color:var(--gold)}
-.icard b{font-size:16px}.icard small{color:var(--mut);line-height:1.7}
 .fnav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin:0 0 16px}
 .fnav a{color:var(--mut);font-size:14px}.fnav a:hover{color:var(--gold)}.tipc{display:flex;gap:14px;align-items:flex-start}.tipc b{display:block;color:var(--gold);margin-bottom:2px}.tipc p{margin:0;line-height:1.9}
-@media(min-width:700px){.icards{grid-template-columns:repeat(4,1fr)}}
 .zk{margin:6px 0 14px}.zk span{display:block;font-family:Amiri,serif;font-size:24px;color:var(--gold);line-height:1.8}.zk small{color:var(--mut);font-size:13px}
 .mini{font-size:13px;color:var(--mut);margin:8px 0 0}
 .demo{max-width:420px;margin:18px auto 0;border:1px solid var(--line);border-radius:22px;padding:16px;background:linear-gradient(160deg,rgba(var(--w),0.06),rgba(var(--w),0.02));text-align:right}
 .demo .dh{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:10px}
 .demo .dh i{font-style:normal;background:var(--gold);color:var(--ink);border-radius:12px;padding:1px 10px;font-size:12px}
 .demo .dm{background:rgba(var(--w),0.06);border-right:4px solid var(--gold);border-radius:14px;padding:12px;margin:8px 0}
-.dl{height:10px;border-radius:6px;background:rgba(var(--w),0.2);margin:7px 0}.w80{width:80%}.w60{width:60%}.w70{width:70%}.w40{width:40%}
 .demo .dm.real p{margin:0;line-height:1.9;color:var(--txt);font-size:15px}
 .dacts{display:flex;gap:14px;margin-top:10px;color:var(--gold);font-size:13px}
 .dacts span{display:inline-flex;gap:6px;align-items:center}
@@ -200,15 +191,11 @@ a{color:inherit;text-decoration:none}
 @media(min-width:700px){.feat2{grid-template-columns:repeat(4,1fr)}}
 .hero .logo{margin:0 auto 18px}h1.brand{margin:8px 0 6px;line-height:1.35}
 button.sbtn{display:inline-flex;align-items:center;gap:6px}.sbtn .ico{width:1.05em;height:1.05em}
-.lkn{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--gold)}
 .qrbox canvas{max-width:260px;width:100%}
 .dev{color:var(--gold);font-weight:700}.dev:hover{text-decoration:underline}
 a.shb .ico{width:20px;height:20px;margin-left:8px}
 .bigbtn{height:56px;font-size:18px;display:flex;align-items:center;justify-content:center;gap:8px}
 .send textarea{font-size:17px;line-height:1.8}
-.qs{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 8px}
-.qs span{padding:7px 14px;border:1px solid var(--line);border-radius:20px;font-size:14px;cursor:pointer;color:var(--mut)}
-.qs span:hover{color:var(--gold);border-color:var(--gold)}
 .pl{display:block;cursor:pointer}
 .center{text-align:center}
 button.sbtn.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
@@ -230,7 +217,6 @@ button.sbtn.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
 .tg i:after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
 .tg input:checked+i{background:var(--gold)}.tg input:checked+i:after{right:23px}
 .vis{color:var(--gold)}.hid{color:var(--mut)}
-.ic.thm{min-width:48px}
 
 input,textarea,select{background:var(--field);color:var(--txt)}
 .kbd{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:12px;background:rgba(var(--g),.12);color:var(--gold);font-size:13px;font-weight:700;margin-bottom:6px}
@@ -258,6 +244,7 @@ input,textarea,select{background:var(--field);color:var(--txt)}
 </head>
 <body>
 <div class="wrap"><div id="app"><div class="skel big"></div></div><footer id="ft"></footer></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 // ====== بيانات المشروع ======
 const SUPABASE_URL = "https://pkyqkzqkxfcytvtsygse.supabase.co";
@@ -333,6 +320,7 @@ const ERR = [
 const arErr = e => { const m = ((e && e.message) || "").toLowerCase(); const f = ERR.find(x => m.includes(x[0])); return f ? f[1] : "حدث خطأ، حاول مرة أخرى"; };
 const fmt = d => new Date(d).toLocaleString("ar-u-nu-latn");
 const track = () => db ? db.from("visits").insert({ device: innerWidth < 768 ? "جوال" : "حاسوب" }).then(()=>{}, ()=>{}) : Promise.resolve();
+const idle = f => { if("requestIdleCallback" in window) requestIdleCallback(f, { timeout: 2500 }); else setTimeout(f, 1200); };
 const getSession = async () => db ? (await db.auth.getSession()).data.session : null;
 const cnt = async (t, f, col) => { let q = db.from(t).select(col || "id", { count:"exact", head:true }); if(f) q = f(q); return (await q).count ?? 0; };
 const darken = h => { const n = parseInt(h.slice(1), 16); const f = v => Math.max(0, Math.round(v * .78)); return "#" + [n >> 16, (n >> 8) & 255, n & 255].map(v => f(v).toString(16).padStart(2, "0")).join(""); };
@@ -400,6 +388,10 @@ function maintPage(){
 // ===== التحقق (hCaptcha) =====
 function mountCaptcha(){
   const box = $("hc"); if(!box) return;
+  if(!window.__hcload){
+    window.__hcload = 1;
+    const sc = document.createElement("script"); sc.src = "https://js.hcaptcha.com/1/api.js?render=explicit"; sc.async = true; sc.defer = true; document.head.appendChild(sc);
+  }
   let tries = 0;
   const t = setInterval(() => {
     if(window.hcaptcha){ clearInterval(t); hcId = hcaptcha.render(box, { sitekey: HC_KEY, theme: "dark" }); }
@@ -432,10 +424,10 @@ async function render(route, s){
 async function start(){
   SET = LS.get("set") || {}; ANN = LS.get("ann") || null; applySettings();
   const route = routeOf(), s = await getSession();
-  if(route === "home" || route === "send") track();
+  if(route === "home" || route === "send") idle(track);
   render(route, s);
   const before = JSON.stringify([SET, ANN]);
-  await Promise.all([loadSettings(), loadAnn()]);
+  await Promise.all(["home","login","signup"].includes(route) ? [loadSettings(), loadAnn()] : [loadSettings()]);
   if(JSON.stringify([SET, ANN]) !== before && (["home","about","guide","tips","safety","respect","featured","suggest"].includes(route) || SET.maintenance === "1")) render(route, s);
 }
 
@@ -546,7 +538,7 @@ function guidePage(s, open){
   const notice = `<div class="warn"><b class="hl">تنبيه:</b> كثرة البلاغات على حساب قد تؤدي إلى تقييده أو حذفه، إذا ثبتت مخالفات مثل السبّ أو الشتم أو أي إساءة، وذلك بعد مراجعة البلاغات والتأكد منها.</div>`;
   infoPage(s, "الإرشادات", "نصائح بسيطة تجعل تجربتك أجمل وأكثر أمانًا.",
     notice + sec("tips","كيف نتعامل بلطف","chat", list(TIPS)) + sec("safety","كيف نحمي حسابنا","shield", list(SAFE)) +
-    sec("respect","الاحترام أساس التعامل بين الناس","star", `<p>احترم غيرك بكلامك وأفعالك، فالكلمة الطيبة صدقة، والأسلوب الراقي دليل على حسن التربية. لا تجرح مشاعر الآخرين، ولا تقلّل من شأن أحد، واختلف مع الناس بأدب واحترام.</p><p>تذكّر دائماً: عامل الناس كما تحب أن يعاملوك، فالاحترام لا يُفرض بالقوة، بل يُكتسب بالأخلاق، والكلمة الطيبة تترك أثراً جميلاً في القلوب.</p>`));
+    sec("respect","الاحترام أساس التعامل بين الناس","star", `<p>احترم غيرك بكلامك وأفعالك، فالكلمة الطيبة صدقة، والأسلوب الراقي دليل على حسن التربية. لا تجرح مشاعر الآخرين، ولا تقلّل من شأن أحد، واختلف مع الناس بأدب واحترام.</p><p>وتذكّر دائمًا: عامل الناس كما تحب أن يعاملوك، فالاحترام لا يُفرض بالقوة، بل يُكتسب بالأخلاق، والكلمة الطيبة تترك أثرًا جميلًا في القلوب.</p>`));
 }
 function aboutPage(s){
   const q = (title, ans, open) => `<details class="glass acc" ${open ? "open" : ""}><summary><span>${title}</span></summary><div class="accb"><p>${ans}</p></div></details>`;
@@ -571,6 +563,7 @@ function suggestPage(s){
   $("sgb").onclick = async()=>{
     const v = $("sg").value.trim();
     if(!v) return say("sgn","اكتب ملاحظتك أولًا ليصلنا صوتك");
+    if(!db) return say("sgn","تعذّر الاتصال بالخادم الآن، حاول تحديث الصفحة");
     $("sgb").disabled = true;
     const r = await db.from("suggestions").insert({ user_id: s ? s.user.id : null, body: "[" + kind + "] " + v });
     $("sgb").disabled = false;
@@ -616,13 +609,13 @@ function landing(s){
   <div id="feat"></div>
   ${s || !signup ? "" : `<div class="band"><h2>جاهز لتبدأ؟</h2><p>أنشئ رابطك وشاركه مع أصدقائك، وانتظر أول رسالة.</p><button id="go3">أنشئ رابطك الآن</button></div>`}
   ${on("show_suggestions") ? `<div class="sugg"><div class="fi">${ic("bolt")}</div><div style="flex:1"><b>عندك اقتراح يطوّر الموقع؟</b><small>اقتراحك يصنع الفرق، ولا يحتاج حسابًا.</small></div><button id="sgo">شاركنا</button></div>` : ""}`);
-  loadFeat();
+  idle(loadFeat);
   if($("sgo")) $("sgo").onclick = () => go("?suggest");
   if(s){
     wireBar(s.user); $("ub1").onclick = () => go("?login");
     ensureProfile(s.user).then(p => { if(!p) return; if(p.banned) return bannedPage(); if($("unm")){ $("unm").textContent = p.username; setAv($("av2"), p); [$("av2"), $("unm")].forEach(e => { e.style.cursor = "pointer"; e.onclick = () => go("?p=" + p.slug); }); } });
   } else { wireOut(); [$("go"), $("go3")].forEach(b => { if(b) b.onclick = () => go("?signup"); }); $("go2").onclick = () => go("?login");
-    if(db) db.rpc("public_today_count").then(({ data }) => { const c = $("livecnt"); if(c && typeof data === "number") c.textContent = data > 0 ? `${data.toLocaleString("en")} رسالة وصلت اليوم في ${N()}` : ""; }, () => {});
+    if(db) idle(() => db.rpc("public_today_count").then(({ data }) => { const c = $("livecnt"); if(c && typeof data === "number") c.textContent = data > 0 ? `${data.toLocaleString("en")} رسالة وصلت اليوم في ${N()}` : ""; }, () => {}));
   }
 }
 
@@ -648,6 +641,7 @@ function authPage(mode, notice){
   if(su) $("gen").onclick = e => { const c = e.target.closest(".chip"); if(!c) return; gender = c.dataset.g; [...$("gen").children].forEach(x => x.classList.toggle("on", x === c)); };
   const rnd = () => "u" + Math.random().toString(36).slice(2, 8);
   $("act").onclick = async()=>{
+    if(!db) return say("note","تعذّر الاتصال بالخادم الآن، حاول تحديث الصفحة");
     const email = $("email").value.trim(), pass = $("pass").value;
     say("note","");
     if(!email || !pass) return say("note","أدخل البريد الإلكتروني وكلمة المرور");
@@ -682,21 +676,21 @@ function authPage(mode, notice){
 }
 
 const TIPS = [
-  ["احترم غيرك","عامل الناس كما تحب أن يعاملوك، فمَن رضّ عن الناس رضى الله عنه."],
-  ["اختر كلماتك بعناية","قال ﷺ: «من كان يؤم بالله واليوم الآخر فليقل خيرًا أو ليصمت»، فالكلمة الطيبة صدقة."],
+  ["احترم غيرك","عامل الناس كما تحب أن يعاملوك، فمن رضي عن الناس رضي الله عنه."],
+  ["اختر كلماتك بعناية","قال ﷺ: «من كان يؤمن بالله واليوم الآخر فليقل خيرًا أو ليصمت»، فالكلمة الطيبة صدقة."],
   ["تقبّل الاختلاف","ليس من الضروري أن نتفق في كل شيء، لكن يجب أن نحترم آراء بعضنا."],
-  ["لا تقلّل من شأن أحد","فلا شيء لأحد عند الله بإيمانه ولا حسبٌ على أحد بحسنه."],
+  ["لا تقلّل من شأن أحد","فلا فضل لأحد على أحد إلا بالتقوى والعمل الصالح."],
   ["استمع قبل أن تحكم","أعطِ الآخرين فرصة للتعبير عن أنفسهم."],
-  ["ابتعد عن السخرية والإهانة","قال تعالى: «ولا تنمزوا أنفسكم»، فالقوة الحقيقية في حسن الأخلاق."],
-  ["اعتذر عندما تخطئ","الاعتذار دليل على النضج وليس ضعفاً، وهذا من أخلق أهل الجنة."],
-  ["كن متواضعاً","لا يتكبر أحد على أحد، فالجنة عند أقدام الأمهات ومَن تواضع لله رفعه."]
+  ["ابتعد عن السخرية والإهانة","قال تعالى: «ولا تلمزوا أنفسكم»، فالقوة الحقيقية في حسن الأخلاق."],
+  ["اعتذر عندما تخطئ","الاعتذار دليل على النضج وليس ضعفًا، وهو من أخلاق أهل الجنة."],
+  ["كن متواضعًا","لا يتكبّر أحد على أحد، ومن تواضع لله رفعه."]
 ];
 
 async function dashboard(user){
-  const p = await ensureProfile(user);
+  const [p, adm] = await Promise.all([ensureProfile(user), db ? db.rpc("is_admin") : null]);
   if(!p){ el(`${HOME}<div class="hero"><div class="logo">${ic("chat")}</div><p class="sub">لم يتم العثور على حسابك، أو أن الاسم أو الرابط محجوز.</p></div><button class="ghost" id="out">تسجيل الخروج</button>`); $("out").onclick = async()=>{ await db.auth.signOut(); go(""); }; return; }
   if(p.banned) return bannedPage();
-  const isAdmin = db ? (await db.rpc("is_admin")).data === true : false;
+  const isAdmin = !!(adm && adm.data === true);
   const link = linkOf(p.slug);
   el(`${BAR()}${annHtml(false)}${motdHtml()}${HOME}<div class="hero" style="padding:14px 0 4px"><div class="avatar" id="av"></div><div class="who" id="nm"></div><p class="tag">هذا رابطك الخاص. انشره ليرسل لك الناس كلماتهم الصادقة: نصيحة، دعاء أو تذكير بالخير، دون أن يظهر اسمهم</p></div>
   ${quickRow(p.slug, "inbox")}${checklistHtml(p)}<div class="glass"><div class="link sel" id="lnk"></div>
@@ -763,7 +757,7 @@ async function loadMsgs(user){
   const fav = data.filter(m => m.starred);
   fb.hidden = !fav.length;
   fav.forEach(m => fl.appendChild(msgCard(m, user)));
-  if(!data.length) return void (box.innerHTML = `<div class="ok"><b>شارك رابطك لتصلك أول رسالة</b><small class="tag">انشره في ستوري إنستغرام أو أي مكان، وسيصلك أصدقاؤك.</small></div>`);
+  if(!data.length) return void (box.innerHTML = `<div class="ok"><b>شارك رابطك لتصلك أول رسالة</b><small class="tag">انشره في ستوري إنستغرام أو أي مكان، وسيرسل لك أصدقاؤك.</small></div>`);
   data.forEach(m => box.appendChild(msgCard(m, user, true)));
   const hm = location.hash.match(/^#m(\d+)$/); if(hm){ const t = $("m" + hm[1]); if(t){ t.scrollIntoView({ block:"center" }); t.classList.add("flash"); } history.replaceState(null, "", location.pathname + location.search); }
   if(ids.length){ await db.from("messages").update({ read_at: new Date().toISOString() }).in("id", ids); db.from("notifications").update({ read:true }).eq("user_id", user.id).eq("kind","message").then(()=>setBadge(0), ()=>{}); }
@@ -826,7 +820,7 @@ async function editPage(user){
     <button id="spf">حفظ الصورة</button><div class="note" id="n6"></div></div>
   <div class="glass sm"><h2>الجنس</h2><div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>
     <button id="sgd">حفظ الجنس</button><div class="note" id="n2"></div></div>
-  <div class="glass sm"><h2>كلمة المرور</h2><p class="tag">غيّرها إن شئت — ستبقى مسجلًا دخولك بحسابك نفسه.</p><input id="np" type="password" placeholder="كلمة المرور الجديدة (8 أحرف على الأقل)" dir="ltr" autocomplete="new-password">
+  <div class="glass sm"><h2>كلمة المرور</h2><p class="tag">غيّرها إن شئت، وستبقى مسجّلًا للدخول بحسابك نفسه.</p><input id="np" type="password" placeholder="كلمة المرور الجديدة (8 أحرف على الأقل)" dir="ltr" autocomplete="new-password">
     <button id="sp">تغيير كلمة المرور</button><div class="note" id="n3"></div></div>
   <div class="glass sm"><h2>حذف الحساب نهائيًا</h2>
     ${dr && dr.status === "pending" ? `<p class="tag">تم إرسال طلبك، يرجى الانتظار حتى يوافق فريق العمل على حذف حسابك.</p>` : `${dr ? `<p class="tag">تم رفض طلبك السابق. يمكنك إرسال طلب جديد.</p>` : `<p class="tag">لن يُحذف حسابك إلا بعد موافقة فريق العمل. اكتب سبب الحذف.</p>`}
@@ -896,9 +890,9 @@ function reportUI(box, s, targetId){
     say("rn","تم إرسال البلاغ، شكرًا لك", true);
   };
 }
-async function renderPub(box, ownerId, s){
+async function renderPub(box, ownerId, s, owner){
   const pm = await db.from("public_messages").select("id,body,reply,created_at").eq("to_user", ownerId).order("created_at",{ascending:false}).limit(20);
-  if(!pm.data || !pm.data.length){ if(me) box.innerHTML = `<div class="glass sm center"><div class="logo">${ic("chat")}</div><h2 style="margin:10px 0 4px;color:var(--txt)">لم تُنشر رسائل بعد</h2><p class="tag">شارك رابطك لتصل أولى الكلمات.</p></div>`; return; }
+  if(!pm.data || !pm.data.length){ if(owner) box.innerHTML = `<div class="glass sm center"><div class="logo">${ic("chat")}</div><h2 style="margin:10px 0 4px;color:var(--txt)">لم تُنشر رسائل بعد</h2><p class="tag">شارك رابطك لتصل أولى الكلمات.</p></div>`; return; }
   const ids = pm.data.map(m => m.id), cnts = {}, mine = new Set();
   ((await db.rpc("thanks_counts", { uid: ownerId })).data || []).forEach(x => cnts[x.message_id] = Number(x.cnt));
   if(s) ((await db.from("message_thanks").select("message_id").eq("user_id", s.user.id).in("message_id", ids)).data || []).forEach(x => mine.add(x.message_id));
@@ -982,7 +976,7 @@ async function profilePage(s){
       if($("rp")) $("rp").onclick = () => reportUI($("rbox"), s, u.id);
     }
   }
-  renderPub($("pub"), u.id, s);
+  renderPub($("pub"), u.id, s, me);
 }
 async function privacyPage(user){
   const p = await ensureProfile(user);
@@ -1033,8 +1027,9 @@ async function privacyPage(user){
   if(location.hash === "#notif") $("notif").scrollIntoView({ block:"start" });
 }
 async function sendPage(key){
+  if(!db){ el(`${TOPOUT()}${HOME}<div class="glass sm" style="text-align:center;margin-top:22px"><p class="tag">تعذّر الاتصال بالخادم الآن، حاول تحديث الصفحة.</p></div>`); wireOut(); return; }
   const p = await db.from("profiles").select("id,username,slug,banned,avatar").eq("slug", key).maybeSingle();
-  if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "الرابط غير صحيح" : "الرابط غير صحيح"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
+  if(!p.data || p.data.banned){ el(`<div class="hero"><div class="logo">${ic("chat")}</div><h1 class="brand" style="font-size:44px">${esc(N())}</h1><p class="sub">${p.data ? "هذا الحساب غير متاح حاليًا" : "الرابط غير صحيح"}</p></div><div class="sm"><button id="h">الصفحة الرئيسية</button></div>`); $("h").onclick = () => go(""); return; }
   const s = await getSession(), mx = MAXLEN();
   const KINDS = [["نصيحة","book"],["مصارحة","eye"],["اعتذار","leaf"],["تذكير بالخير","sun"]];
   let kind = "";
@@ -1077,7 +1072,7 @@ async function adminTab(btn, fn){
   try{ await fn(); }catch(e){ box.innerHTML = ""; const r = mk("button","sbtn","إعادة المحاولة"); r.onclick = () => adminTab(btn, fn); box.append(mk("p","note","تعذّر تحميل هذا القسم."), r); }
 }
 const csv = (rows, name) => {
-  const q = v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const q = v => { let s = String(v == null ? "" : v); if(/^[=+\-@\t\r]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
   const txt = "\ufeff" + rows.map(r => r.map(q).join(",")).join("\n");
   const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([txt], { type:"text/csv;charset=utf-8" })); a.download = name; a.click();
 };
