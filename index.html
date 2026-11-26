@@ -807,6 +807,7 @@ async function editPage(user){
   const p = await ensureProfile(user);
   if(!p) return go("");
   if(p.banned) return bannedPage();
+  let selIcon = "", selColor = 0; { const a = avOf(p.avatar); if(a){ selIcon = a.icon; selColor = AV_COLORS.indexOf(a.color); } }
   const lock = t => { if(!t) return ""; const nx = new Date(t); nx.setMonth(nx.getMonth() + 2); if(nx <= new Date()) return ""; const days = Math.ceil((nx - new Date()) / 864e5); return days <= 7 ? `<span style="color:var(--gold)">تُفتح قريبًا — ${days} ${days === 1 ? "يوم" : "أيام"}</span>` : "يمكنك التغيير بعد: " + nx.toLocaleDateString("ar-u-nu-latn"); };
   const l1 = lock(p.username_changed_at), l2 = lock(p.slug_changed_at);
   const dr = (await db.from("deletion_requests").select("status").eq("user_id", user.id).maybeSingle()).data;
@@ -832,7 +833,6 @@ async function editPage(user){
     <textarea id="dr" rows="3" maxlength="500" placeholder="سبب حذف الحساب"></textarea><button class="red" id="sd">إرسال طلب الحذف</button>`}
     <div class="note" id="n5"></div></div>`);
   await wireBar(user);
-  let selIcon = "", selColor = 0; { const a = avOf(p.avatar); if(a){ selIcon = a.icon; selColor = AV_COLORS.indexOf(a.color); } }
   const updPrev = () => { const el0 = $("avp"); el0.style.background = AV_COLORS[selColor]; el0.innerHTML = selIcon ? ic(selIcon) : esc((p.username || "؟")[0]); };
   const drawPick = () => {
     $("pk").innerHTML = ""; $("sw").innerHTML = "";
