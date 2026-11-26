@@ -807,33 +807,39 @@ async function editPage(user){
   const p = await ensureProfile(user);
   if(!p) return go("");
   if(p.banned) return bannedPage();
-  const lock = t => { if(!t) return ""; const nx = new Date(t); nx.setMonth(nx.getMonth() + 2); return nx > new Date() ? "يمكنك التغيير بعد: " + nx.toLocaleDateString("ar-u-nu-latn") : ""; };
+  const lock = t => { if(!t) return ""; const nx = new Date(t); nx.setMonth(nx.getMonth() + 2); if(nx <= new Date()) return ""; const days = Math.ceil((nx - new Date()) / 864e5); return days <= 7 ? `<span style="color:var(--gold)">تُفتح قريبًا — ${days} ${days === 1 ? "يوم" : "أيام"}</span>` : "يمكنك التغيير بعد: " + nx.toLocaleDateString("ar-u-nu-latn"); };
   const l1 = lock(p.username_changed_at), l2 = lock(p.slug_changed_at);
   const dr = (await db.from("deletion_requests").select("status").eq("user_id", user.id).maybeSingle()).data;
-  el(`${BAR()}${HOME}<div class="hero" style="padding:8px 0 0"><h1 class="brand" style="font-size:40px">حسابي</h1></div>${quickRow(p.slug, "edit")}  <div class="glass sm"><h2>اسم المستخدم</h2><p class="tag">الحالي: ${esc(p.username)} — يمكن تغييره مرة كل شهرين.</p>
+  const fields = [p.avatar, p.bio, p.prompt, p.birth_year, p.location, p.gender];
+  const done = fields.filter(Boolean).length, pct = Math.round(done / fields.length * 100);
+  el(`${BAR()}${HOME}<div class="hero" style="padding:8px 0 0"><h1 class="brand" style="font-size:40px">حسابي</h1></div>${quickRow(p.slug, "edit")}
+  <div class="glass sm" style="margin-top:10px"><div style="display:flex;justify-content:space-between;align-items:center"><b>ملفك مكتمل ${pct}%</b>${pct < 100 ? `<a class="hl" style="font-size:13px" href="?p=${esc(p.slug)}">أكمل ملفك</a>` : `<span style="color:var(--gold);font-size:13px">مكتمل</span>`}</div><div style="height:8px;border-radius:6px;background:rgba(var(--w),.12);margin-top:8px"><div style="height:100%;width:${pct}%;border-radius:6px;background:var(--gold)"></div></div></div>  <div class="glass sm"><h2>اسمك في الموقع</h2><p class="tag">هذا الاسم الذي يراه الناس. الحالي: ${esc(p.username)} — يمكن تغييره مرة كل شهرين.</p>
     <input id="nu" maxlength="25" placeholder="الاسم الجديد" ${l1 ? "disabled" : ""}>
     <button id="sn" ${l1 ? "disabled" : ""}>حفظ الاسم</button><div class="note" id="n1">${l1}</div></div>
-  <div class="glass sm"><h2>رابطك الخاص</h2><p class="tag" dir="ltr" style="text-align:right">${esc(linkOf(p.slug))}</p><p class="tag">يمكن تغييره مرة كل شهرين، وسيتوقف الرابط القديم.</p>
+  <div class="glass sm"><h2>رابطك الذي تنشره للناس</h2><p class="tag" dir="ltr" style="text-align:right">${esc(linkOf(p.slug))}</p><p class="tag">هذا الرابط الذي تنشره في واتساب وإنستغرام ليصلك ما يود الناس قوله. تغييره مرة كل شهرين، وسيتوقف الرابط القديم.</p>
     <input id="ns2" dir="ltr" maxlength="25" placeholder="رابط جديد" ${l2 ? "disabled" : ""}>
     <button id="sl" ${l2 ? "disabled" : ""}>حفظ الرابط</button><div class="note" id="n4">${l2}</div></div>
-  <div class="glass sm"><h2>صورتي الرمزية</h2><p class="tag">هذا شكلك أمام المرسلين. نبذتك وسؤالك وعمرلك وإقامتك تعدّلها من «صفحتي» بالتبويب أعلاه.</p>
+  <div class="glass sm"><h2>صورتي الرمزية</h2><p class="tag">هذا شكلك أمام المرسلين — اختر أيقونة ولونًا يعبران عنك. نبذتك وسؤالك وعمرك وإقامتك تعدّلها من «صفحتي» بالتبويب أعلاه.</p>
+    <div style="display:flex;justify-content:center;margin-bottom:12px"><span id="avp" style="width:72px;height:72px;font-size:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:${AV_COLORS[selColor]};color:var(--ink);font-weight:800">${selIcon ? ic(selIcon) : esc((p.username || "؟")[0])}</span></div>
     <div class="lbl">الصورة الرمزية</div><div class="pick" id="pk"></div><div class="sw" id="sw"></div>
     <button id="spf">حفظ الصورة</button><div class="note" id="n6"></div></div>
   <div class="glass sm"><h2>الجنس</h2><div class="chips" id="gen"><div class="chip" data-g="ذكر">ذكر</div><div class="chip" data-g="أنثى">أنثى</div></div>
     <button id="sgd">حفظ الجنس</button><div class="note" id="n2"></div></div>
-  <div class="glass sm"><h2>كلمة المرور</h2><input id="np" type="password" placeholder="كلمة المرور الجديدة (8 أحرف على الأقل)" dir="ltr" autocomplete="new-password">
+  <div class="glass sm"><h2>كلمة المرور</h2><p class="tag">غيّرها إن شئت — ستبقى مسجلًا دخولك بحسابك نفسه.</p><input id="np" type="password" placeholder="كلمة المرور الجديدة (8 أحرف على الأقل)" dir="ltr" autocomplete="new-password">
     <button id="sp">تغيير كلمة المرور</button><div class="note" id="n3"></div></div>
-  <div class="glass sm"><h2>حذف الحساب</h2>
+  <div class="glass sm"><h2>حذف الحساب نهائيًا</h2>
     ${dr && dr.status === "pending" ? `<p class="tag">تم إرسال طلبك، يرجى الانتظار حتى يوافق فريق العمل على حذف حسابك.</p>` : `${dr ? `<p class="tag">تم رفض طلبك السابق. يمكنك إرسال طلب جديد.</p>` : `<p class="tag">لن يُحذف حسابك إلا بعد موافقة فريق العمل. اكتب سبب الحذف.</p>`}
     <textarea id="dr" rows="3" maxlength="500" placeholder="سبب حذف الحساب"></textarea><button class="red" id="sd">إرسال طلب الحذف</button>`}
     <div class="note" id="n5"></div></div>`);
   await wireBar(user);
   let selIcon = "", selColor = 0; { const a = avOf(p.avatar); if(a){ selIcon = a.icon; selColor = AV_COLORS.indexOf(a.color); } }
+  const updPrev = () => { const el0 = $("avp"); el0.style.background = AV_COLORS[selColor]; el0.innerHTML = selIcon ? ic(selIcon) : esc((p.username || "؟")[0]); };
   const drawPick = () => {
     $("pk").innerHTML = ""; $("sw").innerHTML = "";
     const l0 = mk("div", selIcon ? "" : "on", (p.username || "؟")[0]); l0.onclick = () => { selIcon = ""; drawPick(); }; $("pk").appendChild(l0);
     AV_ICONS.forEach(n => { const d = mk("div", selIcon === n ? "on" : ""); d.innerHTML = ic(n); d.onclick = () => { selIcon = n; drawPick(); }; $("pk").appendChild(d); });
     AV_COLORS.forEach((c, i) => { const d = mk("div", selColor === i ? "on" : ""); d.style.background = c; d.onclick = () => { selColor = i; drawPick(); }; $("sw").appendChild(d); });
+    updPrev();
   };
   drawPick();
   $("spf").onclick = async()=>{
@@ -872,6 +878,7 @@ async function editPage(user){
   if($("sd")) $("sd").onclick = async()=>{
     const reason = $("dr").value.trim();
     if(!reason) return say("n5","اكتب سبب الحذف");
+    if(!confirm("هل أنت متأكد من إرسال طلب حذف الحساب؟ لن يمكن التراجع بعد موافقة الفريق.")) return;
     const r = dr ? await db.from("deletion_requests").update({ reason, status:"pending" }).eq("user_id", user.id) : await db.from("deletion_requests").insert({ user_id: user.id, reason });
     if(r.error) return say("n5","تعذّر إرسال الطلب");
     say("n5","تم إرسال طلبك، انتظر موافقة فريق العمل", true); setTimeout(() => go("?profile"), 1200);
@@ -891,7 +898,7 @@ function reportUI(box, s, targetId){
 }
 async function renderPub(box, ownerId, s){
   const pm = await db.from("public_messages").select("id,body,reply,created_at").eq("to_user", ownerId).order("created_at",{ascending:false}).limit(20);
-  if(!pm.data || !pm.data.length) return;
+  if(!pm.data || !pm.data.length){ if(me) box.innerHTML = `<div class="glass sm center"><div class="logo">${ic("chat")}</div><h2 style="margin:10px 0 4px;color:var(--txt)">لم تُنشر رسائل بعد</h2><p class="tag">شارك رابطك لتصل أولى الكلمات.</p></div>`; return; }
   const ids = pm.data.map(m => m.id), cnts = {}, mine = new Set();
   ((await db.rpc("thanks_counts", { uid: ownerId })).data || []).forEach(x => cnts[x.message_id] = Number(x.cnt));
   if(s) ((await db.from("message_thanks").select("message_id").eq("user_id", s.user.id).in("message_id", ids)).data || []).forEach(x => mine.add(x.message_id));
@@ -1031,7 +1038,7 @@ async function sendPage(key){
   const s = await getSession(), mx = MAXLEN();
   const KINDS = [["نصيحة","book"],["مصارحة","eye"],["اعتذار","leaf"],["تذكير بالخير","sun"]];
   let kind = "";
-  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><a class="pl" id="pl" title="عرض الصفحة الشخصية"><div class="avatar" id="av"></div><div class="who" id="who"></div></a><p class="tag">هنا للكلمة الطيبة مكان، وللنصيحة أثر، وللصدق مساحة. اكتب ما تود قوله</p></div>
+  el(`${s ? BAR() : ""}${HOME}<div class="hero" style="padding:16px 0 8px"><a class="pl" id="pl" title="عرض الصفحة الشخصية"><div class="avatar" id="av"></div><div class="who" id="who"></div></a><p class="tag">هنا للكلمة الطيبة مكان، وللنصيحة أثر، وللصدق مساحة. اكتب ما تود قوله</p><p class="mini">رسالتك تصل صاحب الرابط وحده — اسمك لا يظهر إلا إذا اخترت إظهاره</p></div>
   <div class="glass sm send" id="box">
     <div class="lbl">نوع الرسالة (اختياري)</div><div class="chips kchips" id="kinds"></div>
     <textarea id="body" rows="6" maxlength="${mx}" placeholder="اكتب رسالتك هنا"></textarea>
@@ -1053,7 +1060,7 @@ async function sendPage(key){
     $("send").disabled = false;
     if(r.error){ const m = r.error.message || ""; return say("note", m.includes("BANNED") ? "الرابط غير صحيح" : m.includes("TOOFAST") ? "وصلت رسائل كثيرة الآن، حاول بعد قليل" : m.includes("BADWORD") ? "رسالتك تحتوي على كلمات غير مسموحة" : m.includes("NOVISITOR") ? "الإرسال متاح للمسجّلين فقط حاليًا" : m.includes("TOOLONG") ? "الرسالة أطول من المسموح" : m.includes("BLOCKED") ? "لا يمكن إرسال الرسالة إلى هذا الحساب حاليًا" : "حدث خطأ، حاول مرة أخرى"); }
     const cta = s ? "" : (on("allow_signup") ? `<div class="cta"><b>تريد أن يرسل لك الناس رسائل مثلها؟</b><ul><li>تحصل على رابطك الخاص لتنشره.</li><li>تعرف إن كان المستلم قرأ رسائلك التي ترسلها وأنت مسجّل.</li><li>أنت من يقرر ما يُنشر من رسائلك.</li></ul><button id="cta">أنشئ حسابك في دقيقة</button></div>` : "");
-    $("box").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>وصلت رسالتك</b></div>${cta}<button class="ghost" id="again">إرسال رسالة أخرى</button>`;
+    $("box").innerHTML = `<div class="ok"><div class="big">${ic("check")}</div><b>وصلت رسالتك</b><small class="tag">يمكن لصاحب الرابط قراءتها الآن في صندوقه الخاص.</small></div>${cta}<button class="ghost" id="again">إرسال رسالة أخرى</button>`;
     if($("cta")) $("cta").onclick = () => go("?signup");
     $("again").onclick = () => sendPage(key);
   };
